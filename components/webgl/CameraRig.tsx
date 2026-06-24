@@ -13,7 +13,7 @@ export default function CameraRig() {
   const { camera } = useThree();
   const lookAt = useRef(new Vector3());
 
-  useFrame(() => {
+  useFrame((_, delta) => {
     let p = 0;
     const el = document.getElementById("hero-scroll");
     if (el) {
@@ -22,8 +22,10 @@ export default function CameraRig() {
       p = total > 0 ? clamp01(-rect.top / total) : 0;
     }
     const { position, lookAt: target } = sampleCameraPath(p);
-    camera.position.lerp(position, 0.08);
-    lookAt.current.lerp(target, 0.08);
+    // Frame-rate-independent smoothing so motion feels consistent.
+    const s = 1 - Math.pow(0.0015, delta);
+    camera.position.lerp(position, s);
+    lookAt.current.lerp(target, s);
     camera.lookAt(lookAt.current);
   });
 

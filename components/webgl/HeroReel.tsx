@@ -4,8 +4,9 @@ import { useEffect, useMemo } from "react";
 import { VideoTexture, SRGBColorSpace } from "three";
 
 export default function HeroReel({
-  src = "/assets/experience-media-show-reel.mp4",
+  src = "/assets/webgl/hero-loop.mp4",
   position = [0, 0, 2] as [number, number, number],
+  active = true,
 }) {
   const video = useMemo(() => {
     const v = document.createElement("video");
@@ -23,17 +24,19 @@ export default function HeroReel({
     return t;
   }, [video]);
 
+  // Play only when the hero is visible and the tab is foregrounded.
   useEffect(() => {
-    video.play().catch(() => {});
-    const onVis = () =>
-      document.hidden ? video.pause() : video.play().catch(() => {});
-    document.addEventListener("visibilitychange", onVis);
-    return () => {
-      document.removeEventListener("visibilitychange", onVis);
-      video.pause();
-      texture.dispose();
-    };
-  }, [video, texture]);
+    const shouldPlay = () => active && !document.hidden;
+    const sync = () =>
+      shouldPlay() ? video.play().catch(() => {}) : video.pause();
+    sync();
+    document.addEventListener("visibilitychange", sync);
+    return () => document.removeEventListener("visibilitychange", sync);
+  }, [video, active]);
+
+  useEffect(() => {
+    return () => texture.dispose();
+  }, [texture]);
 
   return (
     <mesh position={position}>

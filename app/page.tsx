@@ -19,33 +19,38 @@ export default function Home() {
 
       <Hero />
 
-      {/* Everything below scrolls up over the canvas on an opaque paper surface. */}
-      <div className="relative z-10 bg-paper">
-        <Founder />
-        <CreatorsStrip />
-        <BrandGrid />
-        <StatCounter />
-        <ServicesPinned />
+      {/* Everything below scrolls up over the canvas. The gradient band dissolves
+          the dark multiverse void smoothly into the light page (hero → services). */}
+      <div className="relative z-10">
+        <div className="pointer-events-none h-[45vh] bg-gradient-to-b from-[#0c0b0a] via-[#0c0b0a] to-paper" />
+        <div className="bg-paper">
+          {/* "What we do" leads, right after the hero */}
+          <ServicesPinned />
+          <Founder />
+          <CreatorsStrip />
+          <BrandGrid />
+          <StatCounter />
 
-        {/* CTA to portfolio */}
-        <section className="border-t border-line">
-          <Link
-            href="/portfolio"
-            className="group mx-auto flex max-w-[1600px] flex-col items-start justify-between gap-6 px-5 py-20 md:flex-row md:items-center md:px-10 md:py-28"
-          >
-            <h2 className="display text-[clamp(2.2rem,7vw,6rem)]">
-              See the work
-              <span className="text-accent">.</span>
-            </h2>
-            <span className="eyebrow flex items-center gap-3 rounded-full border border-ink px-6 py-4 transition-colors group-hover:bg-ink group-hover:text-paper">
-              Explore portfolio{" "}
-              <span className="transition-transform group-hover:translate-x-1">↗</span>
-            </span>
-          </Link>
-        </section>
+          {/* CTA to portfolio */}
+          <section className="border-t border-line">
+            <Link
+              href="/portfolio"
+              className="group mx-auto flex max-w-[1600px] flex-col items-start justify-between gap-6 px-5 py-20 md:flex-row md:items-center md:px-10 md:py-28"
+            >
+              <h2 className="display text-[clamp(2.2rem,7vw,6rem)]">
+                See the work
+                <span className="text-accent">.</span>
+              </h2>
+              <span className="eyebrow flex items-center gap-3 rounded-full border border-ink px-6 py-4 transition-colors group-hover:bg-ink group-hover:text-paper">
+                Explore portfolio{" "}
+                <span className="transition-transform group-hover:translate-x-1">↗</span>
+              </span>
+            </Link>
+          </section>
 
-        <Testimonials />
-        <ContactForm />
+          <Testimonials />
+          <ContactForm />
+        </div>
       </div>
     </>
   );

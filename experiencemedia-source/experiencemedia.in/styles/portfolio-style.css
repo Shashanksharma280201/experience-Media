@@ -1,0 +1,258 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  font-family: 'Montserrat', sans-serif;
+  background: #0e0e0e;
+}
+
+
+.main-heading h2 {
+  color: white;
+  font-size: 2rem;
+  text-align: center;
+  margin-top: 8rem;
+
+}
+
+
+
+
+/* SHORT FORMAT SECTION */
+/* SHORT FORMAT SECTION */
+.short-format-section {
+
+  margin-top: 3rem;
+  padding: 2rem 0;
+}
+
+.short-format-section h3 {
+  color: #ffb300;
+  font-size: 2rem;
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+/* Grid container with clean horizontal scroll */
+.short-grid {
+  display: flex;
+  gap: 5rem;
+  padding: 1rem 2rem;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-behavior: smooth;
+  scrollbar-width: thin; /* Firefox */
+  scrollbar-color: #ffb300 #1a1a1a;
+   -webkit-overflow-scrolling: touch; /* ✅ Smooth iOS touch scroll */
+touch-action: pan-x pan-y;
+
+}
+
+/* Webkit-based (Chrome, Edge, Safari) */
+.short-grid::-webkit-scrollbar {
+  height: 8px;
+}
+
+.short-grid::-webkit-scrollbar-thumb {
+  background: #ffb300;
+  border-radius: 4px;
+}
+
+.short-grid::-webkit-scrollbar-track {
+  background: #1a1a1a;
+}
+
+
+/* Short Card with Hover Effects */
+.short-card {
+  position: relative;
+  flex: 0 0 auto;
+  width: 320px;
+  height: 480px;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+  transition: transform 0.3s ease;
+  cursor: pointer;
+  display: flex;
+  gap: 2rem;
+  flex-direction: column;
+}
+
+.short-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  border-radius: 8px;
+  transition: opacity 0.3s ease;
+}
+
+.short-card:hover {
+  transform: scale(1.03);
+}
+
+.short-card:hover img {
+  opacity: 0.7;
+}
+
+/* Overlay for Shorts */
+.short-card .short-overlay {
+  position: absolute;
+  bottom: 12px;
+  right: 12px;
+  background: rgba(255, 255, 255, 0.9);
+  color: #000;
+  font-weight: bold;
+  font-size: 0.85rem;
+  padding: 0.35rem 0.6rem;
+  border-radius: 5px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.short-card:hover .short-overlay {
+  opacity: 1;
+}
+
+
+
+
+
+.long-format-section {
+  background-color: #0e0e0e;
+  color: white;
+  padding: 3rem 1rem;
+  margin-top: 4rem;
+}
+
+.long-format-section h3 {
+  font-size: 2rem;
+  color: #ffb300;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.long-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+  max-width: 1200px;
+  margin: auto;
+}
+
+.long-card {
+  text-align: center;
+  transition: transform 0.3s ease;
+}
+
+.long-card img {
+  width: 100%;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.long-card img:hover {
+  transform: scale(1.03);
+}
+
+.long-card p {
+  margin-top: 0.8rem;
+  font-weight: bold;
+  font-size: 1rem;
+}
+
+/*different styling*/
+.thumbnail-wrapper {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  border-radius: 10px;
+}
+
+.thumbnail-wrapper img {
+  display: block;
+  width: 100%;
+  transition: opacity 0.3s ease;
+}
+
+.thumbnail-wrapper .overlay {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  background: rgba(255, 255, 255, 0.85);
+  color: #0e0e0e;
+  font-weight: bold;
+  font-size: 0.9rem;
+  padding: 0.4rem 0.6rem;
+  border-radius: 5px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.thumbnail-wrapper:hover img {
+  opacity: 0.7;
+}
+
+.thumbnail-wrapper:hover .overlay {
+  opacity: 1;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* 🔽 Responsive: Stack vertically on small screens */
+@media (max-width: 768px) {
+  .short-grid {
+    flex-direction: row;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    align-items: flex-start;
+  }
+
+  .short-card {
+    width: 80vw;
+    height: auto;
+  }
+
+  .short-card .short-overlay {
+    opacity: 1;
+    background: rgba(255, 255, 255, 0.85);
+    font-size: 0.85rem;
+  }
+
+  .short-card:hover .short-overlay {
+    opacity: 1; /* no change on hover */
+  }
+
+  
+  .thumbnail-wrapper .overlay{
+    opacity: 1;
+  }
+}
+
+
+
+
+
+

@@ -1,0 +1,224 @@
+
+
+/*NAVBAR*/
+.navbar {
+  position:absolute; /* or absolute */
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: transparent;
+  color: white;
+  padding: 1rem 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 10;
+}
+
+
+.navbar a {
+  color: white;
+  font-weight:normal;
+  text-decoration: none;
+  margin: 0 0.75rem;
+  font-size: 1.2rem;
+  position: relative;
+}
+
+.navbar a::after {
+  content: '';
+  position: absolute;
+  width: 0%;
+  height: 2px;
+  left: 0;
+  bottom: -4px;
+  background: linear-gradient(to right, #ffe100, #ffbf00);
+  transition: width 0.3s;
+}
+
+.navbar a:hover::after {
+  width: 100%;
+}
+
+.nav-left,
+.nav-right {
+  display: flex;
+  align-items: center;
+}
+
+.nav-center img {
+  height: 3.5rem;
+}
+
+.nav-center {
+  position: absolute;
+  top: 50%;   /* optional, if you also want vertical centering */
+  left: 50%;
+  transform: translate(-50%, -50%); /* centers both horizontally & vertically */
+}
+
+
+.whatsapp-link {
+
+  align-items: center;
+  margin-left: 1rem;
+}
+
+.whatsapp-icon {
+  height: 30px;         /* adjust size */
+  width: auto;
+  border-radius: 50%;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.whatsapp-icon:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+
+.hamburger {
+  display: none;
+  font-size: 2rem;
+  cursor: pointer;
+  margin-left: 1rem;
+}
+
+.mobile-menu {
+  display: none;
+  flex-direction: column;
+  background: #1b1919f7;
+  position: absolute;
+  top: 100%;
+  right: 0;
+  width: 100%;
+  padding: 1rem 2rem;
+  z-index: 9;
+  
+  box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+  transition: all 0.3s ease;
+}
+
+.mobile-menu.show {
+  display: flex;
+  text-align: right;
+}
+
+
+
+@media (max-width: 768px) {
+  .nav-left,
+  .nav-right a:not(.hamburger) {
+    display: none;
+  }
+
+  .hamburger {
+    display: block;
+  }
+
+  .mobile-menu {
+    display: none;
+  }
+
+  .mobile-menu.show {
+    display: flex;
+  }
+
+  .nav-center {
+    margin: 0 auto;
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* Footer */
+.site-footer {
+  background-color: #000000; /* Pitch black */
+  padding: 3rem 2rem;
+  color: white;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Container for left & right sections */
+.footer-overlay {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  max-width: 1200px;
+  margin: 0 auto;
+  gap: 2rem;
+}
+
+/* Left and Right Sections */
+.footer-left,
+.footer-right {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  min-width: 250px;
+}
+
+/* Footer Links */
+.footer-left a,
+.footer-right a {
+  display: inline-flex;
+  align-items: center;
+  color: white;
+  text-decoration: none;
+  font-size: 1.1rem;
+  font-weight: bold;
+  transition: color 0.3s ease;
+}
+
+.footer-left a:hover,
+.footer-right a:hover {
+  color: #e7fc00; /* Neon yellow on hover */
+}
+
+/* Icon next to text */
+.social-icon {
+  width: 20px;
+  height: 20px;
+  margin-right: 8px;
+  vertical-align: middle;
+  object-fit: contain;
+}
+
+/* Bottom line */
+.footer-bottom {
+  text-align: center;
+  margin-top: 2rem;
+  font-size: 1rem;
+  color: #aaa;
+}
+
+/* Responsive Styling */
+@media (max-width: 768px) {
+  .footer-overlay {
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+  }
+
+  .footer-left,
+  .footer-right {
+    width: 100%;
+  }
+
+  .footer-left a,
+  .footer-right a {
+    font-size: 1rem;
+  }
+}
+

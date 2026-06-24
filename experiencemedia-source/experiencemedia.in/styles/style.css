@@ -1,0 +1,682 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  font-family: 'Montserrat', sans-serif;
+}
+
+
+
+
+/* HERO VIDEO SECTION */
+.video-container {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.video-container video {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  min-width: 100%;
+  min-height: 100%;
+  width: auto;
+  height: auto;
+  transform: translate(-50%, -50%);
+  object-fit: cover;
+  z-index: -1;
+}
+
+
+
+/* CONTENT BELOW VIDEO */
+
+.content{
+  background-color: #111;
+}
+
+/*creators collaborations*/
+.wall-of-fame {
+  padding: 60px 20px;
+  background: #111;
+  color: white;
+  text-align: center;
+}
+
+.wall-of-fame h2 {
+  font-size: 2.5rem;
+  margin-bottom: 30px;
+}
+
+.scroll-container-wrapper {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+}
+
+.scroll-container {
+  display: flex;
+  gap: 10px;
+  overflow-x: scroll;
+  scroll-behavior: smooth;
+  padding: 20px 0;
+  scrollbar-width: none;
+}
+
+.scroll-container::-webkit-scrollbar {
+  display: none;
+}
+
+.client {
+  flex: 0 0 22%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.client img {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  object-fit: cover;
+  transition: transform 0.3s;
+}
+
+.client img:hover {
+  transform: scale(1.07);
+}
+
+
+/* Custom Gradient Scrollbar (Underline Style) */
+.custom-scrollbar {
+  width: 100%;
+  height: 3px;
+  background: #333;
+  margin-top: 10px;
+  position: relative;
+}
+
+.scroll-track {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(to right, #ffe100, #ffbf00);
+  transition: width 0.1s;
+}
+
+.scroll-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 1;
+  background-color: transparent;
+  border: none;
+  color: white;
+  font-size: 2rem;
+  cursor: pointer;
+  padding: 10px;
+  border-radius: 50%;
+  transition: background-color 0.3s;
+}
+
+.scroll-btn:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.scroll-btn.left {
+  left: 10px;
+}
+
+.scroll-btn.right {
+  right: 10px;
+}
+
+
+
+/*button to portfolio*/
+.portfolio-cta {
+  margin-top: 50px;
+  text-align: center;
+}
+
+.portfolio-button {
+  display: inline-block;
+  padding: 0.9rem 2rem;
+  border: 2px solid transparent;
+  border-image: linear-gradient(to right, #ffe100, #ffbf00);
+  border-image-slice: 1;
+  font-size: 1rem;
+  color: white;
+  background: transparent;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  border-radius: 999px;
+  font-weight: 600;
+  position: relative;
+  z-index: 1;
+}
+
+.portfolio-button:hover {
+ 
+  box-shadow: 0 0 10px rgba(0, 255, 136, 0.3);
+  transform: scale(1.03);
+}
+
+
+
+
+
+/*trusted brand partners*/
+.brand-section {
+  padding: 60px 20px;
+  background: #0e0e0e;
+  text-align: center;
+  color: white;
+}
+
+.brand-section h2 {
+  font-size: 2.5rem;
+  margin-bottom: 40px;
+}
+
+.brand-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 30px;
+  justify-items: center;
+  align-items: center;
+}
+
+.brand img {
+  width: 140px; /* increased size */
+  height: auto;
+  opacity: 0.5;
+  filter: grayscale(100%);
+  transition: all 0.4s ease;
+  touch-action: manipulation;
+}
+
+/* On hover and touch (simulated with active/focus) */
+.brand img:hover,
+.brand img:focus,
+.brand img:active {
+  opacity: 1;
+  filter: grayscale(0%);
+  transform: scale(1.07);
+}
+
+
+
+/*testimonials - credibility*/
+
+/*3o million views generated*/
+.testimonial-counter {
+  background: #000;
+  color: white;
+  padding: 100px 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.counter-wrapper {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
+  max-width: 1200px;
+  width: 100%;
+  justify-content: center;
+}
+
+.counter-number {
+  font-size: 4rem;
+  font-weight: 900;
+  color: white;
+  text-align: right;
+  flex: 0 0 auto; /* instead of fixed min-width */
+}
+
+
+.counter-text {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: white;
+  text-align: left;
+}
+
+
+/* === Service Section Styles === */
+.services-section {
+  background-color: #111;
+  padding: 80px 20px;
+  color: white;
+}
+
+.services-heading {
+  text-align: center;
+  font-size: 3rem;
+  margin-bottom: 40px;
+}
+
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  row-gap: 60px;
+  column-gap: 40px;
+  max-width: 1200px;
+  margin: auto;
+}
+
+.services-card {
+  display: flex;
+  align-items: center;
+  padding: 15px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  backdrop-filter: blur(6px);
+  cursor: pointer;
+  transition: all 0.4s ease;
+  overflow: hidden;
+  height: 100px;
+  z-index: 1;
+  position: relative;
+}
+
+.services-card.expanded {
+  height: 180px;
+  background: #222;
+  align-items: flex-start;
+  margin-top: -40px; /* fake "upward" expansion */
+  padding-top: 30px;
+  z-index: 5;
+  box-shadow: 0 0 10px #ffe100;
+}
+
+.services-card img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 12px;
+  margin-right: 20px;
+  flex-shrink: 0;
+  transition: all 0.3s ease;
+}
+
+.services-card.expanded img {
+  width: 100px;
+  height: 100px;
+}
+
+.services-card .card-content {
+  flex: 1;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.services-card h2 {
+  font-size: 1.1rem;
+  margin: 0 0 5px;
+  font-weight: bold;
+  color: white;
+}
+
+.services-card p {
+  font-size: 0.9rem;
+  margin: 0;
+  color: #ccc;
+  opacity: 0;
+  max-height: 0;
+  transition: opacity 0.3s ease, max-height 0.3s ease;
+}
+
+.services-card.expanded p {
+  opacity: 1;
+  max-height: 300px;
+}
+
+.services-card.expanded h2 {
+  font-size: 1.2rem;
+  margin-bottom: 12px;
+}
+
+.services-card.expanded p {
+  font-size: 1rem;
+  line-height: 1.6;
+}
+ 
+/*great testimonials by clients*/
+
+.testimonials-section {
+  padding: 2rem;
+  overflow: hidden;
+}
+
+.testimonials-title {
+  text-align: center;
+  color: white;
+  font-size: 3rem;
+  margin-bottom: 2rem;
+}
+
+
+
+.testimonial-carousel::-webkit-scrollbar {
+  display: none;
+}
+
+.testimonial-card {
+  flex: 0 0 auto;
+  width: 450px;
+  max-width: 90vw;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  transition: transform 0.3s ease;
+}
+
+.testimonial-card img {
+  width: 100%;
+  display: block;
+}
+
+/* Optional hover scale effect */
+.testimonial-card:hover {
+  transform: scale(1.02);
+}
+
+.testimonial-scroll-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.testimonial-scroll-btn {
+  background: rgba(55, 51, 51, 0.634);
+  border: none;
+  color: white;
+  font-size: 2.5rem;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  z-index: 1;
+  transition: background 0.3s ease;
+}
+
+.testimonial-scroll-btn:hover {
+  background: rgba(21, 19, 19, 0.886);
+}
+
+.testimonial-scroll-btn.left {
+  position: absolute;
+  left: 0;
+}
+
+.testimonial-scroll-btn.right {
+  position: absolute;
+  right: 0;
+}
+
+.testimonial-carousel {
+  flex: 1;
+  scroll-behavior: smooth;
+  overflow-x: auto;
+  display: flex;
+  gap: 3rem;
+  padding: 0 3rem; /* To leave space for buttons */
+}
+
+
+/*Form to get in touch*/
+
+.contact-section {
+  background-color: #111; /* Dark background */
+  padding: 4rem 2rem;
+  color: white;
+  text-align: center;
+}
+
+.contact-title {
+  font-size: 2.5rem;
+  margin-bottom: 2rem;
+  color: white;
+}
+
+.contact-form {
+  max-width: 600px;
+  margin: 0 auto;
+  display: grid;
+  gap: 1.5rem;
+}
+
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid #797415;
+  padding: 0.8rem;
+  font-size: 1rem;
+  color: white;
+  outline: none;
+  transition: border-color 0.3s;
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  border-color: #ffe100;
+}
+
+.submit-button {
+  background: transparent;
+  border: 2px solid #ffe100;
+  color: white;
+  padding: 0.8rem 1.5rem;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.submit-button:hover {
+  background: #ffe100;
+  color: #111;
+}
+
+
+
+
+
+
+
+
+
+
+/* Responsive layout changes */
+
+
+@media (max-width: 1024px) {
+  .brand-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .brand-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .brand img {
+    width: 120px;
+  }
+}
+
+@media (max-width: 480px) {
+  .brand-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .brand img {
+    width: 100px;
+  }
+}
+
+
+
+
+/* Responsive */
+
+
+
+@media (max-width: 768px) {
+  .overlay-content h1 {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .overlay-content h1 {
+    font-size: 1.5rem;
+  }
+}
+
+
+@media (max-width: 768px) {
+  .testimonial-card {
+    width: 85vw;
+  }
+
+  .testimonials-title {
+    font-size: 2rem;
+  }
+}
+
+
+
+
+
+
+@media (max-width: 1100px) and (min-width: 600px) {
+  .services-grid {
+    column-gap: 10px;
+  }
+
+  .services-card.expanded {
+  height: 200px;
+
+  }
+
+  .services-card.expanded h2 {
+  font-size: 1rem;
+  margin-bottom: 12px;
+}
+
+.services-card.expanded p {
+  font-size: 0.96rem;
+  line-height: 1.6;
+}
+}
+
+
+
+
+
+
+
+
+
+
+@media (max-width: 768px) {
+  .services-card {
+    flex-direction: column;
+    height: 150px;
+    text-align: center;
+    align-items: center;
+    padding: 15px;
+  }
+
+  .services-card.expanded {
+    height: auto;
+    padding: 20px;
+    align-items: center;
+  }
+
+  .services-card img {
+    margin: 0 0 10px 0;
+  }
+
+  .services-card.expanded img {
+    margin: 0 0 10px 0;
+  }
+
+  .services-card .card-content {
+    width: 100%;
+    overflow: hidden;
+  }
+
+  .services-card h2 {
+    font-size: 1rem;
+    margin: 5px 0;
+  }
+
+  .services-card p {
+    font-size: 0.85rem;
+  }
+}
+
+
+
+
+@media (max-width: 768px) {
+  .video-container video {
+    min-width: 100%;
+    min-height: 100%;
+    width: 100%;
+    height: auto;
+    transform: translate(0, 0);
+    top: 0;
+    left: 0;
+    object-fit: cover;
+  }
+  
+  .counter-number{
+      font-size: 2rem;
+  }
+  
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

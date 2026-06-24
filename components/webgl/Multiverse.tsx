@@ -8,7 +8,13 @@ import CameraRig from "./CameraRig";
 import ParticleField from "./ParticleField";
 import type { Tier } from "@/lib/webgl-capability";
 
-export default function Multiverse({ tier }: { tier: Tier }) {
+export default function Multiverse({
+  tier,
+  active = true,
+}: {
+  tier: Tier;
+  active?: boolean;
+}) {
   const screens = useMemo(() => {
     const all = buildScreenLayout({ seed: 11 });
     return tier === "low" ? all.filter((_, i) => i % 2 === 0) : all;
@@ -20,12 +26,13 @@ export default function Multiverse({ tier }: { tier: Tier }) {
   return (
     <>
       <color attach="background" args={["#0c0b0a"]} />
-      <fog attach="fog" args={["#0c0b0a", 30, 220]} />
+      {/* Light, distant fog — atmosphere without hiding the artwork. */}
+      <fog attach="fog" args={["#0c0b0a", 90, 360]} />
       <ambientLight intensity={0.6} />
       <directionalLight position={[5, 8, 5]} intensity={1.1} color="#ffe9c0" />
       <CameraRig />
-      <HeroReel />
-      <ParticleField count={tier === "low" ? 600 : 1500} />
+      <HeroReel active={active} />
+      <ParticleField count={tier === "low" ? 350 : 800} />
       {screens.map((s) => (
         <Screen key={s.id} datum={s} onOpen={open} />
       ))}

@@ -4,34 +4,28 @@ import {
   EffectComposer,
   Bloom,
   Vignette,
-  Noise,
   ChromaticAberration,
-  DepthOfField,
 } from "@react-three/postprocessing";
 import { Vector2 } from "three";
 import type { Tier } from "@/lib/webgl-capability";
 
+// Lightweight post stack — Bloom + Vignette everywhere, a touch of chromatic
+// aberration on high tier. (DepthOfField/Noise removed: too costly for the gain.)
 export default function Effects({ tier }: { tier: Tier }) {
   return (
-    <EffectComposer enableNormalPass={false}>
+    <EffectComposer enableNormalPass={false} multisampling={0}>
       <Bloom
-        intensity={0.7}
-        luminanceThreshold={0.6}
-        luminanceSmoothing={0.3}
+        intensity={0.55}
+        luminanceThreshold={0.65}
+        luminanceSmoothing={0.25}
         mipmapBlur
       />
       {tier === "high" ? (
-        <DepthOfField focusDistance={0.01} focalLength={0.05} bokehScale={2} />
+        <ChromaticAberration offset={new Vector2(0.0006, 0.0006)} />
       ) : (
         <></>
       )}
-      {tier === "high" ? (
-        <ChromaticAberration offset={new Vector2(0.0008, 0.0008)} />
-      ) : (
-        <></>
-      )}
-      <Noise opacity={0.04} />
-      <Vignette eskil={false} offset={0.2} darkness={0.85} />
+      <Vignette eskil={false} offset={0.3} darkness={0.55} />
     </EffectComposer>
   );
 }

@@ -1,15 +1,19 @@
 import { CatmullRomCurve3, Vector3 } from "three";
 
-const DEPTH = 220;
-
-// A gently weaving path flying from the front of the void toward the back.
-const curve = new CatmullRomCurve3([
-  new Vector3(0, 0, 12),
-  new Vector3(-4, 2, -30),
-  new Vector3(5, -2, -80),
-  new Vector3(-3, 1, -140),
-  new Vector3(2, 0, -DEPTH),
-]);
+// Camera travels LESS deep than the screen field (depth ~150) so it always has
+// artwork ahead — it never outruns the gallery into empty space.
+const curve = new CatmullRomCurve3(
+  [
+    new Vector3(0, 0, 12),
+    new Vector3(-1.5, 1, -22),
+    new Vector3(2, -1, -55),
+    new Vector3(-1.5, 0.6, -90),
+    new Vector3(1, 0, -120),
+  ],
+  false,
+  "catmullrom",
+  0.5
+);
 
 export type CameraSample = { position: Vector3; lookAt: Vector3 };
 

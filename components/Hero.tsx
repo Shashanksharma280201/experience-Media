@@ -114,7 +114,9 @@ export default function Hero() {
               loop
               playsInline
               preload="metadata"
+              poster="/assets/webgl/hero-poster.jpg"
             >
+              <source src="/assets/webgl/hero-loop.mp4" type="video/mp4" />
               <source src={site.showreel} type="video/mp4" />
             </video>
           </div>
@@ -125,7 +127,7 @@ export default function Hero() {
 
   // --- WebGL hero: tall transparent region over the multiverse canvas ---
   return (
-    <div ref={root} id="hero-scroll" className="relative h-[250vh]">
+    <div ref={root} id="hero-scroll" className="relative h-[200vh]">
       <div
         ref={overlay}
         className="sticky top-0 flex h-svh flex-col justify-between px-5 pb-10 pt-32 text-paper md:px-10 md:pt-40"
