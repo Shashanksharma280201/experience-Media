@@ -14,8 +14,13 @@ Six values. Near-black base, warm off-white type, one saturated red.
 |---|---|---|
 | `--void` | `#0A0A0B` | Page base. The only background colour on the site. |
 | `--bone` | `#F4F0EA` | Primary type. Warm, so it never reads as clinical white on black. |
-| `--bone-dim` | `rgba(244,240,234,0.56)` | Body prose, secondary type, captions. |
+| `--bone-dim` | `rgba(244,240,234,0.62)` | Body prose, secondary type. ~7.6:1 on `--void`. |
+| `--bone-faint` | `rgba(244,240,234,0.5)` | Labels, metadata. ~5.0:1 — the floor for normal text. |
 | `--hairline` | `rgba(244,240,234,0.12)` | 1px rules and dividers. The only border colour. |
+
+The alpha ramp is set by measured contrast, not by eye. `--bone-faint` was
+originally 0.3 (~2.6:1) and failed axe-core on every route; `npm run audit`
+is what caught it.
 | `--signal` | `#FF2D20` | **The accent.** Saturated red. |
 | `--ember` | `#3D0A06` | Deep red, used *only* as the inner stop of ambient radial gradients. |
 

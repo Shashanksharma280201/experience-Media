@@ -8,8 +8,11 @@
 @theme {
   --color-void: #0a0a0b;
   --color-bone: #f4f0ea;
-  --color-bone-dim: rgba(244, 240, 234, 0.56);
-  --color-bone-faint: rgba(244, 240, 234, 0.3);
+  /* Alpha ramp is set by contrast, not by eye: against --void these give
+     roughly 7.6:1 and 5.0:1, so both clear AA for normal-size text.
+     bone-faint was 0.3 (~2.6:1) and failed the audit on every route. */
+  --color-bone-dim: rgba(244, 240, 234, 0.62);
+  --color-bone-faint: rgba(244, 240, 234, 0.5);
   --color-hairline: rgba(244, 240, 234, 0.12);
   --color-signal: #ff2d20;
   --color-ember: #3d0a06;
