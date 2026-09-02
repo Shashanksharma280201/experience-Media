@@ -1,73 +1,76 @@
 import Link from "next/link";
-import { contact, socials, site } from "@/lib/content";
+import Shell from "@/components/layout/Shell";
+import Rule from "@/components/layout/Rule";
+import { contact, site, socials } from "@/lib/content";
+
+const year = new Date().getFullYear();
 
 export default function Footer() {
   return (
-    <footer className="relative bg-void text-paper">
-      <div className="mx-auto max-w-[1600px] px-5 py-16 md:px-10 md:py-24">
-        <div className="grid gap-12 md:grid-cols-12">
+    <footer className="relative overflow-hidden pt-[var(--section-y)]">
+      {/* Accent use #1 of 5 — the second and last ambient glow on the page.
+          Kept fully inside the clip box so its falloff never shows an edge. */}
+      <div
+        aria-hidden
+        className="ambient left-1/2 top-0 h-[420px] w-[min(860px,120vw)] -translate-x-1/2"
+      />
+
+      <Shell className="relative">
+        <p className="micro">say hello</p>
+
+        <p className="display-l mt-8 max-w-[16ch]">
+          Tell us what you&rsquo;re trying to move.
+        </p>
+
+        <div className="mt-14 grid gap-10 md:grid-cols-12">
           <div className="md:col-span-6">
-            <p className="eyebrow text-accent">Get in touch</p>
-            <h2 className="display mt-5 text-[clamp(2.5rem,7vw,6rem)]">
-              Let&apos;s make
-              <br />
-              something
-              <span className="text-accent"> people share.</span>
-            </h2>
-            <div className="mt-10 flex flex-col gap-3">
-              <a
-                href={`mailto:${contact.email}`}
-                className="w-fit border-b border-paper/30 pb-1 text-lg transition-colors hover:border-accent hover:text-accent"
-              >
-                {contact.email}
-              </a>
-              <a
-                href={contact.whatsapp}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-fit border-b border-paper/30 pb-1 text-lg transition-colors hover:border-accent hover:text-accent"
-              >
+            {/* Fluid rather than `heading`: the address is long and must not
+                overflow at 360px. */}
+            <a
+              href={`mailto:${contact.email}`}
+              className="link-underline font-display inline-block text-[clamp(1.05rem,3.6vw,2.1rem)] leading-tight tracking-[-0.02em]"
+            >
+              {contact.email}
+            </a>
+            <p className="mt-4">
+              <a href={contact.whatsapp} className="link-underline lede text-bone-dim">
                 {contact.phone}
               </a>
-            </div>
+            </p>
           </div>
 
-          <div className="md:col-span-3 md:col-start-9">
-            <p className="eyebrow text-paper/50">Social</p>
-            <ul className="mt-5 flex flex-col gap-3">
+          <nav aria-label="Social" className="md:col-span-4 md:col-start-9">
+            <ul className="grid grid-cols-2 gap-x-8 gap-y-3">
               {socials.map((s) => (
                 <li key={s.label}>
                   <a
                     href={s.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="group flex items-baseline justify-between gap-4 border-b border-paper/10 py-2 transition-colors hover:text-accent"
+                    className="link-underline small text-bone-dim transition-colors hover:text-bone"
                   >
-                    <span>{s.label}</span>
-                    <span className="font-mono text-xs text-paper/40 group-hover:text-accent">
-                      @{s.handle}
-                    </span>
+                    {s.label}
                   </a>
                 </li>
               ))}
             </ul>
-          </div>
+          </nav>
         </div>
 
-        <div className="mt-16 flex flex-col items-start justify-between gap-4 border-t border-paper/15 pt-8 text-xs text-paper/50 md:flex-row md:items-center">
-          <div className="flex items-center gap-2">
-            <span className="display text-base text-paper">
-              Experience<span className="text-accent">Media</span>
-            </span>
-          </div>
-          <p className="font-mono">© 2025 {site.name}. All rights reserved.</p>
-          <p className="font-mono">
-            <Link href="/work" className="hover:text-accent">
-              New Delhi · IN
+        <Rule className="mt-20" />
+
+        <div className="flex flex-col gap-2 py-8 text-bone-faint md:flex-row md:items-center md:justify-between">
+          <p className="small">
+            © {year} {site.name}
+          </p>
+          <p className="small">New Delhi, India</p>
+          <p className="small">
+            <Link href="/work" className="link-underline">
+              See the work
             </Link>
           </p>
         </div>
-      </div>
+      </Shell>
     </footer>
   );
 }

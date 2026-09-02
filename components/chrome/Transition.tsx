@@ -3,41 +3,40 @@
 import { useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
 
-/** Hold black for two frames at 24fps. */
-const HOLD_MS = 80;
+/** Motion #15 — a 320ms cross-dissolve on route change, then scroll resets. */
+const DISSOLVE_MS = 320;
 
-/**
- * "The cut" — route changes hard-cut through black rather than crossfading.
- * A film cut, not a dissolve.
- */
 export default function Transition() {
-  const el = useRef<HTMLDivElement>(null);
+  const veil = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
   const first = useRef(true);
 
   useEffect(() => {
-    // Don't cut on first paint — there's nothing to cut from.
     if (first.current) {
       first.current = false;
       return;
     }
-    const node = el.current;
+
+    window.scrollTo(0, 0);
+
+    const node = veil.current;
     if (!node) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
+    // The incoming page is already painted; dissolve the veil off it.
+    node.style.transition = "none";
     node.style.opacity = "1";
-    const t = window.setTimeout(() => {
-      node.style.opacity = "0";
-    }, HOLD_MS);
-    return () => window.clearTimeout(t);
+    // Force a reflow so the transition actually runs from opacity 1.
+    void node.offsetHeight;
+    node.style.transition = `opacity ${DISSOLVE_MS}ms linear`;
+    node.style.opacity = "0";
   }, [pathname]);
 
   return (
     <div
-      ref={el}
+      ref={veil}
       aria-hidden
-      className="pointer-events-none fixed inset-0 z-[70] bg-black opacity-0"
-      style={{ transition: "opacity 60ms linear" }}
+      className="pointer-events-none fixed inset-0 z-[70] bg-void opacity-0"
     />
   );
 }

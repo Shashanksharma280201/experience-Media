@@ -1,31 +1,29 @@
 import Link from "next/link";
+import type { Metadata } from "next";
+import Shell from "@/components/layout/Shell";
+
+export const metadata: Metadata = { title: "Page not found" };
 
 export default function NotFound() {
   return (
-    <div className="flex min-h-svh flex-col justify-center bg-void text-paper">
-      <div className="mx-auto w-full max-w-[1600px] px-5 md:px-10">
-        <p className="eyebrow text-accent">00:00:00:00 · No signal</p>
-        <h1 className="display mt-8 text-[clamp(3rem,14vw,11rem)]">
-          404<span className="text-accent">.</span>
+    <div className="flex min-h-svh items-center">
+      <Shell>
+        <p className="micro">no such page</p>
+        <h1 className="display-l mt-8 max-w-[14ch]">
+          That one doesn&rsquo;t exist.
         </h1>
-        <p className="mt-8 max-w-md text-paper/60">
-          That frame doesn&apos;t exist. The reel is still running, though.
+        <p className="lede mt-8 max-w-[42ch] text-bone-dim">
+          The link may be old, or we may have moved it. The work is all still here.
         </p>
-        <div className="mt-10 flex flex-wrap gap-4">
-          <Link
-            href="/"
-            className="eyebrow border border-rule px-6 py-3 transition-colors hover:border-accent hover:text-accent"
-          >
-            Back to index
+        <div className="mt-12 flex flex-wrap gap-x-10 gap-y-4">
+          <Link href="/" className="link-underline heading">
+            Home
           </Link>
-          <Link
-            href="/work"
-            className="eyebrow border border-accent px-6 py-3 text-accent transition-colors hover:bg-accent hover:text-void"
-          >
+          <Link href="/work" className="link-underline heading">
             See the work
           </Link>
         </div>
-      </div>
+      </Shell>
     </div>
   );
 }

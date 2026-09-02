@@ -1,40 +1,63 @@
 @import "tailwindcss";
 
+/* ===========================================================================
+   Tokens — see DESIGN.md. Six colours, two families, one accent with a
+   five-use spending limit.
+   ======================================================================== */
+
 @theme {
-  /* Ground — deep violet-black */
-  --color-void: #0a0612;
-  --color-surface: #150e21;
-  --color-rule: rgba(243, 239, 255, 0.13);
+  --color-void: #0a0a0b;
+  --color-bone: #f4f0ea;
+  --color-bone-dim: rgba(244, 240, 234, 0.56);
+  --color-bone-faint: rgba(244, 240, 234, 0.3);
+  --color-hairline: rgba(244, 240, 234, 0.12);
+  --color-signal: #ff2d20;
+  --color-ember: #3d0a06;
 
-  /* Type on the dark ground; also the one inversion section */
-  --color-paper: #f3efff;
+  --font-display: var(--font-archivo), "Arial Black", sans-serif;
+  --font-sans: var(--font-inter-tight), system-ui, sans-serif;
 
-  /* The accent ramp — violet through fuchsia to pink. `accent` is the
-     workhorse; violet and fuchsia exist to build the gradient. */
-  --color-violet: #8b5cf6;
-  --color-fuchsia: #d946ef;
-  --color-accent: #f472b6;
+  --container-shell: 1560px;
 
-  --font-sans: var(--font-display);
-  --font-mono: var(--font-technical);
-
-  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
-
-  --animate-infinite-scroll: infinite-scroll var(--animation-duration, 60s)
-    var(--animation-direction, forwards) linear infinite;
+  --animate-marquee: marquee var(--marquee-duration, 48s) linear infinite;
 }
 
-@keyframes infinite-scroll {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(calc(-50% - 0.625rem));
+:root {
+  /* Motion */
+  --dur-quick: 240ms;
+  --dur-base: 600ms;
+  --dur-slow: 1000ms;
+  --dur-reveal: 1200ms;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.76, 0, 0.24, 1);
+
+  /* Rhythm */
+  --gutter: 20px;
+  --section-y: 128px;
+}
+
+@media (min-width: 768px) {
+  :root {
+    --gutter: 32px;
+    --section-y: 160px;
   }
 }
 
-* {
-  border-color: var(--color-rule);
+@media (min-width: 1280px) {
+  :root {
+    --gutter: 40px;
+    --section-y: 192px;
+  }
+}
+
+/* ===========================================================================
+   Base
+   ======================================================================== */
+
+*,
+*::before,
+*::after {
+  border-color: var(--color-hairline);
 }
 
 html {
@@ -44,9 +67,24 @@ html {
 
 body {
   background: var(--color-void);
-  color: var(--color-paper);
-  font-family: var(--font-sans), Arial, sans-serif;
+  color: var(--color-bone);
+  font-family: var(--font-sans);
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  letter-spacing: -0.01em;
   overflow-x: hidden;
+}
+
+/* Accent use #3 of 5 — focus ring. */
+:focus-visible {
+  outline: 2px solid var(--color-signal);
+  outline-offset: 3px;
+  border-radius: 1px;
+}
+
+::selection {
+  background: var(--color-signal);
+  color: var(--color-void);
 }
 
 /* Lenis */
@@ -61,38 +99,137 @@ html.lenis body {
   overflow: hidden;
 }
 
-/* Display type helpers */
-.display {
-  font-weight: 600;
+/* ===========================================================================
+   Type roles. Archivo's width axis is the distinguishing move — display sizes
+   are genuinely wider, not merely bigger.
+   ======================================================================== */
+
+.display-xl,
+.display-l,
+.display-m,
+.heading {
+  font-family: var(--font-display);
+  text-wrap: balance;
+}
+
+.display-xl {
+  font-size: clamp(3.25rem, 11vw, 10.5rem);
+  font-variation-settings: "wdth" 118, "wght" 700;
+  line-height: 0.94;
+  letter-spacing: -0.035em;
+}
+
+.display-l {
+  font-size: clamp(2.5rem, 7.5vw, 6.5rem);
+  font-variation-settings: "wdth" 112, "wght" 700;
+  line-height: 0.98;
   letter-spacing: -0.03em;
-  line-height: 0.92;
-}
-.eyebrow {
-  font-family: var(--font-mono), monospace;
-  font-size: 0.72rem;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
 }
 
-/* Kinetic hero type — scroll drives Archivo's width axis. JS writes --wdth;
-   the axis is the ONLY animated property, so nothing here can reflow. */
-.kinetic {
-  font-variation-settings: "wdth" var(--wdth, 100), "wght" var(--wght, 700);
-  will-change: font-variation-settings;
+.display-m {
+  font-size: clamp(2rem, 4.5vw, 3.75rem);
+  font-variation-settings: "wdth" 105, "wght" 600;
+  line-height: 1.04;
+  letter-spacing: -0.025em;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .kinetic {
-    font-variation-settings: "wdth" 100, "wght" 700;
+.heading {
+  font-size: clamp(1.5rem, 2.6vw, 2.25rem);
+  font-variation-settings: "wdth" 100, "wght" 600;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+}
+
+.lede {
+  font-size: clamp(1.25rem, 2vw, 1.75rem);
+  line-height: 1.42;
+  letter-spacing: -0.015em;
+}
+
+.small {
+  font-size: 0.875rem;
+  line-height: 1.5;
+  letter-spacing: -0.005em;
+}
+
+/* Parenthetical micro label. There are no tracked-out all-caps eyebrows
+   anywhere on this site — see DESIGN.md §2. */
+.micro {
+  font-size: 0.8125rem;
+  line-height: 1.4;
+  letter-spacing: 0;
+  color: var(--color-bone-dim);
+}
+.micro::before {
+  content: "(";
+}
+.micro::after {
+  content: ")";
+}
+
+/* ===========================================================================
+   Motion primitives
+   ======================================================================== */
+
+/* Line-mask reveal: GSAP animates the inner span. */
+.mask-line {
+  display: block;
+  overflow: hidden;
+}
+.mask-line > * {
+  display: block;
+  will-change: transform;
+}
+
+@keyframes marquee {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-50%, 0, 0);
   }
 }
 
-/* ---------------------------------------------------------------------------
-   Intro — a pure-CSS loading screen. It must animate the instant the HTML
-   paints, so nothing here waits on React hydration or GSAP.
-   Timeline: core draws 0.10s → wings 0.25s → body 0.35s → fill 1.00s
-             → wordmark 1.15s → exit 1.95s → gone by 2.40s
---------------------------------------------------------------------------- */
+/* Accent use #2 of 5 — the hover underline. */
+.link-underline {
+  position: relative;
+}
+.link-underline::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -0.15em;
+  height: 1px;
+  width: 100%;
+  background: var(--color-signal);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--dur-quick) var(--ease-out);
+}
+.link-underline:hover::after,
+.link-underline:focus-visible::after {
+  transform: scaleX(1);
+}
+
+/* Accent use #1 of 5 — ambient glow. Never more than two per page. */
+.ambient {
+  position: absolute;
+  pointer-events: none;
+  background: radial-gradient(
+    closest-side,
+    color-mix(in oklab, var(--color-ember) 92%, var(--color-signal)) 0%,
+    transparent 100%
+  );
+  opacity: 0.32;
+  filter: blur(40px);
+}
+
+/* ===========================================================================
+   Motion #1 — the load sequence. Pure CSS so it begins the instant the HTML
+   paints; it never waits on hydration.
+   Timeline: core 0.10s → wings 0.25s → body 0.35s → fill 1.00s
+             → wordmark 1.15s → lift 1.95s → clear by 2.40s
+   ======================================================================== */
 
 .intro {
   position: fixed;
@@ -100,27 +237,29 @@ html.lenis body {
   z-index: 100;
   display: grid;
   place-items: center;
-  background:
-    radial-gradient(60% 60% at 18% 22%, color-mix(in oklab, var(--color-violet) 55%, transparent), transparent 70%),
-    radial-gradient(55% 55% at 82% 28%, color-mix(in oklab, var(--color-fuchsia) 45%, transparent), transparent 70%),
-    radial-gradient(75% 70% at 50% 88%, color-mix(in oklab, var(--color-accent) 42%, transparent), transparent 70%),
-    var(--color-void);
-  animation: intro-exit 0.45s cubic-bezier(0.76, 0, 0.24, 1) 1.95s forwards;
+  background: var(--color-void);
+  animation: intro-lift 0.5s var(--ease-in-out) 1.95s forwards;
 }
 
-/* Already seen this session — never paint it at all. */
 html.intro-done .intro {
   display: none;
 }
 
-.intro-aurora {
+.intro-glow {
   position: absolute;
-  inset: -20%;
-  background:
-    radial-gradient(40% 40% at 30% 40%, color-mix(in oklab, var(--color-violet) 40%, transparent), transparent 70%),
-    radial-gradient(35% 35% at 70% 60%, color-mix(in oklab, var(--color-accent) 35%, transparent), transparent 70%);
-  filter: blur(40px);
-  animation: intro-drift 9s ease-in-out infinite alternate;
+  left: 50%;
+  top: 50%;
+  height: 70vmin;
+  width: 70vmin;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(
+    closest-side,
+    color-mix(in oklab, var(--color-ember) 90%, var(--color-signal)) 0%,
+    transparent 100%
+  );
+  opacity: 0.5;
+  filter: blur(30px);
+  animation: intro-breathe 5s ease-in-out infinite alternate;
 }
 
 .intro-stack {
@@ -128,18 +267,18 @@ html.intro-done .intro {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: clamp(1.5rem, 4vw, 2.75rem);
+  gap: clamp(1.5rem, 4vw, 2.5rem);
 }
 
 .intro-mark {
-  width: clamp(140px, 22vw, 260px);
-  filter: drop-shadow(0 0 28px color-mix(in oklab, var(--color-accent) 45%, transparent));
+  width: clamp(120px, 18vw, 210px);
+  color: var(--color-bone);
 }
 
-/* Stroke layer draws itself, then hands off to the fill layer. */
+/* Stroke draws itself, then hands off to the fill. */
 .intro-mark .draw {
   fill: none;
-  stroke: url(#intro-ramp);
+  stroke: currentColor;
   stroke-width: 3;
   stroke-linejoin: round;
   stroke-dasharray: 1;
@@ -152,9 +291,9 @@ html.intro-done .intro {
 .intro-mark .draw[data-p="body"] { animation-delay: 0.35s, 1.15s; }
 
 .intro-mark .solid {
-  fill: url(#intro-ramp);
+  fill: currentColor;
   opacity: 0;
-  animation: intro-fill 0.5s ease-out 1.0s forwards;
+  animation: intro-fill 0.5s ease-out 1s forwards;
 }
 
 .intro-word {
@@ -162,72 +301,36 @@ html.intro-done .intro {
 }
 .intro-word span {
   display: block;
-  font-family: var(--font-sans), sans-serif;
-  font-weight: 600;
-  font-size: clamp(1.1rem, 3.4vw, 2.4rem);
-  letter-spacing: 0.42em;
-  text-transform: uppercase;
-  color: var(--color-paper);
-  transform: translateY(110%);
-  animation: intro-word 0.75s cubic-bezier(0.16, 1, 0.3, 1) 1.15s forwards;
+  font-family: var(--font-display);
+  font-variation-settings: "wdth" 112, "wght" 600;
+  font-size: clamp(1rem, 3vw, 1.9rem);
+  letter-spacing: -0.02em;
+  color: var(--color-bone);
+  transform: translateY(115%);
+  animation: intro-word 0.8s var(--ease-out) 1.15s forwards;
 }
 
-@keyframes intro-draw {
-  to { stroke-dashoffset: 0; }
-}
-@keyframes intro-stroke-out {
-  to { opacity: 0; }
-}
-@keyframes intro-fill {
-  from { opacity: 0; transform: scale(0.985); }
-  to { opacity: 1; transform: scale(1); }
-}
-@keyframes intro-word {
-  to { transform: translateY(0); letter-spacing: 0.24em; }
-}
-@keyframes intro-drift {
-  to { transform: translate3d(4%, -3%, 0) scale(1.12); }
-}
-@keyframes intro-exit {
-  to { transform: translateY(-101%); }
-}
-
-/* Reduced motion: a brief static hold, no movement. */
-@media (prefers-reduced-motion: reduce) {
-  .intro { animation: intro-fade 0.3s linear 0.4s forwards; }
-  .intro-aurora { animation: none; }
-  .intro-mark .draw { display: none; }
-  .intro-mark .solid { opacity: 1; animation: none; }
-  .intro-word span { transform: none; letter-spacing: 0.24em; animation: none; }
-  @keyframes intro-fade { to { opacity: 0; visibility: hidden; } }
-}
-
-::selection {
-  background: var(--color-accent);
-  color: var(--color-void);
-}
-
-.no-scrollbar::-webkit-scrollbar {
-  display: none;
-}
-.no-scrollbar {
-  scrollbar-width: none;
-}
-
-/* Film grain overlay — `overlay` reads on the dark ground; `multiply` vanished. */
-.grain {
-  position: fixed;
-  inset: 0;
-  z-index: 60;
-  pointer-events: none;
-  opacity: 0.08;
-  mix-blend-mode: overlay;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-}
+@keyframes intro-draw { to { stroke-dashoffset: 0; } }
+@keyframes intro-stroke-out { to { opacity: 0; } }
+@keyframes intro-fill { to { opacity: 1; } }
+@keyframes intro-word { to { transform: translateY(0); } }
+@keyframes intro-breathe { to { transform: translate(-50%, -50%) scale(1.14); opacity: 0.34; } }
+@keyframes intro-lift { to { transform: translateY(-101%); } }
 
 @media (prefers-reduced-motion: reduce) {
-  * {
+  *,
+  *::before,
+  *::after {
     animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
     transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
   }
+
+  /* The sequence still resolves — it simply arrives. */
+  .intro { animation: intro-clear 0.001ms linear 400ms forwards; }
+  .intro-mark .draw { display: none; }
+  .intro-mark .solid { opacity: 1; }
+  .intro-word span { transform: none; }
+  @keyframes intro-clear { to { opacity: 0; visibility: hidden; } }
 }

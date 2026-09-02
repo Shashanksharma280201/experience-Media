@@ -1,61 +1,50 @@
 import type { Metadata } from "next";
-import { Archivo, JetBrains_Mono } from "next/font/google";
+import { Archivo, Inter_Tight } from "next/font/google";
 import "./globals.css";
 import SmoothScrollProvider from "@/components/SmoothScrollProvider";
-import { ScrollProgressProvider } from "@/hooks/useScrollProgress";
-import Scrubber from "@/components/chrome/Scrubber";
 import Transition from "@/components/chrome/Transition";
-import CursorReadout from "@/components/chrome/CursorReadout";
 import Intro from "@/components/intro/Intro";
-import Grain from "@/components/Grain";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import { site } from "@/lib/content";
 
-// Archivo carries both a weight and a width axis; the hero maps scroll to `wdth`.
-const display = Archivo({
-  variable: "--font-display",
+// Display. The width axis is the point — see DESIGN.md §2.
+const archivo = Archivo({
+  variable: "--font-archivo",
   subsets: ["latin"],
   axes: ["wdth"],
   display: "swap",
 });
 
-// Technical furniture: timecodes, reel indices, deliverable tracks, metric labels.
-const technical = JetBrains_Mono({
-  variable: "--font-technical",
+// Body. Narrow and neutral, so the pair contrasts on width, not just weight.
+const interTight = Inter_Tight({
+  variable: "--font-inter-tight",
   subsets: ["latin"],
   display: "swap",
 });
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://experiencemedia.in"),
-  title: "Experience Media — Creative Agency, YouTube Management & Video Editing",
+  title: {
+    default: "Experience Media — Video and content studio, New Delhi",
+    template: "%s — Experience Media",
+  },
   description: site.description,
-  keywords: [
-    "motion graphics",
-    "animation",
-    "social media management",
-    "video editing",
-    "YouTube management",
-    "content creation",
-    "ad campaigns",
-    "Experience Media",
-  ],
   icons: {
     icon: "/assets/favicons/favicon-48x48.png",
     apple: "/assets/favicons/apple-touch-icon.png",
   },
   openGraph: {
-    title: "Experience Media — Creative Agency",
-    description:
-      "Experience Media helps creators & brands grow through content strategy, editing, and YouTube management.",
+    title: "Experience Media",
+    description: site.description,
     url: "https://experiencemedia.in/",
+    siteName: site.name,
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Experience Media — Creative Agency",
-    description: "India's most immersive creative agency — Experience Media.",
+    title: "Experience Media",
+    description: site.description,
   },
 };
 
@@ -63,27 +52,30 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`${display.variable} ${technical.variable} antialiased`}>
+    <html
+      lang="en"
+      className={`${archivo.variable} ${interTight.variable} antialiased`}
+    >
       <body>
-        {/* Runs before paint: if the intro already played this session, the
-            loading screen is never rendered at all — no flash either way. */}
+        {/* Runs before paint: if the load sequence already played this session,
+            it is never rendered at all — no flash in either direction. */}
         <script
           dangerouslySetInnerHTML={{
             __html: `try{if(sessionStorage.getItem('em-intro-seen')==='1')document.documentElement.classList.add('intro-done')}catch(e){}`,
           }}
         />
         <Intro />
-        <Grain />
         <Transition />
-        <CursorReadout />
+        <a
+          href="#main"
+          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[90] focus:bg-bone focus:px-4 focus:py-2 focus:text-void"
+        >
+          Skip to content
+        </a>
         <SmoothScrollProvider>
-          <ScrollProgressProvider>
-            <Nav />
-            <main>{children}</main>
-            <Footer />
-            {/* Inside the provider — the scrubber is its consumer. */}
-            <Scrubber />
-          </ScrollProgressProvider>
+          <Nav />
+          <main id="main">{children}</main>
+          <Footer />
         </SmoothScrollProvider>
       </body>
     </html>

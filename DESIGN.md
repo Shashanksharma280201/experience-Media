@@ -121,7 +121,7 @@ Smooth scroll: Lenis. All scroll animation: GSAP ScrollTrigger. **One animation 
 | 10 | Selected work | Scroll | Cards pin and stack, each releasing the previous. |
 | 11 | Testimonial columns | Scroll | Two columns at differing scroll speeds (0.9× / 1.15×). |
 | 12 | Founder portrait | Enter viewport | Scale 1.06 → 1 under a clip mask. |
-| 13 | Footer CTA | Enter viewport | Headline mask reveal; the accent underline draws once. |
+| 13 | Footer CTA | Enter viewport | Headline mask reveal. (No standing accent underline — that would exceed the five-use colour limit in §1; the CTA uses the hover underline like every other link.) |
 | 14 | Link hover | Hover | Accent underline wipes L→R in `--dur-quick`. |
 | 15 | Page transition | Route change | Content cross-dissolves over 320ms; scroll resets. |
 

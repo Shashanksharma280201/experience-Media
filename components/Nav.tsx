@@ -1,23 +1,25 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
-import { contact } from "@/lib/content";
+import Shell from "@/components/layout/Shell";
+import { site } from "@/lib/content";
 
 const links = [
-  { href: "/", label: "Index" },
   { href: "/work", label: "Work" },
-  { href: "/#capabilities", label: "What we do" },
-  { href: "/#contact", label: "Contact" },
+  { href: "/#studio", label: "Studio" },
+  { href: "/#contact", label: "Talk to us" },
 ];
 
 export default function Nav() {
-  const [scrolled, setScrolled] = useState(false);
+  const [condensed, setCondensed] = useState(false);
   const [open, setOpen] = useState(false);
+  const pathname = usePathname();
 
+  // Motion #2 — the nav reacts to scroll rather than sitting static.
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 40);
+    const onScroll = () => setCondensed(window.scrollY > 64);
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
@@ -25,105 +27,89 @@ export default function Nav() {
 
   useEffect(() => {
     document.documentElement.style.overflow = open ? "hidden" : "";
+    return () => {
+      document.documentElement.style.overflow = "";
+    };
   }, [open]);
+
+  const isCurrent = (href: string) =>
+    href.startsWith("/#") ? false : pathname === href || pathname.startsWith(`${href}/`);
 
   return (
     <header
-      className={`fixed inset-x-0 top-0 z-50 transition-all duration-500 ${
-        scrolled
-          ? "border-b border-rule bg-void/80 backdrop-blur-md"
-          : "border-b border-transparent bg-transparent"
+      className={`fixed inset-x-0 top-0 z-50 border-b transition-[background-color,border-color,backdrop-filter] duration-[var(--dur-base)] ${
+        condensed
+          ? "border-hairline bg-void/85 backdrop-blur-md"
+          : "border-transparent bg-transparent"
       }`}
     >
-      <div className="mx-auto flex max-w-[1600px] items-center justify-between px-5 md:px-10">
-        <div
-          className={`flex items-center transition-all duration-500 ${
-            scrolled ? "py-3" : "py-5"
+      <Shell className="flex items-center justify-between">
+        <Link
+          href="/"
+          className={`font-display transition-all duration-[var(--dur-base)] ${
+            condensed ? "py-4 text-[0.95rem]" : "py-6 text-[1.1rem]"
           }`}
+          style={{ fontVariationSettings: '"wdth" 108, "wght" 600', letterSpacing: "-0.02em" }}
         >
-          <Link href="/" className="flex items-center gap-2">
-            <span className="display text-[1.05rem] tracking-tight text-paper">
-              Experience
-            </span>
-            <span className="display text-[1.05rem] tracking-tight text-accent">
-              Media
-            </span>
-          </Link>
-        </div>
+          {site.name}
+        </Link>
 
-        <nav className="hidden items-center gap-9 md:flex">
+        <nav aria-label="Primary" className="hidden items-center gap-8 md:flex">
           {links.map((l) => (
             <Link
               key={l.href}
               href={l.href}
-              className="group relative eyebrow text-paper/70 transition-colors hover:text-paper"
+              aria-current={isCurrent(l.href) ? "page" : undefined}
+              className="link-underline small flex items-center gap-2 text-bone-dim transition-colors duration-[var(--dur-quick)] hover:text-bone"
             >
+              {/* Accent use #5 of 5 — current-page marker. */}
+              {isCurrent(l.href) && (
+                <span aria-hidden className="h-1 w-1 shrink-0 rounded-full bg-signal" />
+              )}
               {l.label}
-              <span className="absolute -bottom-1 left-0 h-px w-0 bg-accent transition-all duration-300 group-hover:w-full" />
             </Link>
           ))}
-          <a
-            href={contact.whatsapp}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="eyebrow border border-accent px-4 py-2 text-accent transition-colors hover:bg-accent hover:text-void"
-          >
-            Let&apos;s talk
-          </a>
         </nav>
 
         <button
-          aria-label="Menu"
+          type="button"
+          aria-label={open ? "Close menu" : "Open menu"}
           aria-expanded={open}
+          aria-controls="mobile-menu"
           onClick={() => setOpen((v) => !v)}
-          className="flex h-10 w-10 flex-col items-center justify-center gap-[5px] md:hidden"
+          className="relative z-10 -mr-2 flex h-11 w-11 flex-col items-center justify-center gap-[6px] md:hidden"
         >
           <span
-            className={`h-px w-6 bg-paper transition-all duration-300 ${
-              open ? "translate-y-[6px] rotate-45" : ""
+            className={`h-px w-6 bg-bone transition-transform duration-[var(--dur-quick)] ${
+              open ? "translate-y-[3.5px] rotate-45" : ""
             }`}
           />
-          <span className={`h-px w-6 bg-paper transition-all ${open ? "opacity-0" : ""}`} />
           <span
-            className={`h-px w-6 bg-paper transition-all duration-300 ${
-              open ? "-translate-y-[6px] -rotate-45" : ""
+            className={`h-px w-6 bg-bone transition-transform duration-[var(--dur-quick)] ${
+              open ? "-translate-y-[3.5px] -rotate-45" : ""
             }`}
           />
         </button>
-      </div>
+      </Shell>
 
-      <AnimatePresence>
-        {open && (
-          <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-            className="absolute inset-x-0 top-full border-b border-rule bg-void px-5 py-8 text-paper md:hidden"
-          >
-            <div className="flex flex-col gap-6">
-              {links.map((l) => (
-                <Link
-                  key={l.href}
-                  href={l.href}
-                  onClick={() => setOpen(false)}
-                  className="display text-3xl"
-                >
-                  {l.label}
-                </Link>
-              ))}
-              <a
-                href={contact.whatsapp}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="eyebrow mt-2 inline-block w-fit border border-accent px-5 py-3 text-accent"
-              >
-                Let&apos;s talk on WhatsApp
-              </a>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      <div
+        id="mobile-menu"
+        hidden={!open}
+        className="border-t border-hairline bg-void md:hidden"
+      >
+        <Shell className="flex flex-col gap-6 py-10">
+          {links.map((l) => (
+            <Link
+              key={l.href}
+              href={l.href}
+              onClick={() => setOpen(false)}
+              className="display-m"
+            >
+              {l.label}
+            </Link>
+          ))}
+        </Shell>
+      </div>
     </header>
   );
 }
