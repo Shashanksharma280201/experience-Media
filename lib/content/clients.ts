@@ -43,12 +43,74 @@ export const brands: Brand[] = [
   { name: "Webrook", img: "/assets/brands/webrook.png", w: 988, h: 241 },
 ];
 
-export const testimonials = [
-  { img: "/assets/testimonials/t1.jpeg", alt: "Kanchi, content creator" },
-  { img: "/assets/testimonials/t2.jpeg", alt: "Varnit Singh, influencer" },
-  { img: "/assets/testimonials/t3.jpeg", alt: "Rajat Verma, founder of Artifact World" },
-  { img: "/assets/testimonials/t4.jpeg", alt: "Paritosh Anand, founder of We Smile Media" },
-  { img: "/assets/testimonials/t7.jpg", alt: "Gaurav Kumar, content creator" },
-  { img: "/assets/testimonials/t6.jpg", alt: "Armeya, content creator" },
-  { img: "/assets/testimonials/t5.jpeg", alt: "Scent Savy, content creator" },
+export type Testimonial = {
+  quote: string;
+  author: string;
+  role?: string;
+  /** Out of five, as shown on the original card. */
+  rating: number;
+  /** The source card these words were taken from. */
+  source: string;
+};
+
+/**
+ * Transcribed verbatim from the testimonial cards in /public/assets/testimonials.
+ * Kept in the voice they were written in, Hinglish included — sanding these into
+ * corporate English would make them sound like everyone else's.
+ */
+export const testimonials: Testimonial[] = [
+  {
+    quote:
+      "Sach bolu to bhai, jaise kandhe se pura bojh utar gaya ho! Bas raw footage diya aur inhone jo final video banake diya — ekdum top-class! Woh bhi bina delay ke, full turbo mode me. Tab se engagement to aise badha hai jaise rocket ho! Bhai, salute hai kaam ko!",
+    author: "Kanchhiiii",
+    role: "Content creator",
+    rating: 4,
+    source: "/assets/testimonials/t1.jpeg",
+  },
+  {
+    quote:
+      "Honestly, working with Experience Media felt super easy. I didn't have to over-explain anything — they just got what I wanted and delivered exactly that, super fast. Plus, my views literally jumped 5x. Can't recommend them enough.",
+    author: "Varnit Singh",
+    rating: 4,
+    source: "/assets/testimonials/t2.jpeg",
+  },
+  {
+    quote:
+      "I had an amazing experience working with this team. The quality of their service is outstanding, and I really liked the way they understood my requirements and delivered beyond expectations. The video they created for me was not only high-quality but also impactful — it was even premiered at IIT Ropar's Annual Fest, which was a proud moment. Truly professional, creative, and reliable.",
+    author: "Gaurav Kumar",
+    role: "CEO, Alma Threads",
+    rating: 4,
+    source: "/assets/testimonials/t7.jpg",
+  },
+  {
+    quote:
+      "Bhai, video quality to ekdum top-level thi! Aur jo speed se kaam deliver kiya na, socha bhi nahi tha itna jaldi milega. Post karne ke baad to DM ki baarish ho gayi — log bol rahe hain, “bhai kya content daala hai!” Serious level ka fark pad gaya hai.",
+    author: "Rajat Verma",
+    role: "Founder, AffectArt World",
+    rating: 4,
+    source: "/assets/testimonials/t3.jpeg",
+  },
+  {
+    quote:
+      "They took my vision and made it 10x better. Plus, I didn't have to wait weeks to get it back. Super happy with the results — and the audience seems to be too.",
+    author: "Paritosh Anand",
+    role: "Founder, WeSmile Media",
+    rating: 4,
+    source: "/assets/testimonials/t4.jpeg",
+  },
+  {
+    quote:
+      "It was great work by the team. Very happy with the work and professionalism. Wish we could get in touch with you guys a little earlier to make it more interactive. At least now we know whom to reach for such projects. Will certainly recommend other students and parents as well.",
+    author: "Armeya",
+    rating: 4,
+    source: "/assets/testimonials/t6.jpg",
+  },
+  {
+    quote:
+      "The process was quick, smooth, and the final result was fire. Definitely saw a spike in views and engagement after I started posting their work.",
+    author: "Scent Savvy",
+    role: "Content creator",
+    rating: 4,
+    source: "/assets/testimonials/t5.jpeg",
+  },
 ];

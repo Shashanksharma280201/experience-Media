@@ -4,8 +4,10 @@ import Positioning from "@/components/home/Positioning";
 import Credibility from "@/components/home/Credibility";
 import Services from "@/components/home/Services";
 import SelectedWork from "@/components/home/SelectedWork";
+import Testimonials from "@/components/home/Testimonials";
+import Founder from "@/components/home/Founder";
+import Contact from "@/components/home/Contact";
 
-// Sections are built one at a time — see BRIEF §8 step 4.
 export default function Home() {
   return (
     <>
@@ -15,6 +17,9 @@ export default function Home() {
       <Credibility />
       <Services />
       <SelectedWork />
+      <Testimonials />
+      <Founder />
+      <Contact />
     </>
   );
 }
