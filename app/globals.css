@@ -248,6 +248,17 @@ html.lenis body {
   transform: scaleX(1);
 }
 
+/* Motion #10 — work cards pin and stack. Sticky rather than scripted, so it
+   degrades to ordinary flow with no JS and is switched off for reduced motion. */
+.work-card {
+  position: sticky;
+}
+@media (prefers-reduced-motion: reduce) {
+  .work-card {
+    position: static;
+  }
+}
+
 /* Services row emphasis. `.svc-dim` is added by JS only when motion is on, so
    no-JS and reduced-motion visitors see every title at full contrast. */
 .svc-title {

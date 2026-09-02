@@ -6,12 +6,10 @@ export { brands, creators, testimonials, type Brand } from "./clients";
 export { services, offers, type Service, type Offer } from "./capabilities";
 export { stat, telemetry, type Readout } from "./proof";
 export {
-  caseStudies,
-  publishedCaseStudies,
-  getCaseStudy,
-  portfolio,
-  type CaseStudy,
-  type CaseStudyMedia,
+  disciplines,
+  getDiscipline,
+  adjacentDisciplines,
+  totalPieces,
+  type Discipline,
   type PortfolioItem,
-  type PortfolioCategory,
 } from "./work";

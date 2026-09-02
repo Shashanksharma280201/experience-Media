@@ -1,41 +1,52 @@
 import { describe, expect, it } from "vitest";
-import { caseStudies, getCaseStudy, publishedCaseStudies } from "./work";
+import { disciplines, getDiscipline, adjacentDisciplines } from "./work";
 
-describe("case studies", () => {
-  it("looks a case study up by slug", () => {
-    const first = caseStudies[0];
-    expect(getCaseStudy(first.slug)).toBe(first);
+describe("disciplines", () => {
+  it("looks a discipline up by slug", () => {
+    const first = disciplines[0];
+    expect(getDiscipline(first.slug)).toBe(first);
   });
 
   it("returns undefined for an unknown slug", () => {
-    expect(getCaseStudy("not-a-real-client")).toBeUndefined();
+    expect(getDiscipline("interpretive-dance")).toBeUndefined();
   });
 
-  it("gives every case study a unique slug", () => {
-    const slugs = caseStudies.map((c) => c.slug);
+  it("gives every discipline a unique slug", () => {
+    const slugs = disciplines.map((d) => d.slug);
     expect(new Set(slugs).size).toBe(slugs.length);
   });
 
-  it("carries three to six flagships", () => {
-    // The spec caps flagships: depth where it counts, breadth in the index.
-    expect(caseStudies.length).toBeGreaterThanOrEqual(3);
-    expect(caseStudies.length).toBeLessThanOrEqual(6);
-  });
-
-  it("gives every case study the content a brand buyer needs", () => {
-    for (const c of caseStudies) {
-      expect(c.challenge.length, `${c.slug} challenge`).toBeGreaterThan(0);
-      expect(c.approach.length, `${c.slug} approach`).toBeGreaterThan(0);
-      expect(c.deliverables.length, `${c.slug} deliverables`).toBeGreaterThan(0);
-      expect(c.metrics.length, `${c.slug} metrics`).toBeGreaterThan(0);
-      expect(c.media.length, `${c.slug} media`).toBeGreaterThan(0);
+  it("gives every discipline real pieces and real prose", () => {
+    for (const d of disciplines) {
+      expect(d.items.length, `${d.slug} items`).toBeGreaterThan(0);
+      expect(d.blurb.length, `${d.slug} blurb`).toBeGreaterThan(0);
+      expect(d.context.length, `${d.slug} context`).toBeGreaterThan(0);
+      expect(d.approach.length, `${d.slug} approach`).toBeGreaterThan(0);
     }
   });
 
-  it("excludes draft case studies from the published set", () => {
-    // The launch gate: placeholder copy must not reach production.
-    for (const c of publishedCaseStudies) {
-      expect(c.contentStatus, `${c.slug} is draft`).toBe("final");
+  it("points every piece at a real outbound link", () => {
+    for (const d of disciplines) {
+      for (const item of d.items) {
+        expect(item.href, `${d.slug} href`).toMatch(/^https:\/\//);
+        expect(item.thumb, `${d.slug} thumb`).toMatch(/^\/assets\//);
+      }
     }
+  });
+});
+
+describe("adjacentDisciplines", () => {
+  it("wraps around at both ends so navigation is never a dead end", () => {
+    const first = disciplines[0].slug;
+    const last = disciplines[disciplines.length - 1].slug;
+
+    expect(adjacentDisciplines(first).prev.slug).toBe(last);
+    expect(adjacentDisciplines(last).next.slug).toBe(first);
+  });
+
+  it("returns the true neighbours in the middle", () => {
+    const { prev, next } = adjacentDisciplines(disciplines[1].slug);
+    expect(prev.slug).toBe(disciplines[0].slug);
+    expect(next.slug).toBe(disciplines[2].slug);
   });
 });

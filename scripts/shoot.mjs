@@ -38,14 +38,27 @@ for (const vp of VIEWPORTS) {
   await page.keyboard.press("Escape").catch(() => {});
   await page.waitForTimeout(motion ? 3000 : 900);
   await page.evaluate(async () => {
-    // Walk the page so lazy-loaded images and any scroll reveals resolve.
+    // Sticky cards mean a scroll walk alone does not reliably bring every
+    // lazy image into view, so force them eager for the capture.
+    for (const img of Array.from(document.images)) img.loading = "eager";
+
     const step = window.innerHeight;
     for (let y = 0; y < document.body.scrollHeight; y += step) {
       window.scrollTo(0, y);
       await new Promise((r) => setTimeout(r, 90));
     }
     window.scrollTo(0, 0);
-    await new Promise((r) => setTimeout(r, 250));
+
+    // Wait for every image to finish decoding before the shutter.
+    await Promise.all(
+      Array.from(document.images)
+        .filter((i) => !i.complete)
+        .map((i) => new Promise((r) => {
+          i.addEventListener("load", r, { once: true });
+          i.addEventListener("error", r, { once: true });
+        }))
+    );
+    await new Promise((r) => setTimeout(r, 300));
   });
 
   const file = `${out}/${label}-${vp.name}.png`;
