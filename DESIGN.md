@@ -117,7 +117,7 @@ Smooth scroll: Lenis. All scroll animation: GSAP ScrollTrigger. **One animation 
 | 6 | Logo marquee | Continuous | Horizontal `linear` loop, pauses on hover. |
 | 7 | Positioning statement | Enter viewport | Word-by-word opacity wipe, 24ms stagger. Not a slide. |
 | 8 | Credibility figures | Enter viewport | Digits roll up in a masked column. |
-| 9 | Services rows | Scroll through | Active row lifts to full opacity, others sit at 40%. Hairline draws L→R. |
+| 9 | Services rows | Scroll through | Hairline draws L→R. The active row's **title** lifts to full opacity, inactive titles sit at 45%. Body copy never dims — compounding opacity onto `--bone-dim` drops it below AA. Under reduced motion nothing dims at all. |
 | 10 | Selected work | Scroll | Cards pin and stack, each releasing the previous. |
 | 11 | Testimonial columns | Scroll | Two columns at differing scroll speeds (0.9× / 1.15×). |
 | 12 | Founder portrait | Enter viewport | Scale 1.06 → 1 under a clip mask. |

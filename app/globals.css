@@ -248,6 +248,15 @@ html.lenis body {
   transform: scaleX(1);
 }
 
+/* Services row emphasis. `.svc-dim` is added by JS only when motion is on, so
+   no-JS and reduced-motion visitors see every title at full contrast. */
+.svc-title {
+  transition: opacity var(--dur-base) var(--ease-out);
+}
+.svc-dim .svc-title[data-active="false"] {
+  opacity: 0.45;
+}
+
 /* Accent use #1 of 5 — ambient glow. Never more than two per page. */
 .ambient {
   position: absolute;
