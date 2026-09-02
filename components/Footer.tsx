@@ -16,23 +16,21 @@ export default function Footer() {
       />
 
       <Shell className="relative">
-        <p className="micro">say hello</p>
+        {/* The contact form directly above is the ask. This closes rather than
+            repeating it — the address itself carries the weight. */}
+        <p className="micro">or just email us</p>
 
-        <p className="display-l mt-8 max-w-[16ch]">
-          Tell us what you&rsquo;re trying to move.
-        </p>
-
-        <div className="mt-14 grid gap-10 md:grid-cols-12">
-          <div className="md:col-span-6">
+        <div className="mt-8 grid gap-10 md:grid-cols-12">
+          <div className="md:col-span-7">
             {/* Fluid rather than `heading`: the address is long and must not
                 overflow at 360px. */}
             <a
               href={`mailto:${contact.email}`}
-              className="link-underline font-display inline-block text-[clamp(1.05rem,3.6vw,2.1rem)] leading-tight tracking-[-0.02em]"
+              className="link-underline font-display inline-block text-[clamp(1.35rem,4.6vw,3rem)] leading-tight tracking-[-0.028em] [font-variation-settings:'wdth'_108,'wght'_600]"
             >
               {contact.email}
             </a>
-            <p className="mt-4">
+            <p className="mt-5">
               <a href={contact.whatsapp} className="link-underline lede text-bone-dim">
                 {contact.phone}
               </a>
