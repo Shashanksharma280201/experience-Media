@@ -112,11 +112,19 @@ html.lenis body {
   text-wrap: balance;
 }
 
+/* Mobile is tuned so the hero's pre-split lines never re-wrap — a wrapped line
+   inside .mask-line would break the reveal. Desktop keeps its full scale. */
 .display-xl {
-  font-size: clamp(3.25rem, 11vw, 10.5rem);
+  font-size: clamp(2.4rem, 9.4vw, 10.5rem);
   font-variation-settings: "wdth" 118, "wght" 700;
   line-height: 0.94;
   letter-spacing: -0.035em;
+}
+
+@media (min-width: 768px) {
+  .display-xl {
+    font-size: clamp(4rem, 11vw, 10.5rem);
+  }
 }
 
 .display-l {
@@ -179,6 +187,19 @@ html.lenis body {
 .mask-line > * {
   display: block;
   will-change: transform;
+}
+
+/* Motion #5 — the scroll cue's 2px travel loop. */
+@keyframes cue {
+  0%,
+  100% {
+    transform: translateY(-2px);
+    opacity: 0.6;
+  }
+  50% {
+    transform: translateY(2px);
+    opacity: 1;
+  }
 }
 
 @keyframes marquee {
