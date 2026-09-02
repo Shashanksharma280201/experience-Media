@@ -1,57 +1,38 @@
-import Link from "next/link";
 import dynamic from "next/dynamic";
-import Hero from "@/components/Hero";
-import Founder from "@/components/Founder";
-import CreatorsStrip from "@/components/CreatorsStrip";
-import BrandGrid from "@/components/BrandGrid";
-import StatCounter from "@/components/StatCounter";
-import ServicesPinned from "@/components/ServicesPinned";
-import Testimonials from "@/components/Testimonials";
+import Hero from "@/components/home/Hero";
+import SelectedWork from "@/components/home/SelectedWork";
+import Capabilities from "@/components/home/Capabilities";
+import Proof from "@/components/home/Proof";
+import PointOfView from "@/components/home/PointOfView";
+import Clients from "@/components/home/Clients";
 import ContactForm from "@/components/ContactForm";
 
-const WebGLCanvas = dynamic(() => import("@/components/webgl/WebGLCanvas"));
+// The finale: the camera pulls back behind the contact section to reveal the
+// whole constellation of work. Loaded only when the visitor gets there.
+const WebGLScene = dynamic(() => import("@/components/webgl/WebGLScene"));
+
+// The page is one reel; each section is a slate on it.
+const REEL = 7;
 
 export default function Home() {
   return (
-    <>
-      {/* Fixed WebGL multiverse — shows through the transparent hero region. */}
-      <WebGLCanvas />
+    <div className="relative text-paper">
+      {/* Ground plane, behind the scene. */}
+      <div aria-hidden className="fixed inset-0 -z-20 bg-void" />
+      <WebGLScene mode="pullback" anchorId="contact" />
 
-      <Hero />
-
-      {/* Everything below scrolls up over the canvas. The gradient band dissolves
-          the dark multiverse void smoothly into the light page (hero → services). */}
-      <div className="relative z-10">
-        <div className="pointer-events-none h-[45vh] bg-gradient-to-b from-[#0c0b0a] via-[#0c0b0a] to-paper" />
-        <div className="bg-paper">
-          {/* "What we do" leads, right after the hero */}
-          <ServicesPinned />
-          <Founder />
-          <CreatorsStrip />
-          <BrandGrid />
-          <StatCounter />
-
-          {/* CTA to portfolio */}
-          <section className="border-t border-line">
-            <Link
-              href="/portfolio"
-              className="group mx-auto flex max-w-[1600px] flex-col items-start justify-between gap-6 px-5 py-20 md:flex-row md:items-center md:px-10 md:py-28"
-            >
-              <h2 className="display text-[clamp(2.2rem,7vw,6rem)]">
-                See the work
-                <span className="text-accent">.</span>
-              </h2>
-              <span className="eyebrow flex items-center gap-3 rounded-full border border-ink px-6 py-4 transition-colors group-hover:bg-ink group-hover:text-paper">
-                Explore portfolio{" "}
-                <span className="transition-transform group-hover:translate-x-1">↗</span>
-              </span>
-            </Link>
-          </section>
-
-          <Testimonials />
-          <ContactForm />
-        </div>
+      {/* Opaque stack — the canvas is hidden behind all of this. */}
+      <div className="bg-void">
+        <Hero />
+        <SelectedWork index={1} total={REEL} />
+        <Capabilities index={2} total={REEL} />
+        <Proof index={3} total={REEL} />
+        <PointOfView index={4} total={REEL} />
+        <Clients index={5} total={REEL} />
       </div>
-    </>
+
+      {/* Transparent — the constellation resolves behind the contact form. */}
+      <ContactForm index={6} total={REEL} />
+    </div>
   );
 }

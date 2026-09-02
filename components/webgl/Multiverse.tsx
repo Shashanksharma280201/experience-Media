@@ -1,19 +1,20 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, type RefObject } from "react";
 import { buildScreenLayout } from "@/lib/webgl-content";
 import Screen from "./Screen";
-import HeroReel from "./HeroReel";
-import CameraRig from "./CameraRig";
+import CameraRig, { type CameraMode } from "./CameraRig";
 import ParticleField from "./ParticleField";
 import type { Tier } from "@/lib/webgl-capability";
 
 export default function Multiverse({
   tier,
-  active = true,
+  progressRef,
+  mode,
 }: {
   tier: Tier;
-  active?: boolean;
+  progressRef: RefObject<number>;
+  mode: CameraMode;
 }) {
   const screens = useMemo(() => {
     const all = buildScreenLayout({ seed: 11 });
@@ -25,13 +26,12 @@ export default function Multiverse({
 
   return (
     <>
-      <color attach="background" args={["#0c0b0a"]} />
-      {/* Light, distant fog — atmosphere without hiding the artwork. */}
-      <fog attach="fog" args={["#0c0b0a", 90, 360]} />
+      <color attach="background" args={["#0b0a09"]} />
+      {/* Distant fog — atmosphere without hiding the artwork. */}
+      <fog attach="fog" args={["#0b0a09", 90, 360]} />
       <ambientLight intensity={0.6} />
       <directionalLight position={[5, 8, 5]} intensity={1.1} color="#ffe9c0" />
-      <CameraRig />
-      <HeroReel active={active} />
+      <CameraRig progressRef={progressRef} mode={mode} />
       <ParticleField count={tier === "low" ? 350 : 800} />
       {screens.map((s) => (
         <Screen key={s.id} datum={s} onOpen={open} />

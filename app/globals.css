@@ -1,25 +1,22 @@
 @import "tailwindcss";
 
 @theme {
-  /* Canvas — warm off-white paper + ink */
-  --color-paper: #f4f2ee;
-  --color-paper-dim: #e9e6df;
-  --color-ink: #0e0e0e;
-  --color-ink-soft: #4a4742;
-  --color-ink-faint: #8c887f;
-  --color-line: #d8d4cb;
-  --color-line-strong: #c4bfb3;
+  /* Ground — deep violet-black */
+  --color-void: #0a0612;
+  --color-surface: #150e21;
+  --color-rule: rgba(243, 239, 255, 0.13);
 
-  /* Dark sections */
-  --color-night: #0c0b0a;
-  --color-night-soft: #16140f;
+  /* Type on the dark ground; also the one inversion section */
+  --color-paper: #f3efff;
 
-  /* Accent — refined amber/gold (nod to the original brand) */
-  --color-accent: #c8920a;
-  --color-accent-bright: #e3a90f;
+  /* The accent ramp — violet through fuchsia to pink. `accent` is the
+     workhorse; violet and fuchsia exist to build the gradient. */
+  --color-violet: #8b5cf6;
+  --color-fuchsia: #d946ef;
+  --color-accent: #f472b6;
 
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-display);
+  --font-mono: var(--font-technical);
 
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
 
@@ -36,13 +33,8 @@
   }
 }
 
-:root {
-  --background: var(--color-paper);
-  --foreground: var(--color-ink);
-}
-
 * {
-  border-color: var(--color-line);
+  border-color: var(--color-rule);
 }
 
 html {
@@ -51,8 +43,8 @@ html {
 }
 
 body {
-  background: var(--color-paper);
-  color: var(--color-ink);
+  background: var(--color-void);
+  color: var(--color-paper);
   font-family: var(--font-sans), Arial, sans-serif;
   overflow-x: hidden;
 }
@@ -82,9 +74,137 @@ html.lenis body {
   text-transform: uppercase;
 }
 
+/* Kinetic hero type — scroll drives Archivo's width axis. JS writes --wdth;
+   the axis is the ONLY animated property, so nothing here can reflow. */
+.kinetic {
+  font-variation-settings: "wdth" var(--wdth, 100), "wght" var(--wght, 700);
+  will-change: font-variation-settings;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kinetic {
+    font-variation-settings: "wdth" 100, "wght" 700;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Intro — a pure-CSS loading screen. It must animate the instant the HTML
+   paints, so nothing here waits on React hydration or GSAP.
+   Timeline: core draws 0.10s → wings 0.25s → body 0.35s → fill 1.00s
+             → wordmark 1.15s → exit 1.95s → gone by 2.40s
+--------------------------------------------------------------------------- */
+
+.intro {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  background:
+    radial-gradient(60% 60% at 18% 22%, color-mix(in oklab, var(--color-violet) 55%, transparent), transparent 70%),
+    radial-gradient(55% 55% at 82% 28%, color-mix(in oklab, var(--color-fuchsia) 45%, transparent), transparent 70%),
+    radial-gradient(75% 70% at 50% 88%, color-mix(in oklab, var(--color-accent) 42%, transparent), transparent 70%),
+    var(--color-void);
+  animation: intro-exit 0.45s cubic-bezier(0.76, 0, 0.24, 1) 1.95s forwards;
+}
+
+/* Already seen this session — never paint it at all. */
+html.intro-done .intro {
+  display: none;
+}
+
+.intro-aurora {
+  position: absolute;
+  inset: -20%;
+  background:
+    radial-gradient(40% 40% at 30% 40%, color-mix(in oklab, var(--color-violet) 40%, transparent), transparent 70%),
+    radial-gradient(35% 35% at 70% 60%, color-mix(in oklab, var(--color-accent) 35%, transparent), transparent 70%);
+  filter: blur(40px);
+  animation: intro-drift 9s ease-in-out infinite alternate;
+}
+
+.intro-stack {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(1.5rem, 4vw, 2.75rem);
+}
+
+.intro-mark {
+  width: clamp(140px, 22vw, 260px);
+  filter: drop-shadow(0 0 28px color-mix(in oklab, var(--color-accent) 45%, transparent));
+}
+
+/* Stroke layer draws itself, then hands off to the fill layer. */
+.intro-mark .draw {
+  fill: none;
+  stroke: url(#intro-ramp);
+  stroke-width: 3;
+  stroke-linejoin: round;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: intro-draw 0.85s cubic-bezier(0.65, 0, 0.35, 1) forwards,
+    intro-stroke-out 0.4s linear 1.15s forwards;
+}
+.intro-mark .draw[data-p="core"] { animation-delay: 0.1s, 1.15s; }
+.intro-mark .draw[data-p="wings"] { animation-delay: 0.25s, 1.15s; }
+.intro-mark .draw[data-p="body"] { animation-delay: 0.35s, 1.15s; }
+
+.intro-mark .solid {
+  fill: url(#intro-ramp);
+  opacity: 0;
+  animation: intro-fill 0.5s ease-out 1.0s forwards;
+}
+
+.intro-word {
+  overflow: hidden;
+}
+.intro-word span {
+  display: block;
+  font-family: var(--font-sans), sans-serif;
+  font-weight: 600;
+  font-size: clamp(1.1rem, 3.4vw, 2.4rem);
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  color: var(--color-paper);
+  transform: translateY(110%);
+  animation: intro-word 0.75s cubic-bezier(0.16, 1, 0.3, 1) 1.15s forwards;
+}
+
+@keyframes intro-draw {
+  to { stroke-dashoffset: 0; }
+}
+@keyframes intro-stroke-out {
+  to { opacity: 0; }
+}
+@keyframes intro-fill {
+  from { opacity: 0; transform: scale(0.985); }
+  to { opacity: 1; transform: scale(1); }
+}
+@keyframes intro-word {
+  to { transform: translateY(0); letter-spacing: 0.24em; }
+}
+@keyframes intro-drift {
+  to { transform: translate3d(4%, -3%, 0) scale(1.12); }
+}
+@keyframes intro-exit {
+  to { transform: translateY(-101%); }
+}
+
+/* Reduced motion: a brief static hold, no movement. */
+@media (prefers-reduced-motion: reduce) {
+  .intro { animation: intro-fade 0.3s linear 0.4s forwards; }
+  .intro-aurora { animation: none; }
+  .intro-mark .draw { display: none; }
+  .intro-mark .solid { opacity: 1; animation: none; }
+  .intro-word span { transform: none; letter-spacing: 0.24em; animation: none; }
+  @keyframes intro-fade { to { opacity: 0; visibility: hidden; } }
+}
+
 ::selection {
   background: var(--color-accent);
-  color: var(--color-paper);
+  color: var(--color-void);
 }
 
 .no-scrollbar::-webkit-scrollbar {
@@ -94,14 +214,14 @@ html.lenis body {
   scrollbar-width: none;
 }
 
-/* Film grain overlay */
+/* Film grain overlay — `overlay` reads on the dark ground; `multiply` vanished. */
 .grain {
   position: fixed;
   inset: 0;
   z-index: 60;
   pointer-events: none;
-  opacity: 0.045;
-  mix-blend-mode: multiply;
+  opacity: 0.08;
+  mix-blend-mode: overlay;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 

@@ -1,0 +1,17 @@
+// Barrel: every binding the v1 components imported from `@/lib/content`
+// still resolves here, so the split is transparent to consumers.
+
+export { site, contact, socials } from "./site";
+export { brands, creators, testimonials } from "./clients";
+export { services, offers, type Service, type Offer } from "./capabilities";
+export { stat, telemetry, type Readout } from "./proof";
+export {
+  caseStudies,
+  publishedCaseStudies,
+  getCaseStudy,
+  portfolio,
+  type CaseStudy,
+  type CaseStudyMedia,
+  type PortfolioItem,
+  type PortfolioCategory,
+} from "./work";

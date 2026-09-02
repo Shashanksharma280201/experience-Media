@@ -57,6 +57,8 @@ export default function Screen({
       position={datum.position}
       rotation={[datum.rotation[0], datum.rotation[1], datum.rotation[2]]}
     >
+      {/* drei's <Image> is a three.js mesh, not an <img> */}
+      {/* eslint-disable-next-line jsx-a11y/alt-text */}
       <Image
         ref={img}
         url={datum.thumb}

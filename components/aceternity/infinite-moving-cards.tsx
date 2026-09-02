@@ -3,7 +3,9 @@
 // https://ui.aceternity.com/components/infinite-moving-cards
 
 import { cn } from "@/lib/utils";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef } from "react";
+
+const DURATION = { fast: "30s", normal: "55s", slow: "90s" } as const;
 
 export const InfiniteMovingCards = ({
   items,
@@ -18,33 +20,30 @@ export const InfiniteMovingCards = ({
   pauseOnHover?: boolean;
   className?: string;
 }) => {
-  const containerRef = React.useRef<HTMLDivElement>(null);
-  const scrollerRef = React.useRef<HTMLUListElement>(null);
-  const [start, setStart] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const scrollerRef = useRef<HTMLUListElement>(null);
 
   useEffect(() => {
-    addAnimation();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    const container = containerRef.current;
+    const scroller = scrollerRef.current;
+    if (!container || !scroller) return;
 
-  function addAnimation() {
-    if (!containerRef.current || !scrollerRef.current) return;
-    const scrollerContent = Array.from(scrollerRef.current.children);
-    scrollerContent.forEach((item) => {
-      const dup = item.cloneNode(true);
-      scrollerRef.current?.appendChild(dup);
-    });
-
-    containerRef.current.style.setProperty(
+    container.style.setProperty(
       "--animation-direction",
       direction === "left" ? "forwards" : "reverse"
     );
-    containerRef.current.style.setProperty(
-      "--animation-duration",
-      speed === "fast" ? "30s" : speed === "normal" ? "55s" : "90s"
-    );
-    setStart(true);
-  }
+    container.style.setProperty("--animation-duration", DURATION[speed]);
+
+    // Duplicate once so the track can loop seamlessly.
+    if (scroller.dataset.duplicated !== "true") {
+      for (const item of Array.from(scroller.children)) {
+        scroller.appendChild(item.cloneNode(true));
+      }
+      scroller.dataset.duplicated = "true";
+    }
+
+    scroller.classList.add("animate-infinite-scroll");
+  }, [direction, speed]);
 
   return (
     <div
@@ -58,7 +57,6 @@ export const InfiniteMovingCards = ({
         ref={scrollerRef}
         className={cn(
           "flex w-max min-w-full shrink-0 flex-nowrap gap-5",
-          start && "animate-infinite-scroll",
           pauseOnHover && "hover:[animation-play-state:paused]"
         )}
       >

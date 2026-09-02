@@ -8,6 +8,6 @@ export default defineConfig({
     setupFiles: ["test/setup.ts"],
   },
   resolve: {
-    alias: { "@": path.resolve(__dirname, ".") },
+    alias: { "@": path.resolve(import.meta.dirname, ".") },
   },
 });

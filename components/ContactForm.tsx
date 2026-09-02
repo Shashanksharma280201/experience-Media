@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { contact } from "@/lib/content";
+import Timecode from "@/components/chrome/Timecode";
 
 type Status = "idle" | "sending" | "ok" | "error";
 
@@ -12,7 +13,16 @@ const fields = [
   { name: "country", placeholder: "Country", type: "text", required: false, half: true },
 ];
 
-export default function ContactForm() {
+const input =
+  "w-full border-b border-rule bg-transparent py-4 text-paper placeholder:text-paper/35 focus:border-accent focus:outline-none";
+
+export default function ContactForm({
+  index,
+  total,
+}: {
+  index?: number;
+  total?: number;
+}) {
   const [status, setStatus] = useState<Status>("idle");
   const [error, setError] = useState("");
 
@@ -39,28 +49,37 @@ export default function ContactForm() {
   }
 
   return (
-    <section id="contact" className="border-t border-line py-20 md:py-28">
+    <section id="contact" className="py-20 md:py-28">
       <div className="mx-auto max-w-[1600px] px-5 md:px-10">
-        <div className="grid gap-12 md:grid-cols-12">
+        <div className="flex flex-wrap items-baseline justify-between gap-4 border-b border-rule pb-6">
+          <h2 className="display text-[clamp(2rem,5vw,4rem)]">Start a project</h2>
+          {index !== undefined && total !== undefined && (
+            <Timecode index={index} total={total} label="Contact" />
+          )}
+        </div>
+
+        <div className="mt-12 grid gap-12 md:grid-cols-12">
           <div className="md:col-span-5">
-            <p className="eyebrow text-accent">Start a project</p>
-            <h2 className="display mt-5 text-[clamp(2.5rem,7vw,6rem)]">
-              Wanna get
+            <p className="display text-[clamp(1.8rem,4vw,3rem)]">
+              Tell us what you&apos;re
               <br />
-              in touch?
-            </h2>
-            <p className="mt-8 max-w-sm text-ink-soft">
-              Tell us about your channel, brand or idea. We usually reply within a day.
+              trying to move<span className="text-accent">.</span>
+            </p>
+            <p className="mt-8 max-w-sm text-paper/60">
+              Your channel, your brand, or a single film. We usually reply within a day.
             </p>
             <div className="mt-8 flex flex-col gap-2 text-sm">
-              <a href={`mailto:${contact.email}`} className="w-fit border-b border-line pb-1 hover:border-accent hover:text-accent">
+              <a
+                href={`mailto:${contact.email}`}
+                className="w-fit border-b border-rule pb-1 transition-colors hover:border-accent hover:text-accent"
+              >
                 {contact.email}
               </a>
               <a
                 href={contact.whatsapp}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-fit border-b border-line pb-1 hover:border-accent hover:text-accent"
+                className="w-fit border-b border-rule pb-1 transition-colors hover:border-accent hover:text-accent"
               >
                 WhatsApp · {contact.phone}
               </a>
@@ -76,7 +95,7 @@ export default function ContactForm() {
                     type={f.type}
                     required={f.required}
                     placeholder={f.placeholder + (f.required ? " *" : "")}
-                    className="w-full border-b border-line bg-transparent py-4 text-ink placeholder:text-ink-faint focus:border-accent focus:outline-none"
+                    className={input}
                   />
                 </div>
               ))}
@@ -85,7 +104,7 @@ export default function ContactForm() {
                   name="whatsapp"
                   type="tel"
                   placeholder="WhatsApp number"
-                  className="w-full border-b border-line bg-transparent py-4 text-ink placeholder:text-ink-faint focus:border-accent focus:outline-none"
+                  className={input}
                 />
               </div>
               <div className="sm:col-span-2">
@@ -94,7 +113,7 @@ export default function ContactForm() {
                   required
                   rows={4}
                   placeholder="Your message *"
-                  className="w-full resize-none border-b border-line bg-transparent py-4 text-ink placeholder:text-ink-faint focus:border-accent focus:outline-none"
+                  className={`${input} resize-none`}
                 />
               </div>
             </div>
@@ -103,7 +122,7 @@ export default function ContactForm() {
               <button
                 type="submit"
                 disabled={status === "sending"}
-                className="eyebrow rounded-full bg-ink px-8 py-4 text-paper transition-colors hover:bg-accent disabled:opacity-50"
+                className="eyebrow border border-accent px-8 py-4 text-accent transition-colors hover:bg-accent hover:text-void disabled:opacity-50"
               >
                 {status === "sending" ? "Sending…" : "Send message"}
               </button>
@@ -111,7 +130,7 @@ export default function ContactForm() {
                 <span className="text-sm text-accent">Thanks — we&apos;ll be in touch soon.</span>
               )}
               {status === "error" && (
-                <span className="text-sm text-red-700">{error}</span>
+                <span className="text-sm text-red-400">{error}</span>
               )}
             </div>
           </form>

@@ -1,16 +1,31 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Archivo, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import SmoothScrollProvider from "@/components/SmoothScrollProvider";
 import { ScrollProgressProvider } from "@/hooks/useScrollProgress";
-import ScrollProgress from "@/components/ScrollProgress";
+import Scrubber from "@/components/chrome/Scrubber";
+import Transition from "@/components/chrome/Transition";
+import CursorReadout from "@/components/chrome/CursorReadout";
+import Intro from "@/components/intro/Intro";
 import Grain from "@/components/Grain";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import { site } from "@/lib/content";
 
-const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
-const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
+// Archivo carries both a weight and a width axis; the hero maps scroll to `wdth`.
+const display = Archivo({
+  variable: "--font-display",
+  subsets: ["latin"],
+  axes: ["wdth"],
+  display: "swap",
+});
+
+// Technical furniture: timecodes, reel indices, deliverable tracks, metric labels.
+const technical = JetBrains_Mono({
+  variable: "--font-technical",
+  subsets: ["latin"],
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://experiencemedia.in"),
@@ -48,15 +63,26 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+    <html lang="en" className={`${display.variable} ${technical.variable} antialiased`}>
       <body>
+        {/* Runs before paint: if the intro already played this session, the
+            loading screen is never rendered at all — no flash either way. */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `try{if(sessionStorage.getItem('em-intro-seen')==='1')document.documentElement.classList.add('intro-done')}catch(e){}`,
+          }}
+        />
+        <Intro />
         <Grain />
-        <ScrollProgress />
+        <Transition />
+        <CursorReadout />
         <SmoothScrollProvider>
           <ScrollProgressProvider>
             <Nav />
             <main>{children}</main>
             <Footer />
+            {/* Inside the provider — the scrubber is its consumer. */}
+            <Scrubber />
           </ScrollProgressProvider>
         </SmoothScrollProvider>
       </body>

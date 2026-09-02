@@ -3,7 +3,7 @@ import { contact, socials, site } from "@/lib/content";
 
 export default function Footer() {
   return (
-    <footer className="bg-night text-paper">
+    <footer className="relative bg-void text-paper">
       <div className="mx-auto max-w-[1600px] px-5 py-16 md:px-10 md:py-24">
         <div className="grid gap-12 md:grid-cols-12">
           <div className="md:col-span-6">
@@ -62,9 +62,8 @@ export default function Footer() {
           </div>
           <p className="font-mono">© 2025 {site.name}. All rights reserved.</p>
           <p className="font-mono">
-            Site:{" "}
-            <Link href="/" className="hover:text-accent">
-              v1 redesign
+            <Link href="/work" className="hover:text-accent">
+              New Delhi · IN
             </Link>
           </p>
         </div>

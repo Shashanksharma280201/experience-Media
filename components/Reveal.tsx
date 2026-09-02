@@ -1,6 +1,6 @@
 "use client";
 
-import { createElement, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
@@ -11,11 +11,10 @@ if (typeof window !== "undefined") {
 type Props = {
   children: React.ReactNode;
   className?: string;
-  /** stagger direct children instead of animating the whole block */
+  /** Stagger direct children instead of animating the whole block. */
   stagger?: boolean;
   delay?: number;
   y?: number;
-  as?: React.ElementType;
 };
 
 export default function Reveal({
@@ -24,9 +23,8 @@ export default function Reveal({
   stagger = false,
   delay = 0,
   y = 28,
-  as: Tag = "div",
 }: Props) {
-  const ref = useRef<HTMLElement>(null);
+  const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const el = ref.current;
@@ -43,16 +41,16 @@ export default function Reveal({
         delay,
         ease: "expo.out",
         stagger: stagger ? 0.08 : 0,
-        scrollTrigger: {
-          trigger: el,
-          start: "top 85%",
-          once: true,
-        },
+        scrollTrigger: { trigger: el, start: "top 85%", once: true },
       });
     }, el);
 
     return () => ctx.revert();
   }, [stagger, delay, y]);
 
-  return createElement(Tag, { ref, className }, children);
+  return (
+    <div ref={ref} className={className}>
+      {children}
+    </div>
+  );
 }

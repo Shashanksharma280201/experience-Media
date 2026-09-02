@@ -14,6 +14,23 @@ export function pickTier(input: {
   return "high";
 }
 
+// --- useSyncExternalStore adapter -------------------------------------------
+// The tier never changes for a session, so the snapshot is computed once and
+// cached. This lets components read it without setState-inside-an-effect.
+
+let cached: Tier | null = null;
+const noop = () => {};
+
+export const subscribeTier = () => noop;
+
+export function getTierSnapshot(): Tier {
+  if (cached === null) cached = detectTier();
+  return cached;
+}
+
+/** Server render assumes no WebGL; the client swaps in the real tier. */
+export const getServerTierSnapshot = (): Tier => "off";
+
 /** Runtime probe — only call in the browser. */
 export function detectTier(): Tier {
   if (typeof window === "undefined") return "off";
