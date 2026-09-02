@@ -10,22 +10,37 @@ export const creators = [
   "/assets/creators/9.png",
 ];
 
-export const brands = [
-  { name: "Hyundai", img: "/assets/brands/image-removebg-preview-2.png" },
-  { name: "MyGov", img: "/assets/brands/image.png" },
-  { name: "Odoo", img: "/assets/brands/image-removebg-preview-4.png" },
-  { name: "Zerodha Zero1", img: "/assets/brands/image-removebg-preview-5.png" },
-  { name: "Skillosaurus", img: "/assets/brands/image-removebg-preview-3.png" },
-  { name: "Frontier Group", img: "/assets/brands/image-removebg-preview-1.png" },
-  { name: "We Smile Media", img: "/assets/brands/image-1.png" },
-  { name: "Think School", img: "/assets/brands/image-removebg-preview-6.png" },
-  { name: "Lenskart", img: "/assets/brands/image-removebg-previewgfd.png" },
-  { name: "Ugaoo", img: "/assets/brands/image-removebg-preview-7-improved.png" },
-  { name: "Cable Australia", img: "/assets/brands/ca-cable-aurtralia.png" },
-  { name: "Flo Mobility", img: "/assets/brands/flo-mobility-autonomous-navigation.png" },
-  { name: "Stemachip", img: "/assets/brands/stemachip.png" },
-  { name: "TFN 2025", img: "/assets/brands/tfn2025-logo.png" },
-  { name: "Webrook", img: "/assets/brands/webrook.png" },
+export type Brand = {
+  name: string;
+  img: string;
+  /** Intrinsic pixel size — drives correct aspect and prevents layout shift. */
+  w: number;
+  h: number;
+  /**
+   * The logo band silhouettes every mark to white. A few source files are
+   * full-colour artwork on a solid background and turn into blank shapes when
+   * silhouetted, so they sit the band out until a transparent version exists.
+   */
+  needsTransparentAsset?: boolean;
+};
+
+export const brands: Brand[] = [
+  { name: "Hyundai", img: "/assets/brands/image-removebg-preview-2.png", w: 666, h: 375 },
+  // Colour artwork on a solid white disc — silhouettes to a plain circle.
+  { name: "MyGov", img: "/assets/brands/image.png", w: 180, h: 180, needsTransparentAsset: true },
+  { name: "Odoo", img: "/assets/brands/image-removebg-preview-4.png", w: 577, h: 432 },
+  { name: "Zerodha Zero1", img: "/assets/brands/image-removebg-preview-5.png", w: 200, h: 200 },
+  { name: "Skillosaurus", img: "/assets/brands/image-removebg-preview-3.png", w: 1024, h: 135 },
+  { name: "Frontier Group", img: "/assets/brands/image-removebg-preview-1.png", w: 225, h: 225 },
+  { name: "We Smile Media", img: "/assets/brands/image-1.png", w: 1024, h: 1024 },
+  { name: "Think School", img: "/assets/brands/image-removebg-preview-6.png", w: 500, h: 500 },
+  { name: "Lenskart", img: "/assets/brands/image-removebg-previewgfd.png", w: 400, h: 331 },
+  { name: "Ugaoo", img: "/assets/brands/image-removebg-preview-7-improved.png", w: 268, h: 119 },
+  { name: "Cable Australia", img: "/assets/brands/ca-cable-aurtralia.png", w: 1563, h: 1563 },
+  { name: "Flo Mobility", img: "/assets/brands/flo-mobility-autonomous-navigation.png", w: 500, h: 500 },
+  { name: "Stemachip", img: "/assets/brands/stemachip.png", w: 207, h: 202 },
+  { name: "TFN 2025", img: "/assets/brands/tfn2025-logo.png", w: 635, h: 387 },
+  { name: "Webrook", img: "/assets/brands/webrook.png", w: 988, h: 241 },
 ];
 
 export const testimonials = [

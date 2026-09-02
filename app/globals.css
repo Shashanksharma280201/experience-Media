@@ -211,6 +211,22 @@ html.lenis body {
   }
 }
 
+.marquee {
+  animation: marquee var(--marquee-duration, 56s) linear infinite;
+  will-change: transform;
+}
+.marquee:hover {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* Static row rather than a jump to the loop's end frame. */
+  .marquee {
+    animation: none !important;
+    transform: none !important;
+  }
+}
+
 /* Accent use #2 of 5 — the hover underline. */
 .link-underline {
   position: relative;
