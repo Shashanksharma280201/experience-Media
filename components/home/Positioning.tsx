@@ -1,57 +1,54 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import Section from "@/components/layout/Section";
+import Scene from "@/components/layout/Scene";
+import Group from "@/components/motion/Group";
 import { EASE, gsap, prefersReducedMotion, ScrollTrigger } from "@/lib/gsap";
 
 // DRAFT COPY — flagged for review.
-const PARAGRAPHS = [
-  "We started as creators, which means we build for the algorithm and the audience at the same time. Most studios pick one.",
-  "Everything is made in-house — strategy through final grade — so nothing is lost in a handoff, and nothing waits on someone else's calendar.",
-];
+const STATEMENT =
+  "We started as creators, so we build for the algorithm and the audience at the same time. Most agencies pick one.";
+const SECOND =
+  "Strategy, production and distribution under one roof — so nothing is lost in a handoff, and nothing waits on someone else's calendar.";
 
-/** Splits into words while keeping the sentence readable to assistive tech. */
+/** Every word in its own mask, so the statement can rise word by word. */
 function Words({ text }: { text: string }) {
   return (
     <>
       {text.split(" ").map((w, i) => (
-        <span key={`${w}-${i}`} className="pw inline-block">
-          {w}
-          {" "}
+        <span key={`${w}-${i}`}>
+          <span className="word-mask">
+            <span className="pw">{w}</span>
+          </span>{" "}
         </span>
       ))}
     </>
   );
 }
 
+/**
+ * 03 — what we believe. The statement as a full-width poster on the sun
+ * tint; its words rise out of their masks with the scroll (motion #7).
+ */
 export default function Positioning() {
   const root = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const el = root.current;
-    if (!el) return;
-    if (prefersReducedMotion()) return;
-
+    if (!el || prefersReducedMotion()) return;
     const ctx = gsap.context(() => {
-      // Motion #7 — word-by-word opacity wipe. No translation.
       gsap.fromTo(
         ".pw",
-        { opacity: 0.2 },
+        { yPercent: 110 },
         {
-          opacity: 1,
-          ease: "none",
-          stagger: 0.024,
-          duration: 0.5,
-          scrollTrigger: {
-            trigger: el,
-            start: "top 78%",
-            end: "bottom 62%",
-            scrub: 0.4,
-          },
+          yPercent: 0,
+          ease: EASE.out,
+          stagger: 0.035,
+          duration: 0.6,
+          scrollTrigger: { trigger: el, start: "top 70%", end: "center 45%", scrub: 0.5 },
         }
       );
     }, el);
-
     return () => {
       ctx.revert();
       ScrollTrigger.refresh();
@@ -59,16 +56,20 @@ export default function Positioning() {
   }, []);
 
   return (
-    <Section id="studio" label="what we believe">
-      <div ref={root} className="grid gap-10 md:grid-cols-12">
-        <div className="md:col-span-10 md:col-start-2 lg:col-span-9 lg:col-start-3">
-          {PARAGRAPHS.map((p, i) => (
-            <p key={i} className={`display-m ${i > 0 ? "mt-10 md:mt-14" : ""}`}>
-              <Words text={p} />
-            </p>
-          ))}
-        </div>
+    <Scene id="studio" tone="sun">
+      <div ref={root}>
+        <p className="poster poster--l">
+          <Words text={STATEMENT} />
+        </p>
+        <Group className="mt-12 grid gap-8 md:mt-16 md:grid-cols-12">
+          <p className="poster-script script-inline md:col-span-4" data-reveal="script">
+            honestly
+          </p>
+          <p className="lede max-w-[46ch] text-ink-dim md:col-span-7 md:col-start-6" data-reveal="fade">
+            {SECOND}
+          </p>
+        </Group>
       </div>
-    </Section>
+    </Scene>
   );
 }

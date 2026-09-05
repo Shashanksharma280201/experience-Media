@@ -1,59 +1,64 @@
+"use client";
+
+import { useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import Section from "@/components/layout/Section";
-import { disciplines } from "@/lib/content";
+import Scene from "@/components/layout/Scene";
+import Group from "@/components/motion/Group";
+import Poster from "@/components/motion/Poster";
+import { disciplines, totalPieces } from "@/lib/content";
+import { gsap, prefersReducedMotion } from "@/lib/gsap";
 
 /**
- * Motion #10 — the cards pin and stack as you scroll past them.
- * Native `position: sticky`, so without JS they simply flow normally.
+ * 07 — selected work, as a fold gallery (motion #10). Five panels on a strip,
+ * each folded up on its top edge and laid flat as it scrolls into view.
+ * Without JS or under reduced motion the panels are simply flat.
  */
 export default function SelectedWork() {
-  return (
-    <Section id="work" label="selected work">
-      <div className="work-stack">
-        {disciplines.map((d, i) => (
-          <article
-            key={d.slug}
-            className="work-card bg-void"
-            style={{ top: `calc(5rem + ${i * 14}px)` }}
-          >
-            <Link
-              href={`/work/${d.slug}`}
-              className="group block border-t border-hairline pt-8 md:pt-10"
-            >
-              <div className="grid gap-8 md:grid-cols-12 md:gap-10">
-                <div className="md:col-span-5">
-                  <h3 className="display-m link-underline inline-block">{d.title}</h3>
-                  <p className="lede mt-5 max-w-[34ch] text-bone-dim">{d.blurb}</p>
-                  <p className="small mt-6 text-bone-faint">
-                    {d.items.length} pieces · {d.period}
-                  </p>
-                </div>
+  const root = useRef<HTMLDivElement>(null);
 
-                <div className="md:col-span-6 md:col-start-7">
-                  <div
-                    className={`relative overflow-hidden bg-[#131315] ${
-                      d.layout === "short"
-                        ? "mx-auto aspect-[9/16] max-w-[300px]"
-                        : "aspect-video"
-                    }`}
-                  >
-                    <Image
-                      src={d.items[0].thumb}
-                      alt={`${d.title} — sample frame`}
-                      fill
-                      loading="lazy"
-                      sizes="(min-width: 768px) 46vw, 100vw"
-                      className="object-cover opacity-85 transition-[opacity,transform] duration-[var(--dur-slow)] ease-[var(--ease-out)] group-hover:scale-[1.02] group-hover:opacity-100"
-                    />
-                  </div>
-                </div>
-              </div>
-              <div className="h-16 md:h-24" />
-            </Link>
-          </article>
+  useEffect(() => {
+    const el = root.current;
+    if (!el || prefersReducedMotion()) return;
+    const ctx = gsap.context(() => {
+      gsap.utils.toArray<HTMLElement>(".fold-panel").forEach((panel) => {
+        gsap.fromTo(
+          panel,
+          { rotateX: -64 },
+          { rotateX: 0, ease: "power2.out", scrollTrigger: { trigger: panel, start: "top 95%", end: "top 45%", scrub: 0.5 } }
+        );
+      });
+    }, el);
+    return () => ctx.revert();
+  }, []);
+
+  return (
+    <Scene id="work">
+      <Group>
+        <Poster lines={["Five disciplines,", `${totalPieces} pieces.`]} script="see it" scriptLine={1} />
+      </Group>
+      <div ref={root} className="fold mt-12 md:mt-16">
+        {disciplines.map((d) => (
+          <Link key={d.slug} href={`/work/${d.slug}`} className="fold-panel group">
+            <Image
+              src={d.items[0].thumb}
+              alt={`${d.title} — sample frame`}
+              fill
+              loading="lazy"
+              sizes="(min-width: 1200px) 1120px, 100vw"
+            />
+            <div className="fold-caption">
+              <span className="poster poster--m">{d.title}</span>
+              <span className="small whitespace-nowrap">{d.items.length} pieces · {d.period}</span>
+            </div>
+          </Link>
         ))}
       </div>
-    </Section>
+      <p className="mt-8 text-right">
+        <Link href="/work" className="link-underline small text-ink">
+          See all the work
+        </Link>
+      </p>
+    </Scene>
   );
 }

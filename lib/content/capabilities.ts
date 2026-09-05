@@ -64,12 +64,24 @@ const byTitle = (title: string): Service => {
   return found;
 };
 
+// Strategy first: an agency leads with the thinking, then the making.
+// DRAFT COPY — flagged for review.
 export const offers: Offer[] = [
+  {
+    id: "strategy",
+    title: "Strategy & Growth",
+    summary:
+      "Where to play, what to make, and the number we are chasing — then training your team to run the system after we build it.",
+    services: [
+      byTitle("Strategic Content Consultancy"),
+      byTitle("Team Training & System Enhancement"),
+    ],
+  },
   {
     id: "content-engine",
     title: "Content Engine",
     summary:
-      "Always-on output. Short-form that travels and long-form that builds authority, produced on a repeatable schedule.",
+      "Always-on output. Short-form that travels and long-form that builds authority, on a schedule that never slips.",
     services: [
       byTitle("Viral Social Media Content"),
       byTitle("Podcast Production Service"),
@@ -79,7 +91,7 @@ export const offers: Offer[] = [
     id: "brand-films",
     title: "Brand Films",
     summary:
-      "Single pieces made to carry weight — campaign films, documentaries, music videos and live capture.",
+      "Single pieces made to carry a campaign — ads, documentaries, music videos and live capture.",
     services: [
       byTitle("Ad Production Service"),
       byTitle("Music Videos"),
@@ -91,17 +103,7 @@ export const offers: Offer[] = [
     id: "post-vfx",
     title: "Post & VFX",
     summary:
-      "Visual effects, CGI and finishing — the craft layer that separates a shot from a scene.",
+      "Visual effects, CGI and finishing — the craft layer that turns a shot into a scene.",
     services: [byTitle("VFX And CGI")],
-  },
-  {
-    id: "strategy",
-    title: "Strategy & Enablement",
-    summary:
-      "Content strategy, and training your in-house team to run the system after we build it.",
-    services: [
-      byTitle("Strategic Content Consultancy"),
-      byTitle("Team Training & System Enhancement"),
-    ],
   },
 ];

@@ -1,83 +1,98 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { EMBLEM_PATHS, EMBLEM_VIEWBOX } from "@/components/brand/emblem-paths";
+import { useEffect, useRef, useState } from "react";
 import { site } from "@/lib/content";
 
-/** Matches the CSS timeline in globals.css (lift ends at 2.45s). */
-const DURATION_MS = 2450;
-const SEEN_KEY = "em-intro-seen";
+/**
+ * Mirrors the CSS timeline in globals.css — change both together.
+ * The panel starts wiping at LIFT_AT and has cleared by LIFT_AT + LIFT_MS.
+ */
+const LIFT_AT = 2500;
+const LIFT_MS = 900;
+const HANDOFF_IN = 300;
+const REDUCED_HOLD = 2000;
+
+const WORD = "Experience";
+const SCRIPT = "Media";
 
 /**
- * Motion #1 — the load sequence. Server-rendered so its CSS animation begins
- * the moment the HTML paints. Plays once per session and is skippable.
+ * Motion #1 — the poster loader. The wordmark sets itself in condensed caps,
+ * letter by letter; the script writes itself in red across it; it holds for
+ * at least two seconds; then everything lifts and the panel wipes away.
+ * Escape skips on the same choreography.
  */
 export default function Intro() {
   const [gone, setGone] = useState(false);
+  const panel = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const root = document.documentElement;
-    const alreadySeen = root.classList.contains("intro-done");
-    const prevOverflow = root.style.overflow;
-
-    if (!alreadySeen) {
-      try {
-        sessionStorage.setItem(SEEN_KEY, "1");
-      } catch {
-        // Blocked storage: the sequence simply plays every visit.
-      }
-      root.style.overflow = "hidden";
-    }
-
-    let timer = 0;
-    const finish = () => {
-      window.clearTimeout(timer);
-      root.classList.add("intro-done");
-      root.style.overflow = prevOverflow;
-      setGone(true);
-    };
+    root.classList.add("intro-lock");
 
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const delay = alreadySeen ? 0 : reduced ? 600 : DURATION_MS;
-    timer = window.setTimeout(finish, delay);
+    const started = performance.now();
+    const timers: number[] = [];
+    let leaving = false;
 
-    const events = ["pointerdown", "keydown", "wheel", "touchstart"] as const;
-    events.forEach((e) =>
-      window.addEventListener(e, finish, { once: true, passive: true })
-    );
+    const handoff = () => {
+      root.classList.remove("intro-lock");
+      root.classList.add("intro-done");
+    };
+
+    const leave = (liftAt: number) => {
+      leaving = true;
+      timers.forEach((t) => window.clearTimeout(t));
+      timers.length = 0;
+      if (reduced) {
+        timers.push(window.setTimeout(handoff, liftAt));
+        timers.push(window.setTimeout(() => setGone(true), liftAt + 50));
+        return;
+      }
+      timers.push(window.setTimeout(handoff, liftAt + HANDOFF_IN));
+      // Removal follows the animation itself (below); this is a fallback.
+      timers.push(window.setTimeout(() => setGone(true), liftAt + LIFT_MS + 1500));
+    };
+
+    const el = panel.current;
+    const onEnd = (e: AnimationEvent) => {
+      if (e.target === el && /^intro-lift/.test(e.animationName)) setGone(true);
+    };
+    el?.addEventListener("animationend", onEnd);
+
+    leave(reduced ? REDUCED_HOLD : LIFT_AT);
+
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key !== "Escape") return;
+      const elapsed = performance.now() - started;
+      if (leaving && elapsed >= (reduced ? REDUCED_HOLD : LIFT_AT)) return;
+      panel.current?.classList.add("intro--skip");
+      leave(200);
+    };
+    window.addEventListener("keydown", onKey);
 
     return () => {
-      window.clearTimeout(timer);
-      events.forEach((e) => window.removeEventListener(e, finish));
-      root.style.overflow = prevOverflow;
+      timers.forEach((t) => window.clearTimeout(t));
+      window.removeEventListener("keydown", onKey);
+      el?.removeEventListener("animationend", onEnd);
+      root.classList.remove("intro-lock");
     };
   }, []);
 
   if (gone) return null;
 
   return (
-    <div className="intro" role="status" aria-label={`${site.name} — loading`}>
-      <div aria-hidden className="intro-glow" />
-
+    <div ref={panel} className="intro" role="status" aria-label={`${site.name} — loading`}>
       <div className="intro-stack">
-        <svg viewBox={EMBLEM_VIEWBOX} className="intro-mark" aria-hidden>
-          {/* Stroke layer — draws centre outward */}
-          <g fillRule="evenodd">
-            {EMBLEM_PATHS.map((p) => (
-              <path key={p.id} className="draw" data-p={p.id} d={p.d} pathLength={1} />
-            ))}
-          </g>
-          {/* Fill layer — takes over once the draw completes */}
-          <g className="solid" fillRule="evenodd">
-            {EMBLEM_PATHS.map((p) => (
-              <path key={p.id} d={p.d} />
-            ))}
-          </g>
-        </svg>
-
-        <div className="intro-word">
-          <span>{site.name}</span>
+        <div className="intro-word" aria-hidden>
+          {WORD.split("").map((ch, i) => (
+            <span key={i} style={{ "--i": i } as React.CSSProperties}>
+              {ch}
+            </span>
+          ))}
         </div>
+        <span className="intro-script" aria-hidden>
+          {SCRIPT}
+        </span>
       </div>
     </div>
   );

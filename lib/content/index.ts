@@ -10,7 +10,7 @@ export {
   type Testimonial,
 } from "./clients";
 export { services, offers, type Service, type Offer } from "./capabilities";
-export { stat, telemetry, type Readout } from "./proof";
+export { stat, telemetry, process, featuredVoices, type Readout, type Step } from "./proof";
 export {
   disciplines,
   getDiscipline,

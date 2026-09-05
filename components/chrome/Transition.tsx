@@ -2,9 +2,13 @@
 
 import { useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
+import { EASE, gsap, prefersReducedMotion, ScrollTrigger } from "@/lib/gsap";
 
-/** Motion #15 — a 320ms cross-dissolve on route change, then scroll resets. */
-const DISSOLVE_MS = 320;
+/**
+ * Motion #15 — the veil dissolves off the incoming page on route change, on
+ * the same ease as everything else, then scroll and scroll-triggers reset.
+ */
+const DISSOLVE_S = 0.45;
 
 export default function Transition() {
   const veil = useRef<HTMLDivElement>(null);
@@ -18,25 +22,27 @@ export default function Transition() {
     }
 
     window.scrollTo(0, 0);
+    // Route content changed under the triggers; re-measure everything.
+    ScrollTrigger.refresh();
 
     const node = veil.current;
-    if (!node) return;
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    if (!node || prefersReducedMotion()) return;
 
-    // The incoming page is already painted; dissolve the veil off it.
-    node.style.transition = "none";
-    node.style.opacity = "1";
-    // Force a reflow so the transition actually runs from opacity 1.
-    void node.offsetHeight;
-    node.style.transition = `opacity ${DISSOLVE_MS}ms linear`;
-    node.style.opacity = "0";
+    const tween = gsap.fromTo(
+      node,
+      { opacity: 1 },
+      { opacity: 0, duration: DISSOLVE_S, ease: EASE.out, overwrite: true }
+    );
+    return () => {
+      tween.kill();
+    };
   }, [pathname]);
 
   return (
     <div
       ref={veil}
       aria-hidden
-      className="pointer-events-none fixed inset-0 z-[70] bg-void opacity-0"
+      className="pointer-events-none fixed inset-0 z-[70] bg-paper opacity-0"
     />
   );
 }

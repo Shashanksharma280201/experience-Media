@@ -31,4 +31,31 @@ export function prefersReducedMotion(): boolean {
   );
 }
 
+/**
+ * Runs `cb` once the load sequence has handed off (or immediately if it
+ * already has, or if motion is reduced). Returns a cleanup that cancels the
+ * wait and reverts whatever `cb` returned.
+ */
+export function whenIntroDone(cb: () => gsap.Context | void): () => void {
+  const root = document.documentElement;
+  let ctx: gsap.Context | void;
+
+  if (root.classList.contains("intro-done") || prefersReducedMotion()) {
+    ctx = cb();
+    return () => ctx?.revert();
+  }
+
+  const obs = new MutationObserver(() => {
+    if (root.classList.contains("intro-done")) {
+      obs.disconnect();
+      ctx = cb();
+    }
+  });
+  obs.observe(root, { attributes: true, attributeFilter: ["class"] });
+  return () => {
+    obs.disconnect();
+    ctx?.revert();
+  };
+}
+
 export { gsap, ScrollTrigger };

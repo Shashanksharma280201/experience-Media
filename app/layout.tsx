@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Archivo, Inter_Tight } from "next/font/google";
+import { Archivo, Inter_Tight, Pinyon_Script } from "next/font/google";
 import "./globals.css";
 import SmoothScrollProvider from "@/components/SmoothScrollProvider";
 import Transition from "@/components/chrome/Transition";
@@ -23,10 +23,18 @@ const interTight = Inter_Tight({
   display: "swap",
 });
 
+// The script: one word in red laid over the condensed caps — see DESIGN.md §2.
+const pinyon = Pinyon_Script({
+  variable: "--font-pinyon",
+  weight: "400",
+  subsets: ["latin"],
+  display: "swap",
+});
+
 export const metadata: Metadata = {
   metadataBase: new URL("https://experiencemedia.in"),
   title: {
-    default: "Experience Media — Video and content studio, New Delhi",
+    default: "Experience Media — Marketing agency, New Delhi",
     template: "%s — Experience Media",
   },
   description: site.description,
@@ -54,21 +62,14 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${archivo.variable} ${interTight.variable} antialiased`}
+      className={`${archivo.variable} ${interTight.variable} ${pinyon.variable} antialiased`}
     >
       <body>
-        {/* Runs before paint: if the load sequence already played this session,
-            it is never rendered at all — no flash in either direction. */}
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `try{if(sessionStorage.getItem('em-intro-seen')==='1')document.documentElement.classList.add('intro-done')}catch(e){}`,
-          }}
-        />
         <Intro />
         <Transition />
         <a
           href="#main"
-          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[90] focus:bg-bone focus:px-4 focus:py-2 focus:text-void"
+          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[90] focus:bg-ink focus:px-4 focus:py-2 focus:text-paper"
         >
           Skip to content
         </a>
