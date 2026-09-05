@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import Link from "next/link";
 import Scene from "@/components/layout/Scene";
 import Group from "@/components/motion/Group";
-import Line from "@/components/motion/Line";
+import FlowingMenu from "@/components/bits/FlowingMenu";
 import Poster from "@/components/motion/Poster";
 import { disciplines, totalPieces } from "@/lib/content";
 
@@ -25,21 +24,10 @@ export default function WorkPage() {
       </Scene>
 
       <Scene tight>
-        <Group start="top 88%" stagger={0.05}>
-          {disciplines.map((d) => (
-            <Link key={d.slug} href={`/work/${d.slug}`} className="group row">
-              <span className="row-rule" data-reveal="rule" />
-              <Line as="h2" className="row-title poster">
-                <span className="link-underline inline-block">{d.title}</span>
-              </Line>
-              <div className="row-body grid gap-4 md:grid-cols-6">
-                <p className="lede text-ink-dim md:col-span-5" data-reveal="fade">{d.blurb}</p>
-                <p className="small text-ink-faint md:text-right" data-reveal="fade">{d.items.length} pieces</p>
-              </div>
-            </Link>
-          ))}
-          <span className="block h-px w-full bg-hairline" data-reveal="rule" />
-        </Group>
+        {/* React Bits FlowingMenu: hover a discipline and its blurb runs across. */}
+        <FlowingMenu
+          items={disciplines.map((d) => ({ link: `/work/${d.slug}`, text: d.title, marquee: `${d.blurb}  ·  ${d.items.length} pieces`, image: d.items[0].thumb }))}
+        />
       </Scene>
 
       <Scene tight>

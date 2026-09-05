@@ -2,6 +2,7 @@ import { existsSync } from "node:fs";
 import { join } from "node:path";
 import Hero from "@/components/home/Hero";
 import Reel from "@/components/home/Reel";
+import Ticker from "@/components/home/Ticker";
 import ReelPlayer from "@/components/media/ReelPlayer";
 import Positioning from "@/components/home/Positioning";
 import Record from "@/components/home/Record";
@@ -23,6 +24,7 @@ export default function Home() {
   return (
     <>
       <Hero portrait={portrait} />
+      <Ticker />
       <Reel />
       <Positioning />
       <Record />

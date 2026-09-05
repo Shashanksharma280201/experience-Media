@@ -5,6 +5,8 @@ import Image from "next/image";
 import Scene from "@/components/layout/Scene";
 import Group from "@/components/motion/Group";
 import Poster from "@/components/motion/Poster";
+import Magnet from "@/components/bits/Magnet";
+import StickerPeel from "@/components/bits/StickerPeel";
 import { brands, creators, stat, telemetry, type Brand } from "@/lib/content";
 import { DUR, gsap, prefersReducedMotion } from "@/lib/gsap";
 
@@ -158,22 +160,23 @@ export default function Record() {
             {board.map((item, i) => (
               <li key={item.key} className="slot">
                 {item.kind === "brand" ? (
-                  <span className="sticker" style={{ "--r": `${HAND[i % HAND.length]}deg`, "--s": SIZE[i % SIZE.length] } as React.CSSProperties} title={item.brand.name}>
-                    <Image
-                      src={item.brand.img}
-                      alt={item.brand.name}
-                      width={item.brand.w}
-                      height={item.brand.h}
-                      loading="lazy"
-                      sizes="200px"
-                      className={`${cap(item.brand)} object-contain brightness-0`}
-                    />
-                  </span>
-                ) : (
-                  <span className="sticker sticker--face" style={{ "--r": `${HAND[i % HAND.length]}deg`, "--s": SIZE[i % SIZE.length] } as React.CSSProperties}>
-                    <span className="face">
-                      <Image src={item.src} alt={`Creator ${item.n}`} fill sizes="80px" loading="lazy" />
+                  <Magnet padding={30} magnetStrength={5}>
+                    <span className="sticker" style={{ "--r": `${HAND[i % HAND.length]}deg`, "--s": SIZE[i % SIZE.length] } as React.CSSProperties} title={item.brand.name}>
+                      <Image
+                        src={item.brand.img}
+                        alt={item.brand.name}
+                        width={item.brand.w}
+                        height={item.brand.h}
+                        loading="lazy"
+                        sizes="200px"
+                        className={`${cap(item.brand)} object-contain brightness-0`}
+                      />
                     </span>
+                  </Magnet>
+                ) : (
+                  /* React Bits StickerPeel: a photo sticker that peels at a corner and can be dragged. */
+                  <span className="sticker-peel-slot" style={{ "--r": `${HAND[i % HAND.length]}deg` } as React.CSSProperties}>
+                    <StickerPeel imageSrc={item.src.replace("/creators/", "/creators/round/")} rotate={HAND[i % HAND.length]} width={84} peelBackHoverPct={22} peelBackActivePct={36} shadowIntensity={0.35} lightingIntensity={0.05} initialPosition="center" />
                   </span>
                 )}
               </li>

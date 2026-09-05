@@ -4,6 +4,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import Shell from "@/components/layout/Shell";
+import Emblem from "@/components/brand/Emblem";
+import Magnet from "@/components/bits/Magnet";
 import { site } from "@/lib/content";
 import { DUR, EASE, gsap, prefersReducedMotion } from "@/lib/gsap";
 
@@ -64,28 +66,30 @@ export default function Nav() {
       <Shell className="flex items-center justify-between">
         <Link
           href="/"
-          className={`font-display transition-all duration-[var(--dur-base)] ${
-            condensed ? "py-4 text-[0.95rem]" : "py-6 text-[1.1rem]"
+          className={`flex items-center gap-3 font-display transition-all duration-[var(--dur-base)] ${
+            condensed ? "py-3 text-[0.95rem]" : "py-5 text-[1.1rem]"
           }`}
           style={{ fontVariationSettings: '"wdth" 108, "wght" 600', letterSpacing: "-0.02em" }}
         >
-          {site.name}
+          <Emblem className={`nav-mark shrink-0 transition-[height] duration-[var(--dur-base)] ${condensed ? "h-6" : "h-8"} w-auto`} />
+          <span>{site.name}</span>
         </Link>
 
         <nav aria-label="Primary" className="hidden items-center gap-8 md:flex">
           {links.map((l) => (
-            <Link
-              key={l.href}
-              href={l.href}
-              aria-current={isCurrent(l.href) ? "page" : undefined}
-              className="link-underline small flex items-center gap-2 text-ink-dim transition-colors duration-[var(--dur-quick)] hover:text-ink"
-            >
-              {/* Accent use #5 of 5 — current-page marker. */}
-              {isCurrent(l.href) && (
-                <span aria-hidden className="h-1 w-1 shrink-0 rounded-full bg-signal" />
-              )}
-              {l.label}
-            </Link>
+            <Magnet key={l.href} padding={24} magnetStrength={4}>
+              <Link
+                href={l.href}
+                aria-current={isCurrent(l.href) ? "page" : undefined}
+                className="link-underline small flex items-center gap-2 text-ink-dim transition-colors duration-[var(--dur-quick)] hover:text-ink"
+              >
+                {/* Accent — current-page marker. */}
+                {isCurrent(l.href) && (
+                  <span aria-hidden className="h-1 w-1 shrink-0 rounded-full bg-signal" />
+                )}
+                {l.label}
+              </Link>
+            </Magnet>
           ))}
         </nav>
 

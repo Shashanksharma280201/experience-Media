@@ -629,7 +629,7 @@ html.lenis body {
 }
 @media (min-width: 768px) {
   .hero-reel {
-    clip-path: inset(70% 2.8% 6% 62%);
+    clip-path: inset(60% 2.8% 6% 58%);
   }
 }
 .hero-reel-inner {
@@ -655,7 +655,76 @@ html.lenis body {
   text-shadow: 0 0 24px rgba(10, 10, 11, 0.6);
 }
 .hero-copy {
+  z-index: 3;
+}
+
+/* The headline condenses into place: Hero.tsx tweens --wdth 118 → 62. */
+.hero-poster {
+  font-variation-settings: "wdth" var(--wdth, 62), "wght" 800;
+  /* Three stepped lines, the lede and the reel must share one viewport, so
+     the size is capped by height as well as width. */
+  font-size: clamp(3.2rem, min(11vw, 14svh), 11rem);
+}
+.hero-poster .split-parent,
+.hero-poster .split-parent > div {
+  line-height: 0.86;
+}
+/* Stepped, like a poster: each line starts a little further in. */
+@media (min-width: 768px) {
+  .hero-poster .poster-row:nth-child(2) {
+    padding-left: 6vw;
+  }
+  .hero-poster .poster-row:nth-child(3) {
+    padding-left: 2vw;
+  }
+}
+
+/* ImageTrail — frames that pop in under the pointer. Above the reel, below
+   the copy, so the words stay readable. */
+.hero-trail {
   z-index: 2;
+  pointer-events: none;
+}
+.trail-img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  aspect-ratio: 16 / 9;
+  background-size: cover;
+  background-position: center;
+  opacity: 0;
+  outline: 6px solid var(--color-paper);
+  will-change: transform, opacity;
+}
+
+/* The reel as a sticker: tilted, with a paper edge and a script tag. */
+.hero-reel {
+  rotate: 0deg;
+  transform: rotate(-3deg);
+  transform-origin: 78% 82%;
+}
+.hero-reel-inner {
+  outline: 8px solid var(--color-paper);
+  outline-offset: -8px;
+}
+.hero-tag {
+  position: absolute;
+  z-index: 4;
+  right: 8%;
+  bottom: 32%;
+  left: auto;
+  top: auto;
+  margin: 0;
+  transform: rotate(-8deg);
+  font-size: clamp(1.6rem, 3vw, 2.6rem);
+  pointer-events: none;
+}
+@media (max-width: 767px) {
+  .hero-tag {
+    right: 10%;
+    bottom: 33%;
+    font-size: 1.5rem;
+  }
 }
 
 /* ---------------------------------------------------------------------------
@@ -835,6 +904,108 @@ html.lenis body {
 }
 
 /* ---------------------------------------------------------------------------
+   React Bits pieces, dressed in the tokens.
+   ------------------------------------------------------------------------ */
+
+/* ScrollVelocity — the discipline ticker between the hero and the reel. */
+.ticker {
+  padding-block: clamp(1.25rem, 3.5vh, 2.5rem);
+  border-block: 1px solid var(--color-hairline);
+  overflow: hidden;
+}
+.ticker-row {
+  font-family: var(--font-display);
+  font-variation-settings: "wdth" 62, "wght" 800;
+  text-transform: uppercase;
+  font-size: clamp(2.4rem, 7vw, 6.5rem);
+  line-height: 1;
+  letter-spacing: -0.005em;
+}
+.ticker-row + .ticker-row {
+  margin-top: 0.15em;
+  color: var(--color-ink-faint);
+}
+.ticker-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3em;
+  padding-right: 0.3em;
+}
+.ticker-dot {
+  display: inline-block;
+  width: 0.16em;
+  height: 0.16em;
+  border-radius: 50%;
+  background: var(--color-signal);
+}
+
+/* FlowingMenu / FlowingRow — the marquee that slides over a row on hover. */
+.flow-marquee {
+  background: var(--color-ink);
+  color: var(--color-paper);
+}
+.flow-marquee-text {
+  font-family: var(--font-display);
+  font-variation-settings: "wdth" 62, "wght" 800;
+  text-transform: uppercase;
+  font-size: clamp(1.4rem, 3.2vw, 2.8rem);
+  line-height: 1;
+  padding-inline: 1vw;
+}
+.flow-marquee-image {
+  width: clamp(120px, 14vw, 200px);
+  height: clamp(48px, 6vh, 64px);
+  margin-inline: 2vw;
+  flex: none;
+}
+.flow-menu .flow-row {
+  border-top: 1px solid var(--color-hairline);
+}
+.flow-menu .flow-row:last-child {
+  border-bottom: 1px solid var(--color-hairline);
+}
+.flow-menu .flow-face {
+  padding-block: clamp(1.5rem, 4vh, 3rem);
+}
+.flow-title {
+  display: block;
+}
+
+/* ScrollStack — the process cards. */
+.stack-card {
+  background: var(--color-paper);
+  border: 1px solid var(--color-hairline);
+  padding: clamp(1.5rem, 3vw, 2.75rem);
+  min-height: 38vh;
+}
+
+/* StickerPeel — the face stickers have their own slot on the board. */
+.sticker-peel-slot {
+  position: relative;
+  display: block;
+  width: 108px;
+  height: 108px;
+}
+.sticker-peel-slot > div {
+  left: 0;
+  top: 0;
+}
+
+/* TextPressure — the live wordmark in the footer. */
+.wordmark-live {
+  color: var(--color-ink);
+}
+
+/* CurvedLoop — the line above the footer. */
+.curve {
+  color: var(--color-ink);
+}
+.curve svg {
+  font-size: 5.25rem;
+  font-variation-settings: "wdth" 62, "wght" 800;
+}
+
+/* ---------------------------------------------------------------------------
    Reel player. Ink ground, nothing else on screen.
    ------------------------------------------------------------------------ */
 .reel-player {
@@ -866,9 +1037,10 @@ html.lenis body {
 /* ===========================================================================
    Motion #1 — the load sequence. Pure CSS so it begins the instant the HTML
    paints. Plays on every load.
-   Timeline: letters set 0.10–1.10 (60ms apart) → script writes 1.00–1.90
+   Timeline: mark draws 0.05–1.15 and fills 0.85–1.30 → letters set
+             0.10–1.10 (60ms apart) → script writes 1.00–1.90
              → hold → letters and script lift 2.25 → panel wipes 2.50–3.40
-             → hero handoff 2.80 → clear by 3.40
+             while the mark flies to the nav → hero handoff 2.80 → clear 3.40
    Intro.tsx mirrors these numbers; change both together.
    ======================================================================== */
 
@@ -885,6 +1057,49 @@ html.lenis body {
   position: relative;
   padding-inline: var(--gutter);
 }
+/* The mark: outside the panel, fixed above the wordmark. It draws itself
+   stroke-first (core → wings → body), fills, and at the end flies to the nav
+   (Intro.tsx tweens left/top/width/height). */
+.intro-mark {
+  position: fixed;
+  left: 50%;
+  top: calc(50% - clamp(2.4rem, 9vw, 8.5rem));
+  z-index: 101;
+  height: clamp(56px, 9vw, 110px);
+  width: auto;
+  aspect-ratio: 411 / 347;
+  transform: translate(-50%, -100%);
+  color: var(--color-ink);
+  pointer-events: none;
+}
+.intro-mark .draw {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 3;
+  stroke-linejoin: round;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: intro-draw 0.8s cubic-bezier(0.65, 0, 0.35, 1) forwards,
+    intro-stroke-out 0.35s linear 1s forwards;
+}
+.intro-mark .draw[data-p="core"] { animation-delay: 0.05s, 1s; }
+.intro-mark .draw[data-p="wings"] { animation-delay: 0.2s, 1s; }
+.intro-mark .draw[data-p="body"] { animation-delay: 0.35s, 1s; }
+.intro-mark .solid {
+  fill: currentColor;
+  opacity: 0;
+  animation: intro-fill 0.45s ease-out 0.85s forwards;
+}
+@keyframes intro-draw { to { stroke-dashoffset: 0; } }
+@keyframes intro-stroke-out { to { opacity: 0; } }
+@keyframes intro-fill { to { opacity: 1; } }
+.intro-mark--skip .draw { display: none; }
+.intro-mark--skip .solid { opacity: 1; animation: none; }
+/* While the mark is in flight the nav's own mark waits, hidden. */
+html.mark-flying .nav-mark {
+  opacity: 0;
+}
+
 .intro-word {
   display: flex;
   overflow: hidden;
@@ -996,6 +1211,13 @@ html.lenis body {
   }
   .intro-script {
     clip-path: inset(-30% -10% -30% -10%);
+    animation: none;
+  }
+  .intro-mark .draw {
+    display: none;
+  }
+  .intro-mark .solid {
+    opacity: 1;
     animation: none;
   }
   @keyframes intro-clear {

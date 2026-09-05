@@ -5,6 +5,7 @@ import Image from "next/image";
 import Scene from "@/components/layout/Scene";
 import Group from "@/components/motion/Group";
 import Poster from "@/components/motion/Poster";
+import PixelTransition from "@/components/bits/PixelTransition";
 import { disciplines, site } from "@/lib/content";
 import { gsap, prefersReducedMotion, whenIntroDone } from "@/lib/gsap";
 import { openReel } from "@/lib/reel";
@@ -94,7 +95,19 @@ export default function Reel() {
                     style={{ "--cx": col, "--cy": row } as React.CSSProperties}
                     data-reveal="fade"
                   >
-                    <Image src={frame.thumb} alt="" fill loading="lazy" sizes="20vw" className="object-cover" />
+                    {/* React Bits PixelTransition: hover pixelates into the discipline. */}
+                    <PixelTransition
+                      gridSize={8}
+                      pixelColor="var(--color-paper)"
+                      animationStepDuration={0.35}
+                      fill
+                      firstContent={<Image src={frame.thumb} alt="" fill loading="lazy" sizes="20vw" className="object-cover" />}
+                      secondContent={
+                        <div className="grid h-full w-full place-items-center bg-paper p-2 text-center">
+                          <span className="poster poster--m !text-[clamp(0.9rem,1.4vw,1.4rem)]">{frame.title}</span>
+                        </div>
+                      }
+                    />
                   </div>
                 );
               }

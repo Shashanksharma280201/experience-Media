@@ -39,6 +39,13 @@ it on every route.
 Forbidden: red words inside running copy, red buttons, red rules, glows,
 gradients. The v2 signal line is retired: the red has a bigger job now.
 
+### The mark
+
+The emblem (`components/brand/Emblem.tsx`, traced from the original artwork)
+appears in three places: beside the wordmark in the nav, above the wordmark in
+the loader, and in the footer's red block. It inherits the text colour, so it
+is ink on paper and on the tints, ink on the red.
+
 ### Deliberately not doing
 
 No secondary accent. No greys beyond the three alpha steps of ink. Client
@@ -157,13 +164,36 @@ to right; a **fade** settles in with a 12px lift; a **frame** scales 1.08 → 1
 under its clip. **No section uses a generic fade-and-slide-up.** Under
 reduced motion nothing moves and everything is simply there.
 
+### React Bits
+
+Ten pieces from reactbits.dev, copied as their TypeScript + Tailwind sources
+into `components/bits/` and dressed in the tokens. Three were reworked to fit:
+ScrollVelocity is ported from `motion` to GSAP's ticker so the site keeps one
+animation library; ScrollStack reads the page's own scroll instead of creating
+a second Lenis; ScrollReveal scopes its cleanup instead of killing every
+ScrollTrigger on the page. All are gated behind reduced motion.
+
+| Piece | Where |
+|---|---|
+| SplitText | Every poster headline (via `Poster`). |
+| ImageTrail | The hero: frames follow the pointer. |
+| ScrollVelocity | The discipline ticker between the hero and the reel. |
+| PixelTransition | Reel wall cells: hover pixelates into the discipline. |
+| FlowingMenu / FlowingRow | Services rows (hover marquee of the offer's services); the work index. |
+| ScrollStack | The process: four cards that stack. |
+| StickerPeel · Magnet | The board: faces peel and drag; logos lean to the cursor. |
+| ScrollReveal | The three featured quotes. |
+| TextPressure | The footer wordmark: width and weight follow the cursor. |
+| CurvedLoop | The line, curved and draggable, above the footer. |
+| Magnet | Nav links, "Watch the reel", "Send it". |
+
 ### Every animated moment
 
 | # | Moment | Trigger | Behaviour |
 |---|---|---|---|
-| 1 | Load sequence | Every load and refresh | The wordmark sets itself in condensed caps, one letter every 60ms (0.1–1.1s); the script "Media" writes itself across it in red (1.0–1.9s). Holds until 2.25s. Letters and script lift, the panel wipes up (2.5–3.4s), the page is released at 2.8s. Escape skips on the same choreography. |
+| 1 | Load sequence | Every load and refresh | The emblem draws itself stroke-first, core to wingtips (0.05–1.15s), and fills (0.85–1.3s), while "EXPERIENCE" sets itself letter by letter (0.1–1.1s) and "Media" writes itself in red script (1.0–1.9s). Holds until 2.25s. Letters and script lift out; the panel wipes up (2.5–3.4s) while the mark flies to its place in the nav on `expo.inOut`, so the logo you watched draw is the logo in the corner; the hero letters rise through the opening from 2.8s. Escape skips on the same choreography. |
 | 2 | Nav condense | `scrollY > 64` | Height and type-size reduce; hairline appears. |
-| 3 | Hero headline | After loader | Line-by-line mask reveal, 90ms stagger; lede and links settle; the reel window opens last. |
+| 3 | Poster headlines | After loader (hero) or enter viewport | Every poster line rises letter by letter out of per-character masks, 28ms apart (React Bits SplitText on GSAP SplitText); the script writes in after. |
 | 4 | The script | Enter viewport | Writes itself in left to right over the headline, a beat after the lines have risen. |
 | 5 | Scroll cue | Continuous | 2px travel loop. |
 | 6 | Scene open | Enter viewport | The poster lines rise out of their masks, 70ms apart; the script writes in. |
@@ -177,7 +207,7 @@ reduced motion nothing moves and everything is simply there.
 | 14 | Link hover | Hover | Ink underline wipes left to right in `--dur-quick`. |
 | 15 | Page transition | Route change | The paper veil dissolves off the incoming page over 450ms; scroll resets; triggers re-measure. |
 | 16 | Mobile menu | Open | Links rise out of masks, 60ms stagger. |
-| 17 | Hero reel | Scroll | The hero pins for 110% of a viewport. The loop, clipped to a window, scrubs open to full-bleed while the copy lifts and fades, the portrait fades, and the frame settles from 1.12. A caption arrives in the last quarter. |
+| 17 | Hero | After loader; pointer; scroll | The headline condenses into place on the width axis (118 → 62) as its letters rise, its lines stepped like a poster. The pointer leaves a trail of work frames that pop in under it and fall away (React Bits ImageTrail, off on touch). The reel sits as a tilted sticker with a script tag; it slaps in after the words, leans against the cursor, and, pinned, straightens and opens to the full viewport as you scroll while the copy lifts out. |
 | 18 | Mirror wall | Enter viewport; scroll | Sixteen frames in colour on a 5×5 grid in perspective, receding and fading toward the edges around the reel loop at the centre (3×3). The wall turns from -6° to 6° with the scroll. |
 | 19 | Reel player | "Watch the reel" | Full-viewport takeover on ink, sound on, native controls. Settles over `--dur-base`, frame from 0.96. Escape closes; scroll is held; focus returns to the opener. |
 | 20 | More voices | Click | The remaining testimonials expand beneath the three featured. |

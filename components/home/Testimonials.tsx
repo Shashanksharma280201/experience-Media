@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Scene from "@/components/layout/Scene";
 import Group from "@/components/motion/Group";
-import Line from "@/components/motion/Line";
+import ScrollReveal from "@/components/bits/ScrollReveal";
 import Poster from "@/components/motion/Poster";
 import { featuredVoices, testimonials, type Testimonial } from "@/lib/content";
 
@@ -11,11 +11,9 @@ function Voice({ t }: { t: Testimonial }) {
   return (
     <figure className="row">
       <span className="row-rule" data-reveal="rule" />
-      <blockquote className="row-title quote-mark md:col-span-8">
-        <Line as="p" className="display-m">
-          {t.quote}
-        </Line>
-      </blockquote>
+      <ScrollReveal as="blockquote" containerClassName="row-title quote-mark md:col-span-8" textClassName="display-m" baseRotation={2} blurStrength={5} rotationEnd="center center" wordAnimationEnd="center center">
+        {t.quote}
+      </ScrollReveal>
       <figcaption className="md:col-span-3 md:col-start-10 md:pt-[0.6em]" data-reveal="fade">
         <span className="block font-display text-ink [font-variation-settings:'wdth'_104,'wght'_600]">{t.author}</span>
         {t.role && <span className="small mt-1 block text-ink-faint">{t.role}</span>}

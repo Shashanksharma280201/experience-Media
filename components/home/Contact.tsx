@@ -4,6 +4,7 @@ import { useState } from "react";
 import Scene from "@/components/layout/Scene";
 import Group from "@/components/motion/Group";
 import Poster from "@/components/motion/Poster";
+import Magnet from "@/components/bits/Magnet";
 import { contact } from "@/lib/content";
 
 type Status = "idle" | "sending" | "ok" | "error";
@@ -72,9 +73,11 @@ export default function Contact() {
             </div>
           </div>
           <div className="mt-10 flex flex-wrap items-center gap-6">
-            <button type="submit" disabled={status === "sending"} className="button">
-              {status === "sending" ? "Sending" : "Send it"}
-            </button>
+            <Magnet padding={50} magnetStrength={3}>
+              <button type="submit" disabled={status === "sending"} className="button">
+                {status === "sending" ? "Sending" : "Send it"}
+              </button>
+            </Magnet>
             <p aria-live="polite" className="small">
               {status === "ok" && <span>Thanks — we&rsquo;ll be in touch.</span>}
               {status === "error" && <span>{error}</span>}
