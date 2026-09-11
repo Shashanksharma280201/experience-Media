@@ -120,7 +120,7 @@ a hairline, a title in poster caps in columns 1–5, and the body in columns
 
 ### Measure and rhythm
 
-Full width: the measure is the viewport less the gutters (20 / 32 / 40px), on every screen. One vertical token,
+Full width: the measure is the viewport less the gutters (20 / 32 / 40px, and 56px from 1920), on every screen. Past 1920 the headline caps have all been hit, so the root font-size scales instead and every rem-based size grows together: about 20% at 2560, capped at 137.5% for an ultrawide. One vertical token,
 `--section-y` = 112 / 136 / 160px, with no per-section extras. Twelve columns
 from 768px.
 
@@ -162,7 +162,7 @@ Four moves, declared on server-rendered markup with `data-reveal` and played
 by one client `Group`: a **line** rises out of a mask; a **rule** draws left
 to right; a **fade** settles in with a 12px lift; a **frame** scales 1.08 → 1
 under its clip. **No section uses a generic fade-and-slide-up.** Under
-reduced motion nothing moves and everything is simply there.
+reduced motion nothing moves and everything is simply there. On touch, every text control grows to the 24px floor through padding on its inline box, so the line around it does not move.
 
 ### React Bits
 

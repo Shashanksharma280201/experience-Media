@@ -61,6 +61,19 @@
   }
 }
 
+/* Past 1920 the headline caps have all been hit, so nothing grew with the
+   screen while the canvas kept getting wider. Scale the root instead: every
+   rem-based size steps up together, about 20% at 2560 and capped at an
+   ultrawide. The gutter takes one more step for the same reason. */
+@media (min-width: 1920px) {
+  html {
+    font-size: clamp(100%, calc(100% + (100vw - 1920px) * 0.005), 137.5%);
+  }
+  :root {
+    --gutter: 56px;
+  }
+}
+
 /* ===========================================================================
    Base
    ======================================================================== */
@@ -336,6 +349,20 @@ html.lenis body {
   right: auto;
   margin-left: -0.3em;
   transform-origin: left center;
+}
+/* On a phone the line usually fills the width, so "after the line" is off
+   the screen. Set it under the line instead, still in the same hand. */
+@media (max-width: 767px) {
+  .scene--sun .poster-script,
+  .scene--mint .poster-script,
+  .scene--sky .poster-script,
+  .scene--rose .poster-script {
+    position: static;
+    display: block;
+    width: fit-content;
+    margin: 0.1em 0 0 0.1em;
+    transform: rotate(-6deg);
+  }
 }
 .scene--sun .text-ink-faint,
 .scene--mint .text-ink-faint,
@@ -641,6 +668,25 @@ html.lenis body {
 .link-underline:focus-visible::after {
   transform: scaleX(1);
 }
+/* On touch, every text control grows to the 24px floor. Padding on an
+   inline box adds hit area without moving the line; the negative margin
+   does the same for the few that are inline-block or flex. */
+@media (pointer: coarse) {
+  a.link-underline,
+  button.link-underline {
+    padding-block: 0.45em;
+    margin-block: -0.45em;
+  }
+  a.link-underline::after,
+  button.link-underline::after {
+    bottom: 0.3em;
+  }
+  /* A one-letter link ("X") is narrower than a fingertip. */
+  nav[aria-label="Social"] a.link-underline {
+    display: inline-block;
+    min-width: 24px;
+  }
+}
 
 /* One button. Ink outline, fills on hover. */
 .button {
@@ -887,9 +933,12 @@ html.lenis body {
     transform: rotateX(calc(var(--cy) * 8deg));
     opacity: 0.85;
   }
+  /* One row of its own with a real height: the video inside is absolute
+     and would otherwise collapse the row to nothing. */
   .wall-centre {
     grid-column: 1 / span 3;
-    grid-row: 2 / span 2;
+    grid-row: 2;
+    aspect-ratio: 16 / 9;
   }
   .wall-cell--wide {
     display: none;
@@ -939,6 +988,19 @@ html.lenis body {
 }
 .fold-caption .poster {
   text-shadow: 0 0 30px rgba(10, 10, 11, 0.8);
+}
+.fold-caption .poster--m {
+  font-size: clamp(1.5rem, 5.5vw, 5rem);
+}
+@media (max-width: 639px) {
+  .fold-caption {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.3rem;
+  }
+  .fold-caption .small {
+    white-space: normal;
+  }
 }
 @media (prefers-reduced-motion: reduce) {
   .fold-panel {
@@ -1074,6 +1136,12 @@ html.lenis body {
   border: 1px solid var(--color-hairline);
   padding: clamp(1.5rem, 3vw, 2.75rem);
   min-height: 38vh;
+}
+/* Without the stack the cards simply follow one another. */
+@media (prefers-reduced-motion: reduce) {
+  .scroll-stack-card + .scroll-stack-card {
+    margin-top: 1rem;
+  }
 }
 
 /* TextPressure — the live wordmark in the footer. */
