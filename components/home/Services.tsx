@@ -14,7 +14,7 @@ const FRAME: Record<string, string> = {
 };
 
 /**
- * 05 — what we do. Four offers, strategy first. Each row is a React Bits
+ * 06 — what we do. Four offers, strategy first. Each row is a React Bits
  * FlowingRow: hover slides a marquee of the offer's services across it.
  */
 export default function Services() {

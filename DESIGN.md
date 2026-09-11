@@ -131,7 +131,7 @@ shadows, and no elevated surfaces anywhere in this system.
 
 | Page | Sections |
 |---|---|
-| Home | 01 hero · 02 the reel (mirror wall) · 03 what we believe · 04 the record · 05 what we do · 06 how we work · 07 selected work (fold gallery) · 08 what people say · 09 who runs it · 10 start something (red band) · footer (red block) |
+| Home | 01 hero · 02 the reel (mirror wall) · 03 what we believe · 04 the record · 05 who it was for (the roster) · 06 what we do · 07 how we work · 08 selected work (fold gallery) · 09 what people say · 10 who runs it · 11 start something (red band) · footer (red block) |
 | Work | 01 the work · 02 the disciplines · 03 a sample |
 | Discipline | 01 discipline · 02 the brief · 03 the pieces · 04 more |
 | 404 | 01 no such page |
@@ -166,7 +166,7 @@ reduced motion nothing moves and everything is simply there.
 
 ### React Bits
 
-Ten pieces from reactbits.dev, copied as their TypeScript + Tailwind sources
+Nine pieces from reactbits.dev, copied as their TypeScript + Tailwind sources
 into `components/bits/` and dressed in the tokens. Three were reworked to fit:
 ScrollVelocity is ported from `motion` to GSAP's ticker so the site keeps one
 animation library; ScrollStack reads the page's own scroll instead of creating
@@ -181,7 +181,6 @@ ScrollTrigger on the page. All are gated behind reduced motion.
 | PixelTransition | Reel wall cells: hover pixelates into the discipline. |
 | FlowingMenu / FlowingRow | Services rows (hover marquee of the offer's services); the work index. |
 | ScrollStack | The process: four cards that stack. |
-| StickerPeel · Magnet | The board: faces peel and drag; logos lean to the cursor. |
 | ScrollReveal | The three featured quotes. |
 | TextPressure | The footer wordmark: width and weight follow the cursor. |
 | CurvedLoop | The line, curved and draggable, above the footer. |
@@ -201,7 +200,7 @@ ScrollTrigger on the page. All are gated behind reduced motion.
 | 8 | The record | Enter viewport | The lead figure at poster-xl rolls up from zero over 1.7s on `expo.out`; three more follow in a row. |
 | 9 | Rows | Enter viewport | Rule draws, title rises, body settles; 50ms stagger down the list. Services, process, work index, voices. |
 | 10 | Fold gallery | Scroll | Five panels on a strip, each folded up 64° on its top edge in perspective and laid flat as it scrolls from 95% to 45% of the viewport, scrubbed. Flat without JS or under reduced motion. |
-| 11 | Sticker board | Enter viewport; scroll | Brands and creator faces as die-cut paper stickers at fixed hand-set angles, two brands to a face. Each slaps on 70ms after the last, from 1.35× and 14° off, on `back.out(1.7)`; then each slot drifts at its own rate with the scroll; hover straightens and lifts a sticker. |
+| 11 | The roster | Enter viewport; scroll; hover | Every client set as a billing block of condensed caps, each name rising out of its own mask 30ms after the last. From 768px the block becomes an index: the scroll walks a beat down the names, the frame beside them cross-fades to that client's logo over `--dur-base`, and the name being read takes the ink back while the rest sit at `--ink-faint`, with the link underline (#14) wiping in beneath it. Pointing at a name holds the read there until the pointer leaves. Narrower, or under reduced motion, the frame is simply the whole logo wall and no name is ever dimmed. |
 | 12 | Hero portrait | After loader; scroll | Settles from 1.06 under its mask, then drifts at 0.86× the page. Greyscale, multiplied, 55%. |
 | 13 | Footer | Enter viewport | The wordmark rises out of its mask at 19vw; "Media" writes itself across it in paper. |
 | 14 | Link hover | Hover | Ink underline wipes left to right in `--dur-quick`. |

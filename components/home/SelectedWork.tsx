@@ -10,7 +10,7 @@ import { disciplines, totalPieces } from "@/lib/content";
 import { gsap, prefersReducedMotion } from "@/lib/gsap";
 
 /**
- * 07 — selected work, as a fold gallery (motion #10). Five panels on a strip,
+ * 08 — selected work, as a fold gallery (motion #10). Five panels on a strip,
  * each folded up on its top edge and laid flat as it scrolls into view.
  * Without JS or under reduced motion the panels are simply flat.
  */

@@ -5,6 +5,7 @@ export { site, contact, socials } from "./site";
 export {
   brands,
   creators,
+  creatorPortraits,
   testimonials,
   type Brand,
   type Testimonial,

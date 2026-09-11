@@ -6,6 +6,7 @@ import Ticker from "@/components/home/Ticker";
 import ReelPlayer from "@/components/media/ReelPlayer";
 import Positioning from "@/components/home/Positioning";
 import Record from "@/components/home/Record";
+import Clients from "@/components/home/Clients";
 import Process from "@/components/home/Process";
 import Services from "@/components/home/Services";
 import SelectedWork from "@/components/home/SelectedWork";
@@ -28,6 +29,7 @@ export default function Home() {
       <Reel />
       <Positioning />
       <Record />
+      <Clients />
       <Services />
       <Process />
       <SelectedWork />

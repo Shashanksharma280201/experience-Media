@@ -22,7 +22,7 @@ function Voice({ t }: { t: Testimonial }) {
   );
 }
 
-/** 08 — what people say. Three voices at full size; the rest one click away. */
+/** 09 — what people say. Three voices at full size; the rest one click away. */
 export default function Testimonials() {
   const [more, setMore] = useState(false);
   const featured = featuredVoices

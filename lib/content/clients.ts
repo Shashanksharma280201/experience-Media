@@ -1,3 +1,7 @@
+/**
+ * The creators, as the source square crops. `creatorPortraits` is what the
+ * site actually renders — see below.
+ */
 export const creators = [
   "/assets/creators/8.png",
   "/assets/creators/6.png",
@@ -9,6 +13,15 @@ export const creators = [
   "/assets/creators/4.png",
   "/assets/creators/9.png",
 ];
+
+/**
+ * The die-cut round crops, one per creator. The square originals are the
+ * photographer's frame; these are cropped to the face and cut to a circle,
+ * which is the only way a creator appears on the site.
+ */
+export const creatorPortraits = creators.map((src) =>
+  src.replace("/creators/", "/creators/round/")
+);
 
 export type Brand = {
   name: string;
