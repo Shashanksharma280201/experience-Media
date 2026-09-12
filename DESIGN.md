@@ -49,8 +49,7 @@ is ink on paper and on the tints, ink on the red.
 ### Deliberately not doing
 
 No secondary accent. No greys beyond the three alpha steps of ink. Client
-logos render flat black at 60%, full on hover. The one photograph on the home
-page, the founder behind the hero, is greyscale and multiplied into the paper.
+logos render flat black at 60%, full on hover.
 
 ---
 
@@ -201,12 +200,12 @@ ScrollTrigger on the page. All are gated behind reduced motion.
 | 9 | Rows | Enter viewport | Rule draws, title rises, body settles; 50ms stagger down the list. Services, process, work index, voices. |
 | 10 | Fold gallery | Scroll | Five panels on a strip, each folded up 64° on its top edge in perspective and laid flat as it scrolls from 95% to 45% of the viewport, scrubbed. Flat without JS or under reduced motion. |
 | 11 | The roster | Enter viewport; scroll; hover | Every client set as a billing block of condensed caps, each name rising out of its own mask 30ms after the last. From 768px the block becomes an index: the scroll walks a beat down the names, the frame beside them cross-fades to that client's logo over `--dur-base`, and the name being read takes the ink back while the rest sit at `--ink-faint`, with the link underline (#14) wiping in beneath it. Pointing at a name holds the read there until the pointer leaves. Narrower, or under reduced motion, the frame is simply the whole logo wall and no name is ever dimmed. |
-| 12 | Hero portrait | After loader; scroll | Settles from 1.06 under its mask, then drifts at 0.86× the page. Greyscale, multiplied, 55%. |
+| 12 | Scene ground | Scroll | A tinted scene's colour is a layer under it, and it draws down over the paper as the scene arrives (95% to 30% of the viewport, scrubbed), the way a rule draws. Every scene headline also drifts 6% slower than the page around it. Full and still under reduced motion. |
 | 13 | Footer | Enter viewport | The wordmark rises out of its mask at 19vw; "Media" writes itself across it in paper. |
 | 14 | Link hover | Hover | Ink underline wipes left to right in `--dur-quick`. |
 | 15 | Page transition | Route change | The paper veil dissolves off the incoming page over 450ms; scroll resets; triggers re-measure. |
 | 16 | Mobile menu | Open | Links rise out of masks, 60ms stagger. |
-| 17 | Hero | After loader; pointer; scroll | The headline condenses into place on the width axis (118 → 62) as its letters rise, its lines stepped like a poster. The pointer leaves a trail of work frames that pop in under it and fall away (React Bits ImageTrail, off on touch). The reel sits as a tilted sticker with a script tag; it slaps in after the words, leans against the cursor, and, pinned, straightens and opens to the full viewport as you scroll while the copy lifts out. |
+| 17 | Hero | After loader; pointer; scroll | Three acts on one scroll. The poster: the headline condenses into place on the width axis (118 → 62) as its letters rise, its lines stepped; the pointer leaves a trail of work frames that pop in under it and fall away (React Bits ImageTrail, off on touch); the reel slaps in as a tilted sticker with a script tag and leans against the cursor. The takeover, scrubbed over the first viewport of scroll: the copy lifts out in the first fifth, line by line, before the picture is anything but a sticker; the sticker straightens and opens to the whole viewport; a flat ink floor comes up under it and one thing arrives on it, the ask to watch the reel, in paper. The curtain, over the next viewport: the reel holds still and the page slides up over it. The hero is sticky in a taller track and the next section starts a viewport early, so the curtain needs no pin and no script; under reduced motion the track collapses to one still viewport. |
 | 18 | Mirror wall | Enter viewport; scroll | Sixteen frames in colour on a 5×5 grid in perspective, receding and fading toward the edges around the reel loop at the centre (3×3). The wall turns from -6° to 6° with the scroll. |
 | 19 | Reel player | "Watch the reel" | Full-viewport takeover on ink, sound on, native controls. Settles over `--dur-base`, frame from 0.96. Escape closes; scroll is held; focus returns to the opener. |
 | 20 | More voices | Click | The remaining testimonials expand beneath the three featured. |

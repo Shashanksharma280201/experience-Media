@@ -45,6 +45,10 @@
   --section-y: 112px;
   /* Poster leading. Condensed caps sit this tight. */
   --poster-lh: 0.86;
+
+  /* The hero's two extra acts, in scroll: the takeover and the curtain. */
+  --hero-open: 100svh;
+  --hero-curtain: 100svh;
 }
 
 @media (min-width: 768px) {
@@ -217,6 +221,8 @@ html.lenis body {
 
 .scene {
   position: relative;
+  isolation: isolate;
+  background: var(--color-paper);
   overflow-x: clip;
   display: flex;
   flex-direction: column;
@@ -231,16 +237,30 @@ html.lenis body {
   background: var(--color-signal);
   color: var(--color-ink);
 }
-.scene--sun {
+/* A tint is a layer under the scene rather than the scene's own ground,
+   so the page can draw it in as the scene arrives (motion #12). Without
+   JS, or under reduced motion, the layer is simply full. */
+.scene--sun,
+.scene--mint,
+.scene--sky,
+.scene--rose {
+  background: transparent;
+}
+.scene-ground {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+}
+.scene--sun .scene-ground {
   background: var(--color-sun);
 }
-.scene--mint {
+.scene--mint .scene-ground {
   background: var(--color-mint);
 }
-.scene--sky {
+.scene--sky .scene-ground {
   background: var(--color-sky);
 }
-.scene--rose {
+.scene--rose .scene-ground {
   background: var(--color-rose);
 }
 .scene--signal .micro,
@@ -720,55 +740,64 @@ html.lenis body {
 }
 
 /* ---------------------------------------------------------------------------
-   Hero portrait. Two masks intersect: one fades the left edge into the
-   paper so the headline's start is always clean, one fades the foot so the
-   lede sits on plain ground. Both edges stay put while the image drifts.
+   The hero: three acts on one scroll. The hero is sticky inside a taller
+   track; the section after the track starts a viewport early and rides up
+   over it. That is the curtain, and it needs no pin and no script. JS adds
+   only the scrub that opens the reel over the first viewport of scroll.
    ------------------------------------------------------------------------ */
-.hero-portrait {
-  position: absolute;
+.hero-track {
+  position: relative;
+  z-index: 0;
+  min-height: calc(100svh + var(--hero-open) + var(--hero-curtain));
+}
+.hero {
+  position: sticky;
   top: 0;
-  right: 0;
-  bottom: 0;
-  width: min(100%, 64vw);
-  opacity: 0.55;
-  -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 44%),
-    linear-gradient(to top, transparent 4%, #000 46%);
-  mask-image: linear-gradient(to right, transparent 0%, #000 44%),
-    linear-gradient(to top, transparent 4%, #000 46%);
-  -webkit-mask-composite: source-in;
-  mask-composite: intersect;
+  display: flex;
+  flex-direction: column;
+  min-height: 100svh;
+  overflow: hidden;
 }
-.hero-portrait-img {
-  position: absolute;
-  inset: -8% 0 0 0;
+/* Everything after the hero rides over it: the first thing starts a
+   viewport early, and all of it paints above the sticky reel. The reel
+   player is fixed and stays out of this. */
+.hero-track + :not(.reel-player) {
+  margin-top: calc(-1 * var(--hero-curtain));
 }
-.hero-portrait img {
-  object-fit: cover;
-  object-position: 50% 12%;
-  filter: grayscale(1) contrast(1.04);
-  mix-blend-mode: multiply;
+.hero-track ~ :not(.reel-player) {
+  position: relative;
+  z-index: 1;
 }
-@media (max-width: 767px) {
-  .hero-portrait {
-    width: 100%;
-    bottom: auto;
-    height: 64%;
-    -webkit-mask-image: linear-gradient(to bottom, #000 40%, transparent 100%);
-    mask-image: linear-gradient(to bottom, #000 40%, transparent 100%);
+.ticker {
+  background: var(--color-paper);
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-track {
+    min-height: 0;
+  }
+  .hero {
+    position: relative;
+  }
+  .hero-track + :not(.reel-player) {
+    margin-top: 0;
+  }
+  .hero-over {
+    display: none;
   }
 }
 
-/* ---------------------------------------------------------------------------
-   Hero reel. A full-viewport loop clipped to a window; the scrub opens it.
+/* The reel. A full-viewport loop clipped to a window; the scrub opens it.
    The window is a crop, not a scaled frame, so its ratio can follow the
    layout. Insets are the resting state — what no-JS and reduced-motion
-   visitors see.
-   ------------------------------------------------------------------------ */
+   visitors see. */
 .hero-reel {
   position: absolute;
   inset: 0;
   z-index: 1;
   clip-path: inset(64% 5% 6% 5%);
+  /* A sticker: tilted, with a paper edge. */
+  transform: rotate(-3deg);
+  transform-origin: 78% 82%;
 }
 @media (min-width: 768px) {
   .hero-reel {
@@ -779,6 +808,8 @@ html.lenis body {
   position: absolute;
   inset: 0;
   background: var(--color-ink);
+  outline: 8px solid var(--color-paper);
+  outline-offset: -8px;
 }
 .hero-reel video {
   position: absolute;
@@ -789,13 +820,43 @@ html.lenis body {
   transform: scale(1.12);
   transform-origin: 62% 70%;
 }
-.hero-caption {
+/* Flat ink, no gradient: paper type on a moving picture needs a floor. */
+.hero-scrim {
+  position: absolute;
+  inset: 0;
+  background: var(--color-ink);
+  opacity: 0;
+  pointer-events: none;
+}
+.hero-over {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  color: var(--color-paper);
+}
+.hero-over .micro {
   position: absolute;
   left: var(--gutter);
   bottom: var(--gutter);
+  margin: 0;
   color: var(--color-paper);
-  opacity: 0;
   text-shadow: 0 0 24px rgba(10, 10, 11, 0.6);
+}
+.hero-over :focus-visible {
+  outline-color: var(--color-paper);
+}
+.button--paper {
+  border-color: var(--color-paper);
+  color: var(--color-paper);
+  padding: 1.25rem 2.5rem;
+  font-size: 1.1rem;
+}
+.button--paper:hover,
+.button--paper:focus-visible {
+  background: var(--color-paper);
+  color: var(--color-ink);
 }
 .hero-copy {
   z-index: 3;
@@ -840,16 +901,7 @@ html.lenis body {
   will-change: transform, opacity;
 }
 
-/* The reel as a sticker: tilted, with a paper edge and a script tag. */
-.hero-reel {
-  rotate: 0deg;
-  transform: rotate(-3deg);
-  transform-origin: 78% 82%;
-}
-.hero-reel-inner {
-  outline: 8px solid var(--color-paper);
-  outline-offset: -8px;
-}
+/* The script tag on the sticker. */
 .hero-tag {
   position: absolute;
   z-index: 4;

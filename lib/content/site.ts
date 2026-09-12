@@ -5,8 +5,6 @@ export const site = {
   description:
     "Experience Media is a founder-led marketing agency in New Delhi. Strategy, always-on content, brand films, post and VFX for brands that need results, not decks.",
   founder: "Parth Malhotra",
-  /** Hero background. The page checks the file exists before rendering it. */
-  founderPortrait: "/assets/founder/parth.jpg",
   showreel: "/assets/webgl/hero-loop.mp4",
   showreelPoster: "/assets/webgl/hero-poster.jpg",
   showreelFull: "/assets/experience-media-show-reel.mp4",
