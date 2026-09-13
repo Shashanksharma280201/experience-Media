@@ -45,6 +45,10 @@
   --section-y: 112px;
   /* Poster leading. Condensed caps sit this tight. */
   --poster-lh: 0.86;
+
+  /* The hero's two extra acts, in scroll: the takeover and the curtain. */
+  --hero-open: 100svh;
+  --hero-curtain: 100svh;
 }
 
 @media (min-width: 768px) {
@@ -58,6 +62,19 @@
   :root {
     --gutter: 40px;
     --section-y: 160px;
+  }
+}
+
+/* Past 1920 the headline caps have all been hit, so nothing grew with the
+   screen while the canvas kept getting wider. Scale the root instead: every
+   rem-based size steps up together, about 20% at 2560 and capped at an
+   ultrawide. The gutter takes one more step for the same reason. */
+@media (min-width: 1920px) {
+  html {
+    font-size: clamp(100%, calc(100% + (100vw - 1920px) * 0.005), 137.5%);
+  }
+  :root {
+    --gutter: 56px;
   }
 }
 
@@ -204,6 +221,8 @@ html.lenis body {
 
 .scene {
   position: relative;
+  isolation: isolate;
+  background: var(--color-paper);
   overflow-x: clip;
   display: flex;
   flex-direction: column;
@@ -218,16 +237,30 @@ html.lenis body {
   background: var(--color-signal);
   color: var(--color-ink);
 }
-.scene--sun {
+/* A tint is a layer under the scene rather than the scene's own ground,
+   so the page can draw it in as the scene arrives (motion #12). Without
+   JS, or under reduced motion, the layer is simply full. */
+.scene--sun,
+.scene--mint,
+.scene--sky,
+.scene--rose {
+  background: transparent;
+}
+.scene-ground {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+}
+.scene--sun .scene-ground {
   background: var(--color-sun);
 }
-.scene--mint {
+.scene--mint .scene-ground {
   background: var(--color-mint);
 }
-.scene--sky {
+.scene--sky .scene-ground {
   background: var(--color-sky);
 }
-.scene--rose {
+.scene--rose .scene-ground {
   background: var(--color-rose);
 }
 .scene--signal .micro,
@@ -337,6 +370,20 @@ html.lenis body {
   margin-left: -0.3em;
   transform-origin: left center;
 }
+/* On a phone the line usually fills the width, so "after the line" is off
+   the screen. Set it under the line instead, still in the same hand. */
+@media (max-width: 767px) {
+  .scene--sun .poster-script,
+  .scene--mint .poster-script,
+  .scene--sky .poster-script,
+  .scene--rose .poster-script {
+    position: static;
+    display: block;
+    width: fit-content;
+    margin: 0.1em 0 0 0.1em;
+    transform: rotate(-6deg);
+  }
+}
 .scene--sun .text-ink-faint,
 .scene--mint .text-ink-faint,
 .scene--sky .text-ink-faint,
@@ -397,56 +444,692 @@ html.lenis body {
   display: inline-block;
 }
 
-/* The record. The sticker board: logos and faces as die-cut paper stickers,
-   hand-placed at slight angles. `--r` is each sticker's angle; the slot is
-   what drifts, the sticker is what slaps on and straightens on hover. */
+/* The record: the figures roll up from zero, so they need a width that does
+   not jump as the digits change. */
 .counter-value {
   font-variant-numeric: tabular-nums;
 }
-.board {
+/* Featured voices: a pull quote is a statement, so it takes display-m. */
+.quote-mark::before {
+  content: "\201C";
+  display: block;
+  font-family: var(--font-display);
+  font-variation-settings: "wdth" 112, "wght" 700;
+  font-size: 2em;
+  line-height: 0.6;
+  margin-bottom: 0.35em;
+  color: var(--color-ink-faint);
+}
+
+/* ---------------------------------------------------------------------------
+   The roster. Every client set as a billing block: condensed caps read as
+   one paragraph of names, so no client is a shape you have to squint at and
+   none is left out for the state of its artwork.
+
+   Wide enough, `data-live` turns the block into an index: the scroll walks
+   a beat down the names and the frame beside them holds the current logo.
+   Without it — narrow, no JS, or reduced motion — the frame is simply the
+   whole logo wall and no name is ever dimmed.
+   ------------------------------------------------------------------------ */
+.roster-names {
+  font-family: var(--font-display);
+  font-variation-settings: "wdth" 62, "wght" 800;
+  text-transform: uppercase;
+  font-size: clamp(1.5rem, 4.6vw, 3.4rem);
+  line-height: 1.06;
+  letter-spacing: -0.005em;
+}
+/* Inline-block so each name can carry its own mask; `wbr` between them is
+   what lets the block wrap, since there is no whitespace to break on. */
+.roster-name {
+  position: relative;
+  display: inline-block;
+  vertical-align: bottom;
+}
+.roster-sep {
+  padding-inline: 0.3em 0.24em;
+  color: var(--color-ink-faint);
+}
+
+/* The logo wall: flat black at 60%, full on hover. */
+.roster-frame {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: clamp(0.75rem, 2vw, 1.5rem) clamp(0.25rem, 1vw, 0.75rem);
-  padding-block: 1rem;
+  place-items: center;
+  gap: clamp(1.25rem, 4vw, 2.5rem);
+  margin-top: clamp(2.5rem, 6vw, 3.5rem);
+  border-top: 1px solid var(--color-hairline);
+  padding-top: clamp(2rem, 5vw, 3rem);
 }
 @media (min-width: 640px) {
-  .board {
+  .roster-frame {
     grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 }
-@media (min-width: 1024px) {
-  .board {
-    grid-template-columns: repeat(6, minmax(0, 1fr));
+.roster-logo {
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: clamp(28px, 5vw, 54px);
+  object-fit: contain;
+  filter: brightness(0);
+  opacity: 0.6;
+  transition: opacity var(--dur-base) var(--ease-out);
+}
+.roster-logo:hover {
+  opacity: 1;
+}
+/* Colour artwork on a solid ground silhouettes to a blank shape, so this
+   one is set in type instead of shown. */
+.roster-logo--set {
+  filter: none;
+  font-family: var(--font-display);
+  font-variation-settings: "wdth" 62, "wght" 800;
+  text-transform: uppercase;
+  font-size: clamp(0.95rem, 2.2vw, 1.5rem);
+  line-height: 0.9;
+  text-align: center;
+  color: var(--color-ink);
+}
+
+@media (min-width: 768px) {
+  .roster[data-live] {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    gap: clamp(1.5rem, 3vw, 3rem);
+    align-items: start;
+  }
+  .roster[data-live] .roster-names {
+    grid-column: 1 / span 7;
+  }
+  /* Only the read is live, so only the read dims the names. The one being
+     read takes the ink back and the site's own underline wipes in under it
+     (motion #14) — alpha alone is too quiet a marker at this size. */
+  .roster[data-live] .roster-name {
+    color: var(--color-ink-faint);
+    transition: color var(--dur-base) var(--ease-out);
+  }
+  .roster[data-live] .roster-name::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -0.04em;
+    height: 1px;
+    width: 100%;
+    background: currentColor;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform var(--dur-quick) var(--ease-out);
+  }
+  .roster[data-live] .roster-name.is-on {
+    color: var(--color-ink);
+  }
+  .roster[data-live] .roster-name.is-on::after {
+    transform: scaleX(1);
+  }
+  .roster[data-live] .roster-frame {
+    grid-column: 9 / span 4;
+    position: sticky;
+    /* Clear of the condensed nav. */
+    top: clamp(88px, 14vh, 140px);
+    grid-template-columns: none;
+    aspect-ratio: 4 / 3;
+    margin-top: 0;
+    border: 1px solid var(--color-hairline);
+    padding-top: 0;
+  }
+  /* One cell, everything stacked in it: the active logo is the subject, so
+     it sits at full ink rather than the wall's 60%. */
+  .roster[data-live] .roster-logo {
+    grid-area: 1 / 1;
+    max-width: 76%;
+    max-height: 54%;
+    opacity: 0;
+  }
+  .roster[data-live] .roster-logo.is-on {
+    opacity: 1;
+  }
+  .roster[data-live] .roster-logo--set {
+    max-width: 80%;
+    font-size: clamp(1.3rem, 3vw, 2.2rem);
   }
 }
-.slot {
-  display: grid;
-  place-items: center;
-  min-height: clamp(96px, 12vw, 150px);
+
+/* The creators: the round crops, greyscale until you look at one. */
+.faces {
+  display: flex;
+  flex-wrap: wrap;
+  gap: clamp(0.5rem, 1.4vw, 1rem);
 }
-.sticker {
-  display: grid;
-  place-items: center;
-  padding: clamp(0.6rem, 1.2vw, 1rem) clamp(0.9rem, 1.6vw, 1.4rem);
-  background: var(--color-paper);
-  /* A die-cut edge: paper, then a hairline of the tint's shadow. */
-  box-shadow: 0 0 0 1px rgba(10, 10, 11, 0.12);
-  transform: rotate(var(--r, 0deg)) scale(var(--s, 1));
-  transition: transform var(--dur-base) var(--ease-out);
+.face {
+  position: relative;
+  width: clamp(60px, 7.4vw, 100px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  overflow: hidden;
+  background: var(--color-paper-deep);
 }
-.sticker:hover {
-  transform: rotate(0deg) translateY(-4px) scale(calc(var(--s, 1) * 1.04));
+.face img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: grayscale(1) contrast(1.04);
+  transition: filter var(--dur-base) var(--ease-out);
 }
-.sticker img {
+.face:hover img {
+  filter: none;
+}
+
+/* ===========================================================================
+   Motion primitives
+   ======================================================================== */
+
+/* Line-mask reveal: GSAP animates the inner span. */
+.mask-line {
+  display: block;
+  overflow: hidden;
+  /* Room for descenders: the clip must never shave a g or a p at rest. */
+  padding-bottom: 0.08em;
+  margin-bottom: -0.08em;
+}
+.mask-line > * {
   display: block;
 }
-.sticker--face {
-  padding: 0.35rem;
-  border-radius: 50%;
+
+/* The scroll cue's 2px travel loop. */
+@keyframes cue {
+  0%,
+  100% {
+    transform: translateY(-2px);
+    opacity: 0.6;
+  }
+  50% {
+    transform: translateY(2px);
+    opacity: 1;
+  }
 }
-.sticker--face .face {
-  width: clamp(56px, 6vw, 80px);
-  height: clamp(56px, 6vw, 80px);
+
+@keyframes marquee {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+.marquee {
+  animation: marquee var(--marquee-duration, 56s) linear infinite;
+}
+.marquee:hover {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee {
+    animation: none !important;
+    transform: none !important;
+  }
+}
+
+/* Hover underline — ink, so the red stays the line's alone. */
+.link-underline {
+  position: relative;
+}
+.link-underline::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -0.15em;
+  height: 1px;
+  width: 100%;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--dur-quick) var(--ease-out);
+}
+.link-underline:hover::after,
+.link-underline:focus-visible::after {
+  transform: scaleX(1);
+}
+/* On touch, every text control grows to the 24px floor. Padding on an
+   inline box adds hit area without moving the line; the negative margin
+   does the same for the few that are inline-block or flex. */
+@media (pointer: coarse) {
+  a.link-underline,
+  button.link-underline {
+    padding-block: 0.45em;
+    margin-block: -0.45em;
+  }
+  a.link-underline::after,
+  button.link-underline::after {
+    bottom: 0.3em;
+  }
+  /* A one-letter link ("X") is narrower than a fingertip. */
+  nav[aria-label="Social"] a.link-underline {
+    display: inline-block;
+    min-width: 24px;
+  }
+}
+
+/* One button. Ink outline, fills on hover. */
+.button {
+  display: inline-block;
+  border: 1px solid var(--color-ink);
+  padding: 1rem 2rem;
+  color: var(--color-ink);
+  line-height: 1.2;
+  transition: background-color var(--dur-quick) var(--ease-out),
+    color var(--dur-quick) var(--ease-out);
+}
+.button:hover,
+.button:focus-visible {
+  background: var(--color-ink);
+  color: var(--color-paper);
+}
+.button:disabled {
+  opacity: 0.5;
+}
+
+/* Work cards pin and stack. Sticky rather than scripted, so it degrades to
+   ordinary flow with no JS and is switched off for reduced motion. */
+.work-card {
+  position: sticky;
+  transform-origin: top center;
+}
+@media (prefers-reduced-motion: reduce) {
+  .work-card {
+    position: static;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   The hero: three acts on one scroll. The hero is sticky inside a taller
+   track; the section after the track starts a viewport early and rides up
+   over it. That is the curtain, and it needs no pin and no script. JS adds
+   only the scrub that opens the reel over the first viewport of scroll.
+   ------------------------------------------------------------------------ */
+.hero-track {
+  position: relative;
+  z-index: 0;
+  min-height: calc(100svh + var(--hero-open) + var(--hero-curtain));
+}
+.hero {
+  position: sticky;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 100svh;
+  overflow: hidden;
+}
+/* Everything after the hero rides over it: the first thing starts a
+   viewport early, and all of it paints above the sticky reel. The reel
+   player is fixed and stays out of this. */
+.hero-track + :not(.reel-player) {
+  margin-top: calc(-1 * var(--hero-curtain));
+}
+.hero-track ~ :not(.reel-player) {
+  position: relative;
+  z-index: 1;
+}
+.ticker {
+  background: var(--color-paper);
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-track {
+    min-height: 0;
+  }
+  .hero {
+    position: relative;
+  }
+  .hero-track + :not(.reel-player) {
+    margin-top: 0;
+  }
+  .hero-over {
+    display: none;
+  }
+}
+
+/* The reel. A full-viewport loop clipped to a window; the scrub opens it.
+   The window is a crop, not a scaled frame, so its ratio can follow the
+   layout. Insets are the resting state — what no-JS and reduced-motion
+   visitors see. */
+.hero-reel {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  clip-path: inset(64% 5% 6% 5%);
+  /* A sticker: tilted, with a paper edge. */
+  transform: rotate(-3deg);
+  transform-origin: 78% 82%;
+}
+@media (min-width: 768px) {
+  .hero-reel {
+    clip-path: inset(60% 2.8% 6% 58%);
+  }
+}
+.hero-reel-inner {
+  position: absolute;
+  inset: 0;
+  background: var(--color-ink);
+  outline: 8px solid var(--color-paper);
+  outline-offset: -8px;
+}
+.hero-reel video {
+  position: absolute;
+  inset: 0;
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  transform: scale(1.12);
+  transform-origin: 62% 70%;
+}
+/* Flat ink, no gradient: paper type on a moving picture needs a floor. */
+.hero-scrim {
+  position: absolute;
+  inset: 0;
+  background: var(--color-ink);
+  opacity: 0;
+  pointer-events: none;
+}
+.hero-over {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  color: var(--color-paper);
+}
+.hero-over .micro {
+  position: absolute;
+  left: var(--gutter);
+  bottom: var(--gutter);
+  margin: 0;
+  color: var(--color-paper);
+  text-shadow: 0 0 24px rgba(10, 10, 11, 0.6);
+}
+.hero-over :focus-visible {
+  outline-color: var(--color-paper);
+}
+.button--paper {
+  border-color: var(--color-paper);
+  color: var(--color-paper);
+  padding: 1.25rem 2.5rem;
+  font-size: 1.1rem;
+}
+.button--paper:hover,
+.button--paper:focus-visible {
+  background: var(--color-paper);
+  color: var(--color-ink);
+}
+.hero-copy {
+  z-index: 3;
+}
+
+/* The headline condenses into place: Hero.tsx tweens --wdth 118 → 62. */
+.hero-poster {
+  font-variation-settings: "wdth" var(--wdth, 62), "wght" 800;
+  /* Three stepped lines, the lede and the reel must share one viewport, so
+     the size is capped by height as well as width. */
+  font-size: clamp(3.2rem, min(11vw, 14svh), 11rem);
+}
+.hero-poster .split-parent,
+.hero-poster .split-parent > div {
+  line-height: 0.86;
+}
+/* Stepped, like a poster: each line starts a little further in. */
+@media (min-width: 768px) {
+  .hero-poster .poster-row:nth-child(2) {
+    padding-left: 6vw;
+  }
+  .hero-poster .poster-row:nth-child(3) {
+    padding-left: 2vw;
+  }
+}
+
+/* ImageTrail — frames that pop in under the pointer. Above the reel, below
+   the copy, so the words stay readable. */
+.hero-trail {
+  z-index: 2;
+  pointer-events: none;
+}
+.trail-img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  aspect-ratio: 16 / 9;
+  background-size: cover;
+  background-position: center;
+  opacity: 0;
+  outline: 6px solid var(--color-paper);
+  will-change: transform, opacity;
+}
+
+/* The script tag on the sticker. */
+.hero-tag {
+  position: absolute;
+  z-index: 4;
+  right: 8%;
+  bottom: 32%;
+  left: auto;
+  top: auto;
+  margin: 0;
+  transform: rotate(-8deg);
+  font-size: clamp(1.6rem, 3vw, 2.6rem);
+  pointer-events: none;
+}
+@media (max-width: 767px) {
+  .hero-tag {
+    right: 10%;
+    bottom: 33%;
+    font-size: 1.5rem;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   The mirror wall. Frames on a 5×5 grid in perspective, receding toward the
+   edges, around the reel at the centre. The whole wall turns a few degrees
+   with the scroll.
+   ------------------------------------------------------------------------ */
+.wall {
+  position: relative;
+  perspective: 1400px;
+  perspective-origin: 50% 50%;
+  /* The turned wall projects wider than the viewport; keep it in the page. */
+  overflow: clip;
+  padding-inline: 2vw;
+}
+.wall-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: clamp(0.5rem, 1.2vw, 1rem);
+  transform-style: preserve-3d;
+}
+.wall-cell {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background: var(--color-paper-deep);
+  transform: rotateY(calc(var(--cx) * -14deg)) rotateX(calc(var(--cy) * 10deg))
+    translateZ(calc((abs(var(--cx)) + abs(var(--cy))) * -90px));
+  opacity: calc(1 - (abs(var(--cx)) + abs(var(--cy))) * 0.16);
+}
+.wall-cell {
+  opacity: calc(1 - (abs(var(--cx)) + abs(var(--cy))) * 0.1);
+}
+.wall-centre {
+  grid-column: 2 / span 3;
+  grid-row: 2 / span 3;
+  position: relative;
+  z-index: 2;
+  aspect-ratio: auto;
+  transform: translateZ(60px);
+  opacity: 1;
+  background: var(--color-ink);
+}
+.wall-centre video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.wall-centre-cta {
+  position: absolute;
+  inset: auto var(--gutter) var(--gutter) auto;
+  z-index: 3;
+  color: var(--color-paper);
+  text-shadow: 0 0 20px rgba(10, 10, 11, 0.7);
+}
+@media (max-width: 767px) {
+  .wall-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .wall-cell {
+    transform: rotateX(calc(var(--cy) * 8deg));
+    opacity: 0.85;
+  }
+  /* One row of its own with a real height: the video inside is absolute
+     and would otherwise collapse the row to nothing. */
+  .wall-centre {
+    grid-column: 1 / span 3;
+    grid-row: 2;
+    aspect-ratio: 16 / 9;
+  }
+  .wall-cell--wide {
+    display: none;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   The fold gallery. Five panels on a strip, each folded up on its top edge
+   and laid flat as it scrolls into view.
+   ------------------------------------------------------------------------ */
+.fold {
+  perspective: 1600px;
+}
+.fold-panel {
+  position: relative;
+  display: block;
+  margin-inline: auto;
+  width: min(100%, 1120px);
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background: var(--color-paper-deep);
+  transform-origin: 50% 0;
+  transform: rotateX(-64deg);
+  transform-style: preserve-3d;
+}
+.fold-panel + .fold-panel {
+  margin-top: clamp(1rem, 2vw, 1.5rem);
+}
+.fold-panel img {
+  object-fit: cover;
+  transition: transform var(--dur-slow) var(--ease-out);
+}
+.fold-panel:hover img {
+  transform: scale(1.03);
+}
+.fold-caption {
+  position: absolute;
+  inset: auto 0 0 0;
+  z-index: 2;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: var(--gutter);
+  color: var(--color-paper);
+  text-shadow: 0 0 24px rgba(10, 10, 11, 0.7);
+}
+.fold-caption .poster {
+  text-shadow: 0 0 30px rgba(10, 10, 11, 0.8);
+}
+.fold-caption .poster--m {
+  font-size: clamp(1.5rem, 5.5vw, 5rem);
+}
+@media (max-width: 639px) {
+  .fold-caption {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.3rem;
+  }
+  .fold-caption .small {
+    white-space: normal;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .fold-panel {
+    transform: none;
+  }
+  .wall-cell {
+    transform: none;
+    opacity: 1;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   The red blocks: the contact band and the footer.
+   ------------------------------------------------------------------------ */
+.redblock {
+  background: var(--color-signal);
+  color: var(--color-ink);
+}
+.redblock .micro,
+.redblock .num,
+.redblock .text-ink-dim,
+.redblock .text-ink-faint {
+  color: var(--color-ink);
+}
+.redblock .field {
+  border-bottom-color: rgba(10, 10, 11, 0.45);
+}
+.redblock .field:focus {
+  border-bottom-color: var(--color-ink);
+}
+.redblock .button {
+  border-color: var(--color-ink);
+}
+.redblock .button:hover,
+.redblock .button:focus-visible {
+  background: var(--color-ink);
+  color: var(--color-signal);
+}
+.redblock ::selection {
+  background: var(--color-ink);
+  color: var(--color-signal);
+}
+.redblock :focus-visible {
+  outline-color: var(--color-ink);
+}
+.wordmark-script {
+  position: absolute;
+  top: 0.1em;
+  left: 42%;
+  font-size: clamp(2.6rem, 11vw, 11rem);
+  color: var(--color-paper);
+}
+.wordmark {
+  font-family: var(--font-display);
+  font-variation-settings: "wdth" 62, "wght" 800;
+  text-transform: uppercase;
+  font-size: clamp(4.5rem, 19vw, 19rem);
+  line-height: 0.82;
+  letter-spacing: -0.01em;
+}
+
+/* The loop closes: the emblem, huge and outlined, behind the footer. */
+.footer-mark {
+  position: absolute;
+  right: -4%;
+  bottom: -8%;
+  height: 110%;
+  width: auto;
+  fill: none;
+  stroke: var(--color-ink);
+  stroke-width: 1.5;
+  opacity: 0.14;
+  pointer-events: none;
 }
 
 /* The top eleven, and the rest: a poster grid. Landscape pieces take two
@@ -581,493 +1264,6 @@ html.lenis body {
   font-size: 0.8rem;
 }
 
-/* Featured voices: a pull quote is a statement, so it takes display-m. */
-.quote-mark::before {
-  content: "\201C";
-  display: block;
-  font-family: var(--font-display);
-  font-variation-settings: "wdth" 112, "wght" 700;
-  font-size: 2em;
-  line-height: 0.6;
-  margin-bottom: 0.35em;
-  color: var(--color-ink-faint);
-}
-
-/* Creator faces. The source files are circles on dark squares; the circle
-   sits in the middle ~64% of the frame, so scale it up under a round clip. */
-.face {
-  position: relative;
-  width: 56px;
-  height: 56px;
-  border-radius: 50%;
-  overflow: hidden;
-  background: var(--color-paper-deep);
-}
-.face img {
-  transform: scale(1.56);
-  transform-origin: center;
-}
-
-/* ===========================================================================
-   Motion primitives
-   ======================================================================== */
-
-/* Line-mask reveal: GSAP animates the inner span. */
-.mask-line {
-  display: block;
-  overflow: hidden;
-  /* Room for descenders: the clip must never shave a g or a p at rest. */
-  padding-bottom: 0.08em;
-  margin-bottom: -0.08em;
-}
-.mask-line > * {
-  display: block;
-}
-
-/* The scroll cue's 2px travel loop. */
-@keyframes cue {
-  0%,
-  100% {
-    transform: translateY(-2px);
-    opacity: 0.6;
-  }
-  50% {
-    transform: translateY(2px);
-    opacity: 1;
-  }
-}
-
-@keyframes marquee {
-  from {
-    transform: translate3d(0, 0, 0);
-  }
-  to {
-    transform: translate3d(-50%, 0, 0);
-  }
-}
-
-.marquee {
-  animation: marquee var(--marquee-duration, 56s) linear infinite;
-}
-.marquee:hover {
-  animation-play-state: paused;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .marquee {
-    animation: none !important;
-    transform: none !important;
-  }
-}
-
-/* Hover underline — ink, so the red stays the line's alone. */
-.link-underline {
-  position: relative;
-}
-.link-underline::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  bottom: -0.15em;
-  height: 1px;
-  width: 100%;
-  background: currentColor;
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: transform var(--dur-quick) var(--ease-out);
-}
-.link-underline:hover::after,
-.link-underline:focus-visible::after {
-  transform: scaleX(1);
-}
-
-/* One button. Ink outline, fills on hover. */
-.button {
-  display: inline-block;
-  border: 1px solid var(--color-ink);
-  padding: 1rem 2rem;
-  color: var(--color-ink);
-  line-height: 1.2;
-  transition: background-color var(--dur-quick) var(--ease-out),
-    color var(--dur-quick) var(--ease-out);
-}
-.button:hover,
-.button:focus-visible {
-  background: var(--color-ink);
-  color: var(--color-paper);
-}
-.button:disabled {
-  opacity: 0.5;
-}
-
-/* Work cards pin and stack. Sticky rather than scripted, so it degrades to
-   ordinary flow with no JS and is switched off for reduced motion. */
-.work-card {
-  position: sticky;
-  transform-origin: top center;
-}
-@media (prefers-reduced-motion: reduce) {
-  .work-card {
-    position: static;
-  }
-}
-
-/* ---------------------------------------------------------------------------
-   Hero portrait. Two masks intersect: one fades the left edge into the
-   paper so the headline's start is always clean, one fades the foot so the
-   lede sits on plain ground. Both edges stay put while the image drifts.
-   ------------------------------------------------------------------------ */
-.hero-portrait {
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  width: min(100%, 64vw);
-  opacity: 0.55;
-  -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 44%),
-    linear-gradient(to top, transparent 4%, #000 46%);
-  mask-image: linear-gradient(to right, transparent 0%, #000 44%),
-    linear-gradient(to top, transparent 4%, #000 46%);
-  -webkit-mask-composite: source-in;
-  mask-composite: intersect;
-}
-.hero-portrait-img {
-  position: absolute;
-  inset: -8% 0 0 0;
-}
-.hero-portrait img {
-  object-fit: cover;
-  object-position: 50% 12%;
-  filter: grayscale(1) contrast(1.04);
-  mix-blend-mode: multiply;
-}
-@media (max-width: 767px) {
-  .hero-portrait {
-    width: 100%;
-    bottom: auto;
-    height: 64%;
-    -webkit-mask-image: linear-gradient(to bottom, #000 40%, transparent 100%);
-    mask-image: linear-gradient(to bottom, #000 40%, transparent 100%);
-  }
-}
-
-/* ---------------------------------------------------------------------------
-   The lens. The emblem's silhouette as a window on the reel, centred; the
-   scrub brings it from the nav, grows it past the edges, then hands to the
-   full-bleed footage and the cut. At rest (no JS, reduced motion) it sits
-   at the centre-right as a still.
-   ------------------------------------------------------------------------ */
-.lens {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  z-index: 1;
-  height: min(56vh, 70vw);
-  aspect-ratio: 411 / 347;
-  translate: -50% -50%;
-  clip-path: url(#emblem-clip);
-  background: var(--color-ink);
-  transform-origin: 50% 50%;
-}
-
-.lens video,
-.full video,
-.cut video {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-.full,
-.cuts {
-  position: absolute;
-  inset: 0;
-  z-index: 2;
-  pointer-events: none;
-}
-.full {
-  opacity: 0;
-  background: var(--color-ink);
-}
-.cut {
-  position: absolute;
-  inset: 0;
-  margin: 0;
-  opacity: 0;
-  background: var(--color-ink);
-}
-.cut-cap {
-  position: absolute;
-  left: var(--gutter);
-  bottom: clamp(2rem, 6vh, 4rem);
-  z-index: 2;
-  text-shadow: 0 0 30px rgba(10, 10, 11, 0.7);
-}
-
-.hero-copy {
-  z-index: 3;
-}
-
-/* The headline condenses into place: Hero.tsx tweens --wdth 118 → 62. */
-.hero-poster {
-  font-variation-settings: "wdth" var(--wdth, 62), "wght" 800;
-  /* Three stepped lines, the lede and the reel must share one viewport, so
-     the size is capped by height as well as width. */
-  font-size: clamp(3.2rem, min(11vw, 14svh), 11rem);
-}
-.hero-poster .split-parent,
-.hero-poster .split-parent > div {
-  line-height: 0.86;
-}
-/* Stepped, like a poster: each line starts a little further in. */
-@media (min-width: 768px) {
-  .hero-poster .poster-row:nth-child(2) {
-    padding-left: 6vw;
-  }
-  .hero-poster .poster-row:nth-child(3) {
-    padding-left: 2vw;
-  }
-}
-
-/* ImageTrail — frames that pop in under the pointer. Above the reel, below
-   the copy, so the words stay readable. */
-.hero-trail {
-  z-index: 2;
-  pointer-events: none;
-}
-.trail-img {
-  position: absolute;
-  top: 0;
-  left: 0;
-  aspect-ratio: 16 / 9;
-  background-size: cover;
-  background-position: center;
-  opacity: 0;
-  outline: 6px solid var(--color-paper);
-  will-change: transform, opacity;
-}
-
-/* The reel as a sticker: tilted, with a paper edge and a script tag. */
-.hero-reel {
-  rotate: 0deg;
-  transform: rotate(-3deg);
-  transform-origin: 78% 82%;
-}
-.hero-reel-inner {
-  outline: 8px solid var(--color-paper);
-  outline-offset: -8px;
-}
-.hero-tag {
-  position: absolute;
-  z-index: 4;
-  right: 8%;
-  bottom: 32%;
-  left: auto;
-  top: auto;
-  margin: 0;
-  transform: rotate(-8deg);
-  font-size: clamp(1.6rem, 3vw, 2.6rem);
-  pointer-events: none;
-}
-@media (max-width: 767px) {
-  .hero-tag {
-    right: 10%;
-    bottom: 33%;
-    font-size: 1.5rem;
-  }
-}
-
-/* ---------------------------------------------------------------------------
-   The mirror wall. Frames on a 5×5 grid in perspective, receding toward the
-   edges, around the reel at the centre. The whole wall turns a few degrees
-   with the scroll.
-   ------------------------------------------------------------------------ */
-.wall {
-  position: relative;
-  perspective: 1400px;
-  perspective-origin: 50% 50%;
-  /* The turned wall projects wider than the viewport; keep it in the page. */
-  overflow: clip;
-  padding-inline: 2vw;
-}
-.wall-grid {
-  display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
-  gap: clamp(0.5rem, 1.2vw, 1rem);
-  transform-style: preserve-3d;
-}
-.wall-cell {
-  position: relative;
-  aspect-ratio: 16 / 9;
-  overflow: hidden;
-  background: var(--color-paper-deep);
-  transform: rotateY(calc(var(--cx) * -14deg)) rotateX(calc(var(--cy) * 10deg))
-    translateZ(calc((abs(var(--cx)) + abs(var(--cy))) * -90px));
-  opacity: calc(1 - (abs(var(--cx)) + abs(var(--cy))) * 0.16);
-}
-.wall-cell {
-  opacity: calc(1 - (abs(var(--cx)) + abs(var(--cy))) * 0.1);
-}
-.wall-centre {
-  grid-column: 2 / span 3;
-  grid-row: 2 / span 3;
-  position: relative;
-  z-index: 2;
-  aspect-ratio: auto;
-  transform: translateZ(60px);
-  opacity: 1;
-  background: var(--color-ink);
-}
-.wall-centre video {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-.wall-centre-cta {
-  position: absolute;
-  inset: auto var(--gutter) var(--gutter) auto;
-  z-index: 3;
-  color: var(--color-paper);
-  text-shadow: 0 0 20px rgba(10, 10, 11, 0.7);
-}
-@media (max-width: 767px) {
-  .wall-grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-  .wall-cell {
-    transform: rotateX(calc(var(--cy) * 8deg));
-    opacity: 0.85;
-  }
-  .wall-centre {
-    grid-column: 1 / span 3;
-    grid-row: 2 / span 2;
-  }
-  .wall-cell--wide {
-    display: none;
-  }
-}
-
-/* ---------------------------------------------------------------------------
-   The fold gallery. Five panels on a strip, each folded up on its top edge
-   and laid flat as it scrolls into view.
-   ------------------------------------------------------------------------ */
-.fold {
-  perspective: 1600px;
-}
-.fold-panel {
-  position: relative;
-  display: block;
-  margin-inline: auto;
-  width: min(100%, 1120px);
-  aspect-ratio: 16 / 9;
-  overflow: hidden;
-  background: var(--color-paper-deep);
-  transform-origin: 50% 0;
-  transform: rotateX(-64deg);
-  transform-style: preserve-3d;
-}
-.fold-panel + .fold-panel {
-  margin-top: clamp(1rem, 2vw, 1.5rem);
-}
-.fold-panel img {
-  object-fit: cover;
-  transition: transform var(--dur-slow) var(--ease-out);
-}
-.fold-panel:hover img {
-  transform: scale(1.03);
-}
-.fold-caption {
-  position: absolute;
-  inset: auto 0 0 0;
-  z-index: 2;
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 1rem;
-  padding: var(--gutter);
-  color: var(--color-paper);
-  text-shadow: 0 0 24px rgba(10, 10, 11, 0.7);
-}
-.fold-caption .poster {
-  text-shadow: 0 0 30px rgba(10, 10, 11, 0.8);
-}
-@media (prefers-reduced-motion: reduce) {
-  .fold-panel {
-    transform: none;
-  }
-  .wall-cell {
-    transform: none;
-    opacity: 1;
-  }
-}
-
-/* ---------------------------------------------------------------------------
-   The red blocks: the contact band and the footer.
-   ------------------------------------------------------------------------ */
-.redblock {
-  background: var(--color-signal);
-  color: var(--color-ink);
-}
-.redblock .micro,
-.redblock .num,
-.redblock .text-ink-dim,
-.redblock .text-ink-faint {
-  color: var(--color-ink);
-}
-.redblock .field {
-  border-bottom-color: rgba(10, 10, 11, 0.45);
-}
-.redblock .field:focus {
-  border-bottom-color: var(--color-ink);
-}
-.redblock .button {
-  border-color: var(--color-ink);
-}
-.redblock .button:hover,
-.redblock .button:focus-visible {
-  background: var(--color-ink);
-  color: var(--color-signal);
-}
-.redblock ::selection {
-  background: var(--color-ink);
-  color: var(--color-signal);
-}
-.redblock :focus-visible {
-  outline-color: var(--color-ink);
-}
-.wordmark-script {
-  position: absolute;
-  top: 0.1em;
-  left: 42%;
-  font-size: clamp(2.6rem, 11vw, 11rem);
-  color: var(--color-paper);
-}
-.wordmark {
-  font-family: var(--font-display);
-  font-variation-settings: "wdth" 62, "wght" 800;
-  text-transform: uppercase;
-  font-size: clamp(4.5rem, 19vw, 19rem);
-  line-height: 0.82;
-  letter-spacing: -0.01em;
-}
-
-/* The loop closes: the emblem, huge and outlined, behind the footer. */
-.footer-mark {
-  position: absolute;
-  right: -4%;
-  bottom: -8%;
-  height: 110%;
-  width: auto;
-  fill: none;
-  stroke: var(--color-ink);
-  stroke-width: 1.5;
-  opacity: 0.14;
-  pointer-events: none;
-}
-
 /* ---------------------------------------------------------------------------
    React Bits pieces, dressed in the tokens.
    ------------------------------------------------------------------------ */
@@ -1143,17 +1339,11 @@ html.lenis body {
   padding: clamp(1.5rem, 3vw, 2.75rem);
   min-height: 38vh;
 }
-
-/* StickerPeel — the face stickers have their own slot on the board. */
-.sticker-peel-slot {
-  position: relative;
-  display: block;
-  width: 108px;
-  height: 108px;
-}
-.sticker-peel-slot > div {
-  left: 0;
-  top: 0;
+/* Without the stack the cards simply follow one another. */
+@media (prefers-reduced-motion: reduce) {
+  .scroll-stack-card + .scroll-stack-card {
+    margin-top: 1rem;
+  }
 }
 
 /* TextPressure — the live wordmark in the footer. */
@@ -1260,10 +1450,8 @@ html.lenis body {
 @keyframes intro-fill { to { opacity: 1; } }
 .intro-mark--skip .draw { display: none; }
 .intro-mark--skip .solid { opacity: 1; animation: none; }
-/* While the mark is in flight, or out as the hero's lens, the nav's own
-   mark waits, hidden. */
-html.mark-flying .nav-mark,
-html.lens-active .nav-mark {
+/* While the mark is in flight the nav's own mark waits, hidden. */
+html.mark-flying .nav-mark {
   opacity: 0;
 }
 

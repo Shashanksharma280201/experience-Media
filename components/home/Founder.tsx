@@ -9,7 +9,7 @@ const STORY = [
   "He got tired of watching agencies hand briefs to editors who had never posted anything, and of waiting weeks to learn what a piece had done. Experience Media exists to close both gaps: strategy, production and distribution in one room, with the numbers read every week.",
 ];
 
-/** 09 — who runs it. */
+/** 10 — who runs it. */
 export default function Founder() {
   const links = ["YouTube", "Instagram", "LinkedIn"]
     .map((l) => socials.find((s) => s.label === l))

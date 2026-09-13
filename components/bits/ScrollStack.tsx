@@ -92,6 +92,9 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
   useLayoutEffect(() => {
     const el = root.current;
     if (!el) return;
+    // Under reduced motion the cards are simply there, in order; a pinned
+    // stack would leave every card but the last unreadable.
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     const cache = last.current;
     cards.current = Array.from(el.querySelectorAll<HTMLElement>(".scroll-stack-card"));
     cards.current.forEach((card, i) => {

@@ -24,7 +24,7 @@ export default function Footer() {
               <Emblem className="mb-8 h-14 w-auto md:h-16" title={site.name} />
               <p className="micro" data-reveal="fade">or just email us</p>
               <p className="mt-4">
-                <a href={`mailto:${contact.email}`} className="link-underline inline-block font-display text-[clamp(1.1rem,4.4vw,2rem)] leading-tight [font-variation-settings:'wdth'_104,'wght'_600]" data-reveal="fade">
+                <a href={`mailto:${contact.email}`} className="link-underline inline-block max-w-full font-display text-[clamp(1rem,4.4vw,2rem)] leading-tight [font-variation-settings:'wdth'_104,'wght'_600] [overflow-wrap:anywhere]" data-reveal="fade">
                   {contact.email}
                 </a>
               </p>

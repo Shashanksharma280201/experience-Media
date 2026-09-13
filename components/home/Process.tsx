@@ -5,7 +5,7 @@ import ScrollStack, { ScrollStackItem } from "@/components/bits/ScrollStack";
 import { process } from "@/lib/content";
 
 /**
- * 06 — how we work. Four moves as cards that stack as you scroll (React
+ * 07 — how we work. Four moves as cards that stack as you scroll (React
  * Bits ScrollStack): each pins under the last and settles slightly smaller.
  */
 export default function Process() {

@@ -49,8 +49,7 @@ is ink on paper and on the tints, ink on the red.
 ### Deliberately not doing
 
 No secondary accent. No greys beyond the three alpha steps of ink. Client
-logos render flat black at 60%, full on hover. The one photograph on the home
-page, the founder behind the hero, is greyscale and multiplied into the paper.
+logos render flat black at 60%, full on hover.
 
 ---
 
@@ -120,7 +119,7 @@ a hairline, a title in poster caps in columns 1–5, and the body in columns
 
 ### Measure and rhythm
 
-Full width: the measure is the viewport less the gutters (20 / 32 / 40px), on every screen. One vertical token,
+Full width: the measure is the viewport less the gutters (20 / 32 / 40px, and 56px from 1920), on every screen. Past 1920 the headline caps have all been hit, so the root font-size scales instead and every rem-based size grows together: about 20% at 2560, capped at 137.5% for an ultrawide. One vertical token,
 `--section-y` = 112 / 136 / 160px, with no per-section extras. Twelve columns
 from 768px.
 
@@ -131,7 +130,7 @@ shadows, and no elevated surfaces anywhere in this system.
 
 | Page | Sections |
 |---|---|
-| Home | 01 hero · 02 the reel (mirror wall, the top eleven first) · 03 what we believe · 04 the record · 05 what we do · 06 how we work · 07 the top eleven (poster grid) · 08 what people say · 09 who runs it · 10 start something (red band) · footer (red block) |
+| Home | 01 hero · 02 the reel (mirror wall, the top eleven first) · 03 what we believe · 04 the record · 05 who it was for (the roster) · 06 what we do · 07 how we work · 08 the top eleven (poster grid) · 09 what people say (the deck) · 10 who runs it · 11 start something (red band) · footer (red block) |
 | Work | 01 the work · 02 the disciplines · 03 everything else (every piece not in the eleven) |
 | Discipline | 01 discipline · 02 the brief · 03 the pieces · 04 more |
 | 404 | 01 no such page |
@@ -162,7 +161,7 @@ Four moves, declared on server-rendered markup with `data-reveal` and played
 by one client `Group`: a **line** rises out of a mask; a **rule** draws left
 to right; a **fade** settles in with a 12px lift; a **frame** scales 1.08 → 1
 under its clip. **No section uses a generic fade-and-slide-up.** Under
-reduced motion nothing moves and everything is simply there.
+reduced motion nothing moves and everything is simply there. On touch, every text control grows to the 24px floor through padding on its inline box, so the line around it does not move.
 
 ### React Bits
 
@@ -181,7 +180,6 @@ ScrollTrigger on the page. All are gated behind reduced motion.
 | PixelTransition | Reel wall cells: hover pixelates into the discipline. |
 | FlowingMenu / FlowingRow | Services rows (hover marquee of the offer's services); the work index. |
 | ScrollStack | The process: four cards that stack. |
-| StickerPeel · Magnet | The board: faces peel and drag; logos lean to the cursor. |
 | CardSwap | The voices: a dealt deck of quote cards. |
 | TextPressure | The footer wordmark: width and weight follow the cursor. |
 | CurvedLoop | The line, curved and draggable, above the footer. |
@@ -201,13 +199,13 @@ ScrollTrigger on the page. All are gated behind reduced motion.
 | 8 | The record | Enter viewport | The lead figure at poster-xl rolls up from zero over 1.7s on `expo.out`; three more follow in a row. |
 | 9 | Rows | Enter viewport | Rule draws, title rises, body settles; 50ms stagger down the list. Services, process, work index, voices. |
 | 10 | The top eleven | Enter viewport | The client's eleven best, ranked, on a six-column poster grid: landscape pieces two columns wide, portraits one wide and two tall. Frames settle from 1.08, captions follow, 60ms apart. The same grid carries the other pieces on the work page. |
-| 11 | Sticker board | Enter viewport; scroll | Brands and creator faces as die-cut paper stickers at fixed hand-set angles, two brands to a face. Each slaps on 70ms after the last, from 1.35× and 14° off, on `back.out(1.7)`; then each slot drifts at its own rate with the scroll; hover straightens and lifts a sticker. |
-| 12 | Hero portrait | After loader; scroll | Settles from 1.06 under its mask, then drifts at 0.86× the page. Greyscale, multiplied, 55%. |
+| 11 | The roster | Enter viewport; scroll; hover | Every client set as a billing block of condensed caps, each name rising out of its own mask 30ms after the last. From 768px the block becomes an index: the scroll walks a beat down the names, the frame beside them cross-fades to that client's logo over `--dur-base`, and the name being read takes the ink back while the rest sit at `--ink-faint`, with the link underline (#14) wiping in beneath it. Pointing at a name holds the read there until the pointer leaves. Narrower, or under reduced motion, the frame is simply the whole logo wall and no name is ever dimmed. |
+| 12 | Scene ground | Scroll | A tinted scene's colour is a layer under it, and it draws down over the paper as the scene arrives (95% to 30% of the viewport, scrubbed), the way a rule draws. Every scene headline also drifts 6% slower than the page around it. Full and still under reduced motion. |
 | 13 | Footer | Enter viewport | The wordmark rises out of its mask at 19vw; "Media" writes itself across it in paper. |
 | 14 | Link hover | Hover | Ink underline wipes left to right in `--dur-quick`. |
 | 15 | Page transition | Route change | The paper veil dissolves off the incoming page over 450ms; scroll resets; triggers re-measure. |
 | 16 | Mobile menu | Open | Links rise out of masks, 60ms stagger. |
-| 17 | Hero, the lens | After loader; pointer; scroll | The headline condenses into place; the pointer leaves a trail of work. Pinned for 320%: the copy lifts and the emblem leaves the nav to grow at the centre as a window (an SVG clip path of its own silhouette) with the reel playing inside; it keeps growing past the edges until the footage fills the screen; then a hard cut through five clips from the reel, one per discipline, effects first, each with a poster callout; then release into the reel wall. The nav's mark hides while the lens is out. In the footer the emblem returns huge as an outline. |
+| 17 | Hero | After loader; pointer; scroll | Three acts on one scroll. The poster: the headline condenses into place on the width axis (118 → 62) as its letters rise, its lines stepped; the pointer leaves a trail of work frames that pop in under it and fall away (React Bits ImageTrail, off on touch); the reel slaps in as a tilted sticker with a script tag and leans against the cursor. The takeover, scrubbed over the first viewport of scroll: the copy lifts out in the first fifth, line by line, before the picture is anything but a sticker; the sticker straightens and opens to the whole viewport; a flat ink floor comes up under it and one thing arrives on it, the ask to watch the reel, in paper. The curtain, over the next viewport: the reel holds still and the page slides up over it. The hero is sticky in a taller track and the next section starts a viewport early, so the curtain needs no pin and no script; under reduced motion the track collapses to one still viewport. |
 | 18 | Mirror wall | Enter viewport; scroll | Sixteen frames in colour on a 5×5 grid in perspective, receding and fading toward the edges around the reel loop at the centre (3×3). The wall turns from -6° to 6° with the scroll. |
 | 19 | Reel player | "Watch the reel" | Full-viewport takeover on ink, sound on, native controls. Settles over `--dur-base`, frame from 0.96. Escape closes; scroll is held; focus returns to the opener. |
 | 20 | The deck | Enter viewport; every 6s; click | Seven paper cards in a skewed 3D stack (React Bits CardSwap) deal themselves: the front card drops, the rest step forward, it returns to the back, elastic. Hover pauses; a click deals. The front card's words are set large beside the deck and rise out of masks as it turns. |

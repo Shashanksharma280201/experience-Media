@@ -18,7 +18,7 @@ const FIELDS = [
 
 const field = "field w-full border-b bg-transparent pb-3 pt-2 text-ink placeholder:text-ink focus:outline-none";
 
-/** 10 — start something. The red band. */
+/** 11 — start something. The red band. */
 export default function Contact() {
   const [status, setStatus] = useState<Status>("idle");
   const [error, setError] = useState("");
