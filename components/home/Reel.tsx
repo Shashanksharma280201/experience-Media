@@ -6,16 +6,15 @@ import Scene from "@/components/layout/Scene";
 import Group from "@/components/motion/Group";
 import Poster from "@/components/motion/Poster";
 import PixelTransition from "@/components/bits/PixelTransition";
-import { disciplines, site } from "@/lib/content";
+import { disciplines, featured, rest, site } from "@/lib/content";
 import { gsap, prefersReducedMotion, whenIntroDone } from "@/lib/gsap";
 import { openReel } from "@/lib/reel";
 
-/** The 5×5 wall minus the 3×3 centre: sixteen frames, mixed across disciplines. */
-const FRAMES = Array.from({ length: 4 }, (_, k) =>
-  disciplines.map((d) => ({ ...d.items[k % d.items.length], title: d.title }))
-)
-  .flat()
-  .slice(0, 16);
+/** The 5×5 wall minus the 3×3 centre: the top eleven, then five from the rest. */
+const FRAMES = [
+  ...featured.map((f) => ({ thumb: f.thumb, title: disciplines.find((d) => d.slug === f.discipline)?.title ?? f.title })),
+  ...rest.slice(0, 5).map((r) => ({ thumb: r.thumb, title: r.discipline.title })),
+].slice(0, 16);
 
 /** Grid coordinates for the sixteen edge cells, row-major, centre excluded. */
 const CELLS = [

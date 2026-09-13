@@ -37,10 +37,3 @@ export const process: Step[] = [
     body: "Posted, promoted and reported. We read the numbers with you every week and change next month's plan because of them.",
   },
 ];
-
-/**
- * The three voices shown at full size on the home page: short, and about what
- * happened after, not how nice we were to work with. Everyone else sits behind
- * "more voices", verbatim.
- */
-export const featuredVoices = ["Varnit Singh", "Paritosh Anand", "Scent Savvy"];

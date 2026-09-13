@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { disciplines, getDiscipline, adjacentDisciplines } from "./work";
+import { disciplines, getDiscipline, adjacentDisciplines, featured, rest, pieceId } from "./work";
 
 describe("disciplines", () => {
   it("looks a discipline up by slug", () => {
@@ -48,5 +48,25 @@ describe("adjacentDisciplines", () => {
     const { prev, next } = adjacentDisciplines(disciplines[1].slug);
     expect(prev.slug).toBe(disciplines[0].slug);
     expect(next.slug).toBe(disciplines[2].slug);
+  });
+});
+
+describe("the top eleven", () => {
+  it("has eleven pieces in rank order, each present in a discipline", () => {
+    expect(featured.map((f) => f.rank)).toEqual(Array.from({ length: 11 }, (_, i) => i + 1));
+    const all = new Set(disciplines.flatMap((d) => d.items.map((i) => pieceId(i.href))));
+    for (const f of featured) expect(all.has(pieceId(f.href)), f.title).toBe(true);
+  });
+
+  it("splits the body of work cleanly between the eleven and the rest", () => {
+    const total = disciplines.reduce((n, d) => n + d.items.length, 0);
+    expect(rest.length).toBe(total - featured.length);
+    const featuredIds = new Set(featured.map((f) => pieceId(f.href)));
+    for (const r of rest) expect(featuredIds.has(pieceId(r.href))).toBe(false);
+  });
+
+  it("reads the same id from every link style", () => {
+    expect(pieceId("https://www.youtube.com/watch?v=6pPNOvofdWs")).toBe(pieceId("https://youtu.be/6pPNOvofdWs"));
+    expect(pieceId("https://youtube.com/shorts/oK1jMtrgQU4?feature=share")).toBe("oK1jMtrgQU4");
   });
 });

@@ -12,6 +12,7 @@ const year = new Date().getFullYear();
 export default function Footer() {
   return (
     <footer className="redblock relative overflow-hidden pt-[var(--section-y)]">
+      <Emblem className="footer-mark" />
       {/* React Bits CurvedLoop: the line, curved and draggable. */}
       <div className="curve -mt-6 mb-10 md:-mt-10">
         <CurvedLoop marqueeText="We make things people finish watching ✦" speed={1.4} curveAmount={220} />

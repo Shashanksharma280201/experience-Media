@@ -8,7 +8,7 @@ import Positioning from "@/components/home/Positioning";
 import Record from "@/components/home/Record";
 import Process from "@/components/home/Process";
 import Services from "@/components/home/Services";
-import SelectedWork from "@/components/home/SelectedWork";
+import TopEleven from "@/components/home/TopEleven";
 import Testimonials from "@/components/home/Testimonials";
 import Founder from "@/components/home/Founder";
 import Contact from "@/components/home/Contact";
@@ -30,7 +30,7 @@ export default function Home() {
       <Record />
       <Services />
       <Process />
-      <SelectedWork />
+      <TopEleven />
       <Testimonials />
       <Founder />
       <Contact />

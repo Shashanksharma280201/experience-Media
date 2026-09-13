@@ -6,6 +6,7 @@
 // absent until Experience Media supplies figures it is willing to publish.
 
 const T = "/assets/agency-thumbnails";
+const F = "/assets/featured";
 
 export type PortfolioItem = {
   thumb: string;
@@ -48,6 +49,9 @@ export const disciplines: Discipline[] = [
       { thumb: `${T}/6509482b6952400cbefdb29fc316715f.jpg`, href: "https://www.instagram.com/reel/C4A0B2RxsaH/", platform: "Instagram" },
       { thumb: `${T}/abe377cf58954f2391c0aaa7798630da.jpg`, href: "https://www.instagram.com/p/DFNr7nHM_Je/", platform: "Instagram" },
       { thumb: `${T}/e569d2f10d894837b8d9c71f2f663262.jpg`, href: "https://www.instagram.com/reel/DEkFUWCBga8/", platform: "Instagram" },
+      { thumb: `${F}/oK1jMtrgQU4-portrait.jpg`, href: "https://youtube.com/shorts/oK1jMtrgQU4", platform: "YouTube" },
+      { thumb: `${F}/Jytd_jziLbg-portrait.jpg`, href: "https://youtube.com/shorts/Jytd_jziLbg", platform: "YouTube" },
+      { thumb: `${F}/REsDZpbQPew-portrait.jpg`, href: "https://youtube.com/shorts/REsDZpbQPew", platform: "YouTube" },
     ],
   },
   {
@@ -67,6 +71,7 @@ export const disciplines: Discipline[] = [
       { thumb: `${T}/wanders-hub-type-edit.jpg`, href: "https://www.youtube.com/watch?v=6pPNOvofdWs", platform: "YouTube" },
       { thumb: `${T}/premier-pro-fast-paced-basic-edit.jpg`, href: "https://www.youtube.com/watch?v=-UMG-7b5Fyc", platform: "YouTube" },
       { thumb: `${T}/fast-paced-premier-pro-videos.png`, href: "https://www.youtube.com/watch?v=xRNt1hz_2ho", platform: "YouTube" },
+      { thumb: `${F}/gzb4m1xQEiQ.jpg`, href: "https://youtu.be/gzb4m1xQEiQ", platform: "YouTube" },
     ],
   },
   {
@@ -148,3 +153,42 @@ export function adjacentDisciplines(slug: string): {
 }
 
 export const totalPieces = disciplines.reduce((n, d) => n + d.items.length, 0);
+
+/** The same video, however it was linked: watch?v=, youtu.be/, shorts/, reel/. */
+export function pieceId(href: string): string {
+  const m = href.match(/(?:v=|youtu\.be\/|shorts\/|reel\/|\/p\/)([A-Za-z0-9_-]{6,})/);
+  return m ? m[1] : href;
+}
+
+export type Featured = {
+  rank: number;
+  /** DRAFT LABELS for the untitled uploads (ranks 5–9) — flagged for review. */
+  title: string;
+  href: string;
+  thumb: string;
+  platform: "YouTube" | "Instagram";
+  orientation: "landscape" | "portrait";
+  discipline: string;
+};
+
+/** The top eleven, in the client's order (links.txt, 2026-09-13). */
+export const featured: Featured[] = [
+  { rank: 1, title: "Motion graphics demonstration", href: "https://www.youtube.com/watch?v=4mX9fkeQFHQ", thumb: `${F}/4mX9fkeQFHQ.jpg`, platform: "YouTube", orientation: "landscape", discipline: "motion-graphics" },
+  { rank: 2, title: "I loved Moon Knight, so I made my own", href: "https://www.youtube.com/watch?v=xIncgA51Sks", thumb: `${F}/xIncgA51Sks.jpg`, platform: "YouTube", orientation: "landscape", discipline: "vfx-cgi" },
+  { rank: 3, title: "The history of reincarnation", href: "https://youtu.be/gzb4m1xQEiQ", thumb: `${F}/gzb4m1xQEiQ.jpg`, platform: "YouTube", orientation: "landscape", discipline: "long-form" },
+  { rank: 4, title: "YouTube sample edit", href: "https://youtu.be/6pPNOvofdWs", thumb: `${F}/6pPNOvofdWs.jpg`, platform: "YouTube", orientation: "landscape", discipline: "long-form" },
+  { rank: 5, title: "The bombs don't stop", href: "https://youtube.com/shorts/oK1jMtrgQU4", thumb: `${F}/oK1jMtrgQU4-portrait.jpg`, platform: "YouTube", orientation: "portrait", discipline: "short-format" },
+  { rank: 6, title: "From around the world", href: "https://youtube.com/shorts/Jytd_jziLbg", thumb: `${F}/Jytd_jziLbg-portrait.jpg`, platform: "YouTube", orientation: "portrait", discipline: "short-format" },
+  { rank: 7, title: "Final edit", href: "https://youtube.com/shorts/REsDZpbQPew", thumb: `${F}/REsDZpbQPew-portrait.jpg`, platform: "YouTube", orientation: "portrait", discipline: "short-format" },
+  { rank: 8, title: "Instagram reel", href: "https://www.instagram.com/reel/DHD5w1yI0J3/", thumb: `${T}/620df32f4bd04c518ce319acec86882f.jpg`, platform: "Instagram", orientation: "portrait", discipline: "short-format" },
+  { rank: 9, title: "Instagram reel", href: "https://www.instagram.com/reel/DFQN5MTz5VB/", thumb: `${T}/6fda69dd28134dc6b99db07f5feeb431.jpg`, platform: "Instagram", orientation: "portrait", discipline: "short-format" },
+  { rank: 10, title: "Delhi 2025 elections — Think School", href: "https://www.youtube.com/watch?v=8nES01011GY", thumb: `${F}/8nES01011GY.jpg`, platform: "YouTube", orientation: "landscape", discipline: "podcast" },
+  { rank: 11, title: "Leadership lessons with Capt Raghu Raman — Think School", href: "https://www.youtube.com/watch?v=-DBx9Ss1C-g", thumb: `${F}/-DBx9Ss1C-g.jpg`, platform: "YouTube", orientation: "landscape", discipline: "podcast" },
+];
+
+const featuredIds = new Set(featured.map((f) => pieceId(f.href)));
+
+export type RestPiece = PortfolioItem & { discipline: Discipline };
+
+/** Everything that is not in the top eleven, discipline attached. */
+export const rest: RestPiece[] = disciplines.flatMap((d) => d.items.filter((i) => !featuredIds.has(pieceId(i.href))).map((i) => ({ ...i, discipline: d })));

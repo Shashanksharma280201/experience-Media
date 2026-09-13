@@ -131,8 +131,8 @@ shadows, and no elevated surfaces anywhere in this system.
 
 | Page | Sections |
 |---|---|
-| Home | 01 hero · 02 the reel (mirror wall) · 03 what we believe · 04 the record · 05 what we do · 06 how we work · 07 selected work (fold gallery) · 08 what people say · 09 who runs it · 10 start something (red band) · footer (red block) |
-| Work | 01 the work · 02 the disciplines · 03 a sample |
+| Home | 01 hero · 02 the reel (mirror wall, the top eleven first) · 03 what we believe · 04 the record · 05 what we do · 06 how we work · 07 the top eleven (poster grid) · 08 what people say · 09 who runs it · 10 start something (red band) · footer (red block) |
+| Work | 01 the work · 02 the disciplines · 03 everything else (every piece not in the eleven) |
 | Discipline | 01 discipline · 02 the brief · 03 the pieces · 04 more |
 | 404 | 01 no such page |
 
@@ -182,7 +182,7 @@ ScrollTrigger on the page. All are gated behind reduced motion.
 | FlowingMenu / FlowingRow | Services rows (hover marquee of the offer's services); the work index. |
 | ScrollStack | The process: four cards that stack. |
 | StickerPeel · Magnet | The board: faces peel and drag; logos lean to the cursor. |
-| ScrollReveal | The three featured quotes. |
+| CardSwap | The voices: a dealt deck of quote cards. |
 | TextPressure | The footer wordmark: width and weight follow the cursor. |
 | CurvedLoop | The line, curved and draggable, above the footer. |
 | Magnet | Nav links, "Watch the reel", "Send it". |
@@ -200,17 +200,17 @@ ScrollTrigger on the page. All are gated behind reduced motion.
 | 7 | The belief | Scroll through | Every word in its own mask; the words rise out of them in order, scrubbed to the scroll, 35ms apart. Not a slide. |
 | 8 | The record | Enter viewport | The lead figure at poster-xl rolls up from zero over 1.7s on `expo.out`; three more follow in a row. |
 | 9 | Rows | Enter viewport | Rule draws, title rises, body settles; 50ms stagger down the list. Services, process, work index, voices. |
-| 10 | Fold gallery | Scroll | Five panels on a strip, each folded up 64° on its top edge in perspective and laid flat as it scrolls from 95% to 45% of the viewport, scrubbed. Flat without JS or under reduced motion. |
+| 10 | The top eleven | Enter viewport | The client's eleven best, ranked, on a six-column poster grid: landscape pieces two columns wide, portraits one wide and two tall. Frames settle from 1.08, captions follow, 60ms apart. The same grid carries the other pieces on the work page. |
 | 11 | Sticker board | Enter viewport; scroll | Brands and creator faces as die-cut paper stickers at fixed hand-set angles, two brands to a face. Each slaps on 70ms after the last, from 1.35× and 14° off, on `back.out(1.7)`; then each slot drifts at its own rate with the scroll; hover straightens and lifts a sticker. |
 | 12 | Hero portrait | After loader; scroll | Settles from 1.06 under its mask, then drifts at 0.86× the page. Greyscale, multiplied, 55%. |
 | 13 | Footer | Enter viewport | The wordmark rises out of its mask at 19vw; "Media" writes itself across it in paper. |
 | 14 | Link hover | Hover | Ink underline wipes left to right in `--dur-quick`. |
 | 15 | Page transition | Route change | The paper veil dissolves off the incoming page over 450ms; scroll resets; triggers re-measure. |
 | 16 | Mobile menu | Open | Links rise out of masks, 60ms stagger. |
-| 17 | Hero | After loader; pointer; scroll | The headline condenses into place on the width axis (118 → 62) as its letters rise, its lines stepped like a poster. The pointer leaves a trail of work frames that pop in under it and fall away (React Bits ImageTrail, off on touch). The reel sits as a tilted sticker with a script tag; it slaps in after the words, leans against the cursor, and, pinned, straightens and opens to the full viewport as you scroll while the copy lifts out. |
+| 17 | Hero, the lens | After loader; pointer; scroll | The headline condenses into place; the pointer leaves a trail of work. Pinned for 320%: the copy lifts and the emblem leaves the nav to grow at the centre as a window (an SVG clip path of its own silhouette) with the reel playing inside; it keeps growing past the edges until the footage fills the screen; then a hard cut through five clips from the reel, one per discipline, effects first, each with a poster callout; then release into the reel wall. The nav's mark hides while the lens is out. In the footer the emblem returns huge as an outline. |
 | 18 | Mirror wall | Enter viewport; scroll | Sixteen frames in colour on a 5×5 grid in perspective, receding and fading toward the edges around the reel loop at the centre (3×3). The wall turns from -6° to 6° with the scroll. |
 | 19 | Reel player | "Watch the reel" | Full-viewport takeover on ink, sound on, native controls. Settles over `--dur-base`, frame from 0.96. Escape closes; scroll is held; focus returns to the opener. |
-| 20 | More voices | Click | The remaining testimonials expand beneath the three featured. |
+| 20 | The deck | Enter viewport; every 6s; click | Seven paper cards in a skewed 3D stack (React Bits CardSwap) deal themselves: the front card drops, the rest step forward, it returns to the back, elastic. Hover pauses; a click deals. The front card's words are set large beside the deck and rise out of masks as it turns. |
 
 ---
 
