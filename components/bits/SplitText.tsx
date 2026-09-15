@@ -3,7 +3,9 @@
 /**
  * React Bits — SplitText, adapted: each character rises out of its own mask
  * (GSAP SplitText's `mask`), the trigger can wait for the load sequence, and
- * under reduced motion the text is simply there.
+ * under reduced motion the text is simply there. Waiting means the letters
+ * are masked from the first paint and only the rise waits, so the finished
+ * line never shows through while the loader's panel lifts.
  */
 import React, { useEffect, useRef } from "react";
 import { gsap } from "gsap";
@@ -55,6 +57,7 @@ const SplitText: React.FC<SplitTextProps> = ({
     if (!el || !text || prefersReducedMotion()) return;
 
     let split: GSAPSplitText | undefined;
+    let rise: gsap.core.Tween | undefined;
     const build = () =>
       gsap.context(() => {
         split = new GSAPSplitText(el, {
@@ -64,11 +67,12 @@ const SplitText: React.FC<SplitTextProps> = ({
           reduceWhiteSpace: false,
           onSplit: (self: GSAPSplitText) => {
             const targets = splitType === "chars" ? self.chars : self.words;
-            return gsap.fromTo(
+            rise = gsap.fromTo(
               targets,
               { ...from },
               {
                 ...to,
+                paused: start === "intro",
                 duration,
                 ease,
                 stagger: delay / 1000,
@@ -77,6 +81,7 @@ const SplitText: React.FC<SplitTextProps> = ({
                 scrollTrigger: start === "enter" ? { trigger: el, start: `top ${(1 - threshold) * 100}%`, once: true } : undefined,
               }
             );
+            return rise;
           },
         });
       }, el);
@@ -84,11 +89,19 @@ const SplitText: React.FC<SplitTextProps> = ({
     const ready = document.fonts.status === "loaded" ? Promise.resolve() : document.fonts.ready;
     let ctx: gsap.Context | undefined;
     let cancel = () => {};
+    let gone = false;
     ready.then(() => {
-      if (start === "intro") cancel = whenIntroDone(() => (ctx = build()));
-      else ctx = build();
+      // The effect may already be over (StrictMode re-runs it); build nothing.
+      if (gone) return;
+      ctx = build();
+      if (start === "intro") {
+        cancel = whenIntroDone(() => {
+          rise?.play();
+        });
+      }
     });
     return () => {
+      gone = true;
       cancel();
       ctx?.revert();
       try {

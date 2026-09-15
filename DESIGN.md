@@ -195,7 +195,7 @@ ScrollTrigger on the page. All are gated behind reduced motion.
 | 4 | The script | Enter viewport | Writes itself in left to right over the headline, a beat after the lines have risen. |
 | 5 | Scroll cue | Continuous | 2px travel loop. |
 | 6 | Scene open | Enter viewport | The poster lines rise out of their masks, 70ms apart; the script writes in. |
-| 7 | The belief | Scroll through | Every word in its own mask; the words rise out of them in order, scrubbed to the scroll, 35ms apart. Not a slide. |
+| 7 | The belief | Scroll through | Every word in its own mask; the words rise out of them in order, scrubbed to the scroll, 35ms apart. Not a slide. As the last words land, "honestly" writes itself in just past the full stop, anchored to the last word like every poster's script. |
 | 8 | The record | Enter viewport | The lead figure at poster-xl rolls up from zero over 1.7s on `expo.out`; three more follow in a row. |
 | 9 | Rows | Enter viewport | Rule draws, title rises, body settles; 50ms stagger down the list. Services, process, work index, voices. |
 | 10 | The top eleven | Enter viewport | The client's eleven best, ranked, on a six-column poster grid: landscape pieces two columns wide, portraits one wide and two tall. Frames settle from 1.08, captions follow, 60ms apart. The same grid carries the other pieces on the work page. |

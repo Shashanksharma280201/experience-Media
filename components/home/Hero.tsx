@@ -48,6 +48,9 @@ export default function Hero() {
     const start = () => {
       if (!v || started) return;
       started = true;
+      // The loop is cut at 1080p for the takeover; a phone never shows it
+      // that large, so it takes the 720p cut instead.
+      if (window.matchMedia("(max-width: 767px)").matches) v.src = site.showreelSmall;
       v.preload = "auto";
       io = new IntersectionObserver(([e]) => (e.isIntersecting ? v.play().catch(() => {}) : v.pause()), { threshold: 0.05 });
       io.observe(v);
@@ -100,20 +103,28 @@ export default function Hero() {
       return () => el.removeEventListener("pointermove", onMove);
     }, el);
 
-    const reveal = whenIntroDone(() =>
-      gsap.context(() => {
-        // The headline condenses into place as its letters land.
-        gsap.fromTo(".hero-copy .poster--xl", { "--wdth": 118 }, { "--wdth": 62, duration: DUR.reveal * 1.5, ease: EASE.out });
-        // The sticker slaps in after the words.
-        gsap.from(".hero-reel-inner", { opacity: 0, scale: 1.3, rotation: 8, duration: 0.8, ease: "back.out(1.6)", delay: 0.7 });
-        gsap.from(".hero-tag", { opacity: 0, x: -20, duration: DUR.base, ease: EASE.out, delay: 1.2 });
-      }, el)
-    );
+    // The arrival, built now so its start states hold under the loader's
+    // panel (a finished hero must never show through the wipe), and played
+    // on the handoff.
+    let arrive = () => {};
+    const reveal = gsap.context(() => {
+      const tl = gsap.timeline({ paused: true });
+      // The headline condenses into place as its letters land.
+      tl.fromTo(".hero-copy .poster--xl", { "--wdth": 118 }, { "--wdth": 62, duration: DUR.reveal * 1.5, ease: EASE.out }, 0);
+      // The sticker slaps in after the words.
+      tl.from(".hero-reel-inner", { opacity: 0, scale: 1.3, rotation: 8, duration: 0.8, ease: "back.out(1.6)" }, 0.7);
+      tl.from(".hero-tag", { opacity: 0, x: -20, duration: DUR.base, ease: EASE.out }, 1.2);
+      arrive = () => {
+        tl.play();
+      };
+    }, el);
+    const stopArrival = whenIntroDone(arrive);
 
     return () => {
       stopWaiting();
       io?.disconnect();
-      reveal();
+      stopArrival();
+      reveal.revert();
       lean.revert();
       scrub.revert();
       if (overlay) overlay.hidden = true;
