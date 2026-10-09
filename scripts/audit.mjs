@@ -14,7 +14,7 @@ const require = createRequire(import.meta.url);
 const AXE_PATH = require.resolve("axe-core");
 
 const port = process.env.PORT ?? "3123";
-const ROUTES = ["/", "/work", "/work/motion-graphics", "/work/short-format", "/nope"];
+const ROUTES = ["/", "/work", "/work/motion-graphics", "/work/short-format", "/about", "/production", "/training", "/contact", "/nope"];
 const WIDTHS = [320, 360, 390, 768, 1024, 1440, 1920, 2560, 3440];
 
 const browser = await chromium.launch({ channel: "chrome" });

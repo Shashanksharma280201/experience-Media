@@ -130,9 +130,13 @@ shadows, and no elevated surfaces anywhere in this system.
 
 | Page | Sections |
 |---|---|
-| Home | 01 hero · 02 the reel (mirror wall, the top eleven first) · 03 what we believe · 04 the record · 05 who it was for (the roster) · 06 what we do · 07 how we work · 08 the top eleven (poster grid) · 09 what people say (the deck) · 10 who runs it · 11 start something (red band) · footer (red block) |
-| Work | 01 the work · 02 the disciplines · 03 everything else (every piece not in the eleven) |
-| Discipline | 01 discipline · 02 the brief · 03 the pieces · 04 more |
+| Home | 01 hero · credibility strip · 02 the reel (mirror wall) · 03 what we believe · 04 the founder story · 05 the numbers · 06 who we work with (audiences, then the roster) · 07 the offer · 08 services (three legs) · 09 capabilities (the band) · 10 process · 11 the work (poster grid) · 12 what people say (the deck) · 13 Founder's Corner · 14 training · 15 the conversation (red band) · footer (red block) |
+| Work | 01 the work · 02 the disciplines · 03 the complete portfolio |
+| Discipline | 01 discipline (tagline, reach, platforms, period) · 02 the line · 03 the pieces · 04 more |
+| About | 01 the headline · 02 the story · 03 the question (sky) · 04 the principle · 05 the brand statement (red) |
+| Production | 01 wherever the story needs to happen · 02 what we shoot |
+| Training | 01 learn the system · 02 the playbook and its form (sun) · 03 coming next |
+| Contact | the conversation, as a page |
 | 404 | 01 no such page |
 
 ---
@@ -213,6 +217,9 @@ ScrollTrigger on the page. All are gated behind reduced motion.
 ---
 
 ## 6. Copy
+
+Every line of copy, every figure and the section order come from the October 2026 redevelopment brief (`Experience_Media_Website_Redevelopment_Brief.docx`, §3–§9). The content layer is `lib/content/`: `proof.ts` holds the approved metrics, the process, the offer, the audiences and training; `capabilities.ts` the three legs, the fifteen capabilities and production; `founder.ts` the story; `work.ts` the discipline copy and reach figures. No count of pieces appears anywhere on the site, and no figure is derived from an array length. The only accent decision the brief leaves open, one electric-blue accent in place of red and the tints, is not applied here.
+
 
 First person plural, plain sentences, no agency throat-clearing. Strategy
 first, results named, distribution and reporting included. Testimonials are

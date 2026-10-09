@@ -9,7 +9,7 @@ import { testimonials } from "@/lib/content";
 import { DUR, EASE, gsap, prefersReducedMotion } from "@/lib/gsap";
 
 /**
- * 08 — what people say, as a dealt deck (React Bits CardSwap). Seven paper
+ * 12 — what people say, as a dealt deck (React Bits CardSwap). Seven paper
  * cards in a skewed stack deal themselves every few seconds, or on a click;
  * the front card's words are set large beside the deck, verbatim, and swap
  * with a mask rise as the deck turns.
@@ -32,7 +32,7 @@ export default function Testimonials() {
   return (
     <Scene tone="rose">
       <Group>
-        <Poster lines={["In their", "words."]} script="really" scriptLine={0} />
+        <Poster lines={["Don't take our", "word for it."]} script="really" scriptLine={1} />
       </Group>
 
       <div className="mt-12 grid items-center gap-12 md:mt-16 md:grid-cols-12">

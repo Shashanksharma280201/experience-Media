@@ -6,9 +6,9 @@ const schema = z.object({
   name: z.string().min(1, "Name is required").max(120),
   email: z.string().email("Valid email is required"),
   phone: z.string().max(40).optional().or(z.literal("")),
-  whatsapp: z.string().max(40).optional().or(z.literal("")),
-  country: z.string().max(80).optional().or(z.literal("")),
-  message: z.string().min(1, "Message is required").max(4000),
+  company: z.string().max(120).optional().or(z.literal("")),
+  looking: z.string().max(120).optional().or(z.literal("")),
+  message: z.string().min(1, "Tell us a little about it").max(4000),
 });
 
 const TO = process.env.CONTACT_TO_EMAIL || "parthmalhotra@experiencemedia.in";
@@ -30,7 +30,7 @@ export async function POST(req: Request) {
     );
   }
 
-  const { name, email, phone, whatsapp, country, message } = parsed.data;
+  const { name, email, phone, company, looking, message } = parsed.data;
 
   // No key configured (e.g. local/preview without secrets): accept but log.
   if (!process.env.RESEND_API_KEY) {
@@ -48,9 +48,9 @@ export async function POST(req: Request) {
       text: [
         `Name: ${name}`,
         `Email: ${email}`,
-        phone ? `Phone: ${phone}` : "",
-        whatsapp ? `WhatsApp: ${whatsapp}` : "",
-        country ? `Country: ${country}` : "",
+        phone ? `Phone / WhatsApp: ${phone}` : "",
+        company ? `Company / Creator: ${company}` : "",
+        looking ? `Looking to build: ${looking}` : "",
         "",
         message,
       ]

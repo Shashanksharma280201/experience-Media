@@ -4,23 +4,23 @@ import { useEffect, useRef } from "react";
 import Scene from "@/components/layout/Scene";
 import Group from "@/components/motion/Group";
 import Poster from "@/components/motion/Poster";
-import { stat, telemetry } from "@/lib/content";
+import { metrics } from "@/lib/content";
 import { DUR, gsap, prefersReducedMotion } from "@/lib/gsap";
 
-/** "300M+" → { n: 300, suffix: "M+" }. */
+/** "500M+" → { n: 500, suffix: "M+" }. */
 function parse(value: string) {
-  const m = value.match(/^(\d+)(.*)$/);
-  return m ? { n: Number(m[1]), suffix: m[2] } : { n: 0, suffix: value };
+  const m = value.match(/^([\d,]+)(.*)$/);
+  return m ? { n: Number(m[1].replace(/,/g, "")), suffix: m[2] } : { n: 0, suffix: value };
 }
 
 /**
- * 04 — the record, on the mint tint. One number leads at poster size and
- * rolls up from zero (motion #8); three more follow in a row. Who the
- * numbers were for is the next scene's job.
+ * 05 — the numbers behind the work, on the mint tint. The lead figure rolls
+ * up from zero at poster size (motion #8); four more follow in a row. Every
+ * figure is from §3 of the brief and nothing else.
  */
 export default function Record() {
   const root = useRef<HTMLDivElement>(null);
-  const [lead, ...rest] = telemetry;
+  const [lead, ...rest] = metrics;
   const leadN = parse(lead.value);
 
   useEffect(() => {
@@ -49,10 +49,9 @@ export default function Record() {
     <Scene tone="mint">
       <div ref={root}>
         <Group>
-          <Poster lines={["Numbers we'll", "put our name to."]} script="proof" scriptLine={0} />
+          <Poster lines={["The numbers", "behind the work."]} script="verified" scriptLine={1} />
         </Group>
 
-        {/* The lead figure. */}
         <Group className="mt-12 grid items-end gap-6 md:mt-16 md:grid-cols-12">
           <p className="poster poster--xl md:col-span-8" data-reveal="fade">
             <span className="counter-value" data-n={leadN.n}>
@@ -61,13 +60,11 @@ export default function Record() {
             {leadN.suffix}
           </p>
           <p className="lede max-w-[22ch] text-ink-dim md:col-span-4 md:pb-[0.35em]" data-reveal="fade">
-            {stat.label.charAt(0).toUpperCase() + stat.label.slice(1)}, across the work we
-            posted for brands and creators.
+            {lead.label}, across the work we have posted for businesses, creators and brands.
           </p>
         </Group>
 
-        {/* Three more. */}
-        <Group className="mt-10 grid grid-cols-3 gap-6 border-y border-hairline py-8 md:mt-14 md:gap-10" stagger={0.08}>
+        <Group className="mt-10 grid grid-cols-2 gap-6 border-y border-hairline py-8 md:mt-14 md:grid-cols-4 md:gap-10" stagger={0.08}>
           {rest.map((t) => {
             const { n, suffix } = parse(t.value);
             return (

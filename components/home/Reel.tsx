@@ -64,7 +64,10 @@ export default function Reel() {
   return (
     <Scene>
       <Group>
-        <Poster lines={["Thirty-five pieces,", "one reel."]} script="watch" scriptLine={1} />
+        <Poster lines={["A decade of work.", "In one reel."]} script="watch" scriptLine={1} />
+        <p className="lede mt-8 max-w-[52ch] text-ink-dim" data-reveal="fade">
+          From viral social content and podcasts to VFX, films and campaigns — this is what happens when strategy meets production.
+        </p>
       </Group>
       <div ref={root} className="wall mt-10 md:mt-14">
         <Group className="wall-grid" stagger={0.04}>
@@ -78,7 +81,7 @@ export default function Reel() {
                     <div key="centre" className="wall-cell wall-centre" data-reveal="fade">
                       <video ref={video} src={site.showreel} poster={site.showreelPoster} muted loop playsInline preload="none" />
                       <button type="button" onClick={openReel} className="wall-centre-cta link-underline small">
-                        Watch the full reel
+                        Watch the Full Reel →
                       </button>
                     </div>
                   );

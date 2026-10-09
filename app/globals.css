@@ -869,9 +869,9 @@ html.lenis body {
 /* The headline condenses into place: Hero.tsx tweens --wdth 118 → 62. */
 .hero-poster {
   font-variation-settings: "wdth" var(--wdth, 62), "wght" 800;
-  /* Three stepped lines, the lede and the reel must share one viewport, so
+  /* Four stepped lines, the lede and the reel must share one viewport, so
      the size is capped by height as well as width. */
-  font-size: clamp(3.2rem, min(11vw, 14svh), 11rem);
+  font-size: clamp(2.5rem, min(10.5vw, 11svh), 10rem);
 }
 .hero-poster .split-parent,
 .hero-poster .split-parent > div {
@@ -884,6 +884,9 @@ html.lenis body {
   }
   .hero-poster .poster-row:nth-child(3) {
     padding-left: 2vw;
+  }
+  .hero-poster .poster-row:nth-child(4) {
+    padding-left: 9vw;
   }
 }
 
@@ -1171,6 +1174,35 @@ html.lenis body {
 }
 .piece--portrait .piece-frame {
   aspect-ratio: 9 / 16;
+}
+/* Every piece says it opens: a small "Watch" chip rises on hover and
+   focus, and is always there on touch, where there is no hover. */
+.piece-play {
+  position: absolute;
+  right: 0.6rem;
+  bottom: 0.6rem;
+  padding: 0.3em 0.6em;
+  font-size: 0.75rem;
+  letter-spacing: 0.02em;
+  background: var(--color-paper);
+  color: var(--color-ink);
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity var(--dur-quick) var(--ease-out), transform var(--dur-quick) var(--ease-out);
+  pointer-events: none;
+}
+.piece:hover .piece-play,
+.piece:focus-visible .piece-play,
+.group:hover .piece-play,
+.group:focus-visible .piece-play {
+  opacity: 1;
+  transform: none;
+}
+@media (hover: none) {
+  .piece-play {
+    opacity: 1;
+    transform: none;
+  }
 }
 .piece-rank {
   position: absolute;

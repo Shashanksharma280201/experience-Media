@@ -6,12 +6,13 @@ import Group from "@/components/motion/Group";
 import Poster from "@/components/motion/Poster";
 import Magnet from "@/components/bits/Magnet";
 import ImageTrail from "@/components/bits/ImageTrail";
+import Link from "next/link";
 import { disciplines, site } from "@/lib/content";
 import { DUR, EASE, gsap, prefersReducedMotion, whenIntroDone } from "@/lib/gsap";
 import { openReel } from "@/lib/reel";
 
-// DRAFT COPY — written for shape and rhythm, flagged for review.
-const HEADLINE = ["We make", "things people", "finish watching."];
+// §4.01 of the brief.
+const HEADLINE = ["We build content", "systems that make", "brands impossible", "to ignore."];
 
 /** Twelve frames for the trail, two per discipline, mixed. */
 const TRAIL = Array.from({ length: 3 }, (_, k) => disciplines.map((d) => d.items[(k * 2) % d.items.length].thumb)).flat().slice(0, 12);
@@ -159,17 +160,22 @@ export default function Hero() {
 
         <Shell className="hero-copy relative flex flex-1 flex-col pb-[38svh] pt-28 md:pb-12 md:pt-20">
           <Group onLoad stagger={0.07}>
-            <Poster as="h1" size="xl" lines={HEADLINE} script="to the end" scriptLine={2} start="intro" className="hero-poster" />
+            <Poster as="h1" size="xl" lines={HEADLINE} script="kingmakers" scriptLine={1} start="intro" className="hero-poster" />
 
             <div className="mt-6 md:mt-6 md:max-w-[52%]">
-              <p className="lede max-w-[38ch] text-ink-dim" data-reveal="fade">
-                A founder-led marketing agency. Strategy, always-on content and brand films for brands that need results, not decks.
+              <p className="lede max-w-[42ch] text-ink-dim" data-reveal="fade">
+                {site.description}
               </p>
               <div className="mt-6 flex flex-wrap items-center gap-x-8 gap-y-3" data-reveal="fade">
                 <Magnet padding={40} magnetStrength={3}>
-                  <button type="button" onClick={openReel} className="link-underline small text-ink">
-                    Watch the reel
-                  </button>
+                  <Link href="/contact" className="button">
+                    Start a Project
+                  </Link>
+                </Magnet>
+                <Magnet padding={40} magnetStrength={3}>
+                  <Link href="/work" className="link-underline small text-ink">
+                    See Our Work →
+                  </Link>
                 </Magnet>
                 <p className="hero-cue small flex items-center gap-3 text-ink-faint">
                   <span aria-hidden className="block h-8 w-px animate-[cue_2.4s_ease-in-out_infinite] bg-signal" />

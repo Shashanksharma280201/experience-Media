@@ -3,19 +3,23 @@ import Link from "next/link";
 import Scene from "@/components/layout/Scene";
 import Group from "@/components/motion/Group";
 import Poster from "@/components/motion/Poster";
-import { featured, totalPieces } from "@/lib/content";
+import Magnet from "@/components/bits/Magnet";
+import { featured } from "@/lib/content";
 
 /**
- * 07 — the work. The top eleven, in the client's order, as a poster grid:
- * landscape pieces two columns wide, portrait pieces one column and two rows
- * tall, each ranked, titled, and linked to where it published. Frames settle
- * in with a stagger. Everything else lives on /work.
+ * 11 — the work. The featured pieces, in the client's order, as a poster
+ * grid: landscape pieces two columns wide, portrait pieces one column and
+ * two rows tall, each titled and linked to where it published. Frames
+ * settle in with a stagger. No count anywhere: the portfolio is on /work.
  */
 export default function TopEleven() {
   return (
     <Scene id="work">
       <Group>
-        <Poster lines={["The top eleven,", "all live."]} script="watch" scriptLine={1} />
+        <Poster lines={["Work that speaks", "for itself."]} script="watch" scriptLine={1} />
+        <p className="lede mt-8 max-w-[46ch] text-ink-dim" data-reveal="fade">
+          A selection of the work we&rsquo;ve created across content, production and storytelling.
+        </p>
       </Group>
       <Group className="eleven mt-12 md:mt-16" stagger={0.06}>
         {featured.map((f) => (
@@ -36,7 +40,9 @@ export default function TopEleven() {
                 className="object-cover saturate-[0.85] transition-[filter,transform] duration-[var(--dur-slow)] ease-[var(--ease-out)] group-hover:scale-[1.04] group-hover:saturate-100"
                 data-reveal="frame"
               />
-              <span className="piece-rank poster">{String(f.rank).padStart(2, "0")}</span>
+              <span className="piece-play poster" aria-hidden>
+                Watch ▶
+              </span>
             </span>
             <span className="piece-cap" data-reveal="fade">
               <span className="piece-title">{f.title}</span>
@@ -45,10 +51,12 @@ export default function TopEleven() {
           </a>
         ))}
       </Group>
-      <p className="mt-10 text-right">
-        <Link href="/work" className="link-underline small text-ink">
-          The other {totalPieces - featured.length} pieces
-        </Link>
+      <p className="mt-12 text-right">
+        <Magnet padding={40} magnetStrength={3}>
+          <Link href="/work" className="button">
+            Explore the complete portfolio →
+          </Link>
+        </Magnet>
       </p>
     </Scene>
   );

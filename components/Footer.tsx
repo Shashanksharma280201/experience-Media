@@ -15,21 +15,22 @@ export default function Footer() {
       <Emblem className="footer-mark" />
       {/* React Bits CurvedLoop: the line, curved and draggable. */}
       <div className="curve -mt-6 mb-10 md:-mt-10">
-        <CurvedLoop marqueeText="We make things people finish watching ✦" speed={1.4} curveAmount={220} />
+        <CurvedLoop marqueeText="Become the people everyone is watching ✦" speed={1.4} curveAmount={220} />
       </div>
       <Shell>
         <Group>
           <div className="grid gap-10 md:grid-cols-12">
             <div className="md:col-span-7">
               <Emblem className="mb-8 h-14 w-auto md:h-16" title={site.name} />
-              <p className="micro" data-reveal="fade">or just email us</p>
+              <p className="micro" data-reveal="fade">talk to us</p>
               <p className="mt-4">
                 <a href={`mailto:${contact.email}`} className="link-underline inline-block max-w-full font-display text-[clamp(1rem,4.4vw,2rem)] leading-tight [font-variation-settings:'wdth'_104,'wght'_600] [overflow-wrap:anywhere]" data-reveal="fade">
                   {contact.email}
                 </a>
               </p>
-              <p className="mt-3" data-reveal="fade">
-                <a href={contact.whatsapp} className="link-underline lede">{contact.phone}</a>
+              <p className="mt-3 flex flex-wrap gap-x-6 gap-y-1" data-reveal="fade">
+                <a href={`tel:+${contact.phoneRaw}`} className="link-underline lede">{contact.phone}</a>
+                <a href={contact.whatsapp} target="_blank" rel="noopener noreferrer" className="link-underline lede">WhatsApp →</a>
               </p>
             </div>
             <nav aria-label="Social" className="md:col-span-4 md:col-start-9">
@@ -55,8 +56,10 @@ export default function Footer() {
         <div className="mt-8 flex flex-col gap-2 border-t py-6 md:flex-row md:items-center md:justify-between" style={{ borderColor: "rgba(10,10,11,0.35)" }}>
           <p className="small">© {year} {site.name}</p>
           <p className="small">{site.tagline}</p>
-          <p className="small">
-            <Link href="/work" className="link-underline">See the work</Link>
+          <p className="small flex gap-6">
+            <Link href="/work" className="link-underline">Work</Link>
+            <Link href="/about" className="link-underline">About</Link>
+            <Link href="/training" className="link-underline">Training</Link>
           </p>
         </div>
       </Shell>

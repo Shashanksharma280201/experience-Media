@@ -34,7 +34,7 @@ const pinyon = Pinyon_Script({
 export const metadata: Metadata = {
   metadataBase: new URL("https://experiencemedia.in"),
   title: {
-    default: "Experience Media — Marketing agency, New Delhi",
+    default: "Experience Media — 360° Media & Marketing Agency",
     template: "%s — Experience Media",
   },
   description: site.description,

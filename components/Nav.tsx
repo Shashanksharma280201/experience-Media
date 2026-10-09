@@ -9,11 +9,14 @@ import Magnet from "@/components/bits/Magnet";
 import { site } from "@/lib/content";
 import { DUR, EASE, gsap, prefersReducedMotion } from "@/lib/gsap";
 
+/** §14 of the brief: minimal, no more top-level links than these. */
 const links = [
   { href: "/work", label: "Work" },
   { href: "/#services", label: "Services" },
-  { href: "/#studio", label: "Studio" },
-  { href: "/#contact", label: "Contact" },
+  { href: "/production", label: "Production" },
+  { href: "/training", label: "Training" },
+  { href: "/about", label: "About" },
+  { href: "/contact", label: "Contact" },
 ];
 
 export default function Nav() {

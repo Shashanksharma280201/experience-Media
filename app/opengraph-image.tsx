@@ -1,7 +1,7 @@
 import { ImageResponse } from "next/og";
 import { EMBLEM_PATHS, EMBLEM_VIEWBOX } from "@/components/brand/emblem-paths";
 
-export const alt = "Experience Media — video and content studio, New Delhi";
+export const alt = "Experience Media — 360° Media & Marketing Agency";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -40,7 +40,7 @@ export default function OpengraphImage() {
         <div style={{ display: "flex", alignItems: "center", gap: 20 }}>
           <div style={{ width: 56, height: 2, background: "#FF2D20" }} />
           <div style={{ fontSize: 26, color: "rgba(10,10,11,0.72)" }}>
-            Experience Media — marketing agency, New Delhi
+            Experience Media — 360° Media & Marketing Agency
           </div>
         </div>
 

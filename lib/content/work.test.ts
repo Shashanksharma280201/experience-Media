@@ -21,7 +21,7 @@ describe("disciplines", () => {
       expect(d.items.length, `${d.slug} items`).toBeGreaterThan(0);
       expect(d.blurb.length, `${d.slug} blurb`).toBeGreaterThan(0);
       expect(d.context.length, `${d.slug} context`).toBeGreaterThan(0);
-      expect(d.approach.length, `${d.slug} approach`).toBeGreaterThan(0);
+      expect(d.outcome, `${d.slug} outcome`).toMatch(/^\d/);
     }
   });
 

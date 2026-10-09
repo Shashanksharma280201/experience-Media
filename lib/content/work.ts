@@ -1,9 +1,8 @@
 // The body of work, organised by discipline.
 //
 // Every piece below is real: a real thumbnail and a real outbound link that
-// already existed in the repo. The prose (`blurb`, `context`, `approach`) is
-// DRAFT COPY written for shape — flagged for review. `outcome` is deliberately
-// absent until Experience Media supplies figures it is willing to publish.
+// already existed in the repo. The prose and the figures are §7 of the
+// October 2026 brief, verbatim.
 
 const T = "/assets/agency-thumbnails";
 const F = "/assets/featured";
@@ -17,12 +16,13 @@ export type PortfolioItem = {
 export type Discipline = {
   slug: string;
   title: string;
-  /** One line with actual substance, used on the home page. */
+  /** The one-line tagline, used wherever the discipline is named. */
   blurb: string;
+  /** The paragraph under it. */
   context: string;
-  approach: string;
-  /** Only set once there is a real, publishable number. */
-  outcome?: string;
+  /** The approved figure for the discipline, e.g. "5M+ views generated". */
+  outcome: string;
+  platforms: string;
   layout: "short" | "long";
   period: string;
   items: PortfolioItem[];
@@ -31,12 +31,11 @@ export type Discipline = {
 export const disciplines: Discipline[] = [
   {
     slug: "short-format",
-    title: "Short Format",
-    blurb: "Reels cut for the first two seconds, because nothing after them matters if those fail.",
-    context:
-      "Short-form lives or dies in the opening beat. Most of this work is for creators whose audiences decide within a scroll-length whether to stay.",
-    approach:
-      "We cut the hook first and build backwards from it, so the edit is designed around retention rather than trimmed to fit it afterwards.",
+    title: "Short-Form",
+    blurb: "The content people stop scrolling for.",
+    context: "Short-form content built for Instagram Reels and YouTube Shorts — combining hooks, storytelling, editing and retention-focused creative.",
+    outcome: "100M+ views generated",
+    platforms: "Instagram · YouTube Shorts",
     layout: "short",
     period: "2024—25",
     items: [
@@ -57,11 +56,10 @@ export const disciplines: Discipline[] = [
   {
     slug: "long-form",
     title: "Long-Form",
-    blurb: "Videos built to hold attention past the ten-minute mark, where authority actually compounds.",
-    context:
-      "Long-form is where a channel earns trust, but it is also where most edits sag — the middle third is where audiences leave.",
-    approach:
-      "We structure long-form around a spine of turns rather than a flat narration, so there is a reason to stay every ninety seconds.",
+    blurb: "Longer stories. Deeper attention.",
+    context: "Long-form content gives complex ideas room to breathe — helping brands and creators educate, entertain and build authority.",
+    outcome: "60M+ views generated",
+    platforms: "YouTube",
     layout: "long",
     period: "2024—25",
     items: [
@@ -76,12 +74,11 @@ export const disciplines: Discipline[] = [
   },
   {
     slug: "podcast",
-    title: "Podcast",
-    blurb: "Multi-camera conversation cut so it reads as a show, not a recording of one.",
-    context:
-      "Podcast video is usually treated as documentation — two fixed angles and a switch every time someone speaks.",
-    approach:
-      "We cut on meaning rather than on who is talking, and treat the room, the cutaways and the sound bed as part of the edit rather than coverage.",
+    title: "Podcasts",
+    blurb: "The new-age newsroom.",
+    context: "Podcasts give leaders a place to discuss ideas, experiences and perspectives in depth — while creating a continuous source of content for their audience.",
+    outcome: "5 IPs created",
+    platforms: "YouTube · Instagram",
     layout: "long",
     period: "2024—25",
     items: [
@@ -95,11 +92,10 @@ export const disciplines: Discipline[] = [
   {
     slug: "motion-graphics",
     title: "Motion Graphics",
-    blurb: "Explainers and data animation, built so the graphic carries the argument.",
-    context:
-      "The explainer space converged on one visual grammar, and audiences stopped seeing it. Charts arrive, sit there, and cut away.",
-    approach:
-      "We build data sequences as continuous camera moves rather than a series of cuts, so a graph never resets the viewer's attention mid-idea.",
+    blurb: "Complex ideas. Made simple.",
+    context: "Motion graphics turn complex information into visual stories people can understand quickly.",
+    outcome: "1,000+ minutes created",
+    platforms: "YouTube · Instagram",
     layout: "long",
     period: "2024—25",
     items: [
@@ -114,11 +110,10 @@ export const disciplines: Discipline[] = [
   {
     slug: "vfx-cgi",
     title: "VFX & CGI",
-    blurb: "Compositing, CGI and finishing — the layer that separates a shot from a scene.",
-    context:
-      "Effects work on social gets judged in a feed, at speed, next to everything else. It has to survive being watched badly.",
-    approach:
-      "We grade and composite for small screens first, so the work still reads when it is a hundred pixels wide and playing without sound.",
+    blurb: "Marvel-level visual thinking for digital content.",
+    context: "VFX and CGI bring impossible ideas into real-world storytelling — from cinematic effects to visual worlds designed for YouTube and Instagram.",
+    outcome: "5M+ views generated",
+    platforms: "YouTube · Instagram",
     layout: "long",
     period: "2024—25",
     items: [
@@ -151,8 +146,6 @@ export function adjacentDisciplines(slug: string): {
     next: disciplines[(i + 1) % n],
   };
 }
-
-export const totalPieces = disciplines.reduce((n, d) => n + d.items.length, 0);
 
 /** The same video, however it was linked: watch?v=, youtu.be/, shorts/, reel/. */
 export function pieceId(href: string): string {

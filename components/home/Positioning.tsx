@@ -3,13 +3,17 @@
 import { useEffect, useRef } from "react";
 import Scene from "@/components/layout/Scene";
 import Group from "@/components/motion/Group";
+import Poster from "@/components/motion/Poster";
 import { EASE, gsap, prefersReducedMotion, ScrollTrigger } from "@/lib/gsap";
 
-// DRAFT COPY — flagged for review.
-const STATEMENT =
-  "We started as creators, so we build for the algorithm and the audience at the same time. Most agencies pick one.";
-const SECOND =
-  "Strategy, production and distribution under one roof — so nothing is lost in a handoff, and nothing waits on someone else's calendar.";
+// §4.03 of the brief.
+const STATEMENT = "We started as creators. So we understand the audience.";
+const COPY = [
+  "Most agencies understand brands. Most creators understand audiences. We built Experience Media by living on both sides.",
+  "We started with editing, freelancing and content creation — learning what makes people stop, watch, share and remember.",
+  "Today, we combine that creator instinct with strategy, production and distribution to build content systems designed for both the algorithm and the audience.",
+];
+const LARGE = ["Strategy. Production.", "Distribution. One system."];
 
 /**
  * Every word in its own mask, so the statement can rise word by word. The
@@ -89,9 +93,16 @@ export default function Positioning() {
           <Words text={STATEMENT} script="honestly" />
         </p>
         <Group className="mt-12 grid gap-8 md:mt-16 md:grid-cols-12">
-          <p className="lede max-w-[46ch] text-ink-dim md:col-span-7 md:col-start-6" data-reveal="fade">
-            {SECOND}
-          </p>
+          <div className="md:col-span-7 md:col-start-6">
+            {COPY.map((p, i) => (
+              <p key={i} className={`lede max-w-[46ch] text-ink-dim ${i > 0 ? "mt-6" : ""}`} data-reveal="fade">
+                {p}
+              </p>
+            ))}
+          </div>
+        </Group>
+        <Group className="mt-16 md:mt-24">
+          <Poster as="p" size="m" lines={LARGE} />
         </Group>
       </div>
     </Scene>

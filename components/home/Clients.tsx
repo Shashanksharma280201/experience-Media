@@ -5,15 +5,15 @@ import Image from "next/image";
 import Scene from "@/components/layout/Scene";
 import Group from "@/components/motion/Group";
 import Poster from "@/components/motion/Poster";
-import { brands, creatorPortraits } from "@/lib/content";
+import { audiences, brands, creatorPortraits } from "@/lib/content";
 import { gsap, prefersReducedMotion, ScrollTrigger } from "@/lib/gsap";
 
-// DRAFT COPY — flagged for review.
-const CREATORS_LINE =
-  "And nine creators, on their own channels, week after week.";
+// §4.06 of the brief: no fixed creator count in the line.
+const CREATORS_LINE = "And the creators we work with, on their own channels, week after week.";
 
 /**
- * 05 — who it was for. The roster is the billing block on a poster: every
+ * 06 — who we work with. Three audiences first, then the roster: the
+ * billing block on a poster: every
  * client set in condensed caps, read as one paragraph of names rather than
  * a wall of logos, so nobody is a shape you have to squint at and nobody is
  * left out for having artwork that will not silhouette.
@@ -98,10 +98,19 @@ export default function Clients() {
   return (
     <Scene id="clients">
       <Group>
-        <Poster lines={["Who we made", "it for."]} script="so far" scriptLine={0} />
+        <Poster lines={["Built for people", "building something", "bigger."]} script="like you" scriptLine={2} />
       </Group>
 
-      <div ref={roster} className="roster mt-12 md:mt-16">
+      <Group className="mt-12 grid gap-10 md:mt-16 md:grid-cols-3" stagger={0.08}>
+        {audiences.map((a) => (
+          <div key={a.title} className="border-t border-hairline pt-6" data-reveal="fade">
+            <h3 className="poster poster--m">{a.title}</h3>
+            <p className="lede mt-4 max-w-[34ch] text-ink-dim">{a.body}</p>
+          </div>
+        ))}
+      </Group>
+
+      <div ref={roster} className="roster mt-16 md:mt-24">
         <Group className="roster-names" stagger={0.03}>
           {brands.map((b, i) => (
             // Each name carries its own mask, so it has to be inline-block;
