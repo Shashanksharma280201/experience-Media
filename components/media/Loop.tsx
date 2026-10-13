@@ -15,8 +15,16 @@ export default function Loop({ clip, className = "", label }: { clip: Clip; clas
   useEffect(() => {
     const v = ref.current;
     if (!v || prefersReducedMotion()) return;
-    v.preload = "auto";
-    const io = new IntersectionObserver(([e]) => (e.isIntersecting ? v.play().catch(() => {}) : v.pause()), { threshold: 0.2 });
+    // Nothing downloads until the loop is within a screen of the viewport;
+    // then it buffers, and plays only while a fifth of it is on screen.
+    const io = new IntersectionObserver(
+      ([e]) => {
+        if (e.isIntersecting && v.preload !== "auto") v.preload = "auto";
+        if (e.isIntersecting && e.intersectionRatio >= 0.2) v.play().catch(() => {});
+        else v.pause();
+      },
+      { threshold: [0, 0.2], rootMargin: "200px 0px" }
+    );
     io.observe(v);
     return () => io.disconnect();
   }, []);

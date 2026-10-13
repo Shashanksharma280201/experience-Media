@@ -66,7 +66,9 @@ export default function Hero() {
         })
         .to(".hero-copy", { y: -60, autoAlpha: 0, duration: 0.2, ease: "power2.in" }, 0)
         .to(".hero-trail", { autoAlpha: 0, duration: 0.12 }, 0)
-        .to(".hero-watch", { autoAlpha: 0, scale: 0.8, duration: 0.15 }, 0)
+        // Explicit start values: the arrival also tweens this, and a lazily
+        // recorded start would otherwise be whatever the arrival had set.
+        .fromTo(".hero-watch", { autoAlpha: 1, scale: 1 }, { autoAlpha: 0, scale: 0.8, duration: 0.15 }, 0)
         .to(".hero-scrim", { opacity: 0, duration: 0.5 }, 0.1)
         .to(".hero-film", { clipPath: "inset(12% 4% 12% 52%)", duration: 0.75, ease: "power2.inOut" }, 0.15)
         .to(".hero-film video", { scale: 1.06, duration: 0.75, ease: "power2.inOut" }, 0.15);

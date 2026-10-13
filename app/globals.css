@@ -793,14 +793,16 @@ html.lenis body {
   object-fit: cover;
   transform-origin: 60% 50%;
 }
-/* Flat ink, no gradient: paper type on a moving picture needs a floor.
-   0.5 here plus the darker encode clears 4.5:1 on the brightest frame. */
+/* Flat ink, no gradient in CSS: paper type on a moving picture needs a
+   floor. 0.6 here plus the grade (darker, and shaded where the type sits;
+   see scripts/encode-media.sh) clears 4.5:1 for the small type and 3:1 for
+   the headline on every frame of the loop, which the encode's gate checks. */
 .hero-scrim {
   position: absolute;
   inset: 0;
   z-index: 1;
   background: var(--color-ink);
-  opacity: 0.5;
+  opacity: 0.6;
   pointer-events: none;
 }
 .hero-trail {
@@ -863,7 +865,9 @@ html.lenis body {
   font-family: var(--font-sans);
   font-size: 0.8rem;
   letter-spacing: 0.02em;
-  color: var(--color-paper-dim);
+  /* Full paper, not paper-dim: at 12.8px over footage it needs 4.5:1 on
+     every shot, and the dim step fell to 3.2:1 on the brightest two. */
+  color: var(--color-paper);
 }
 .hero-strip > span + span::before {
   content: "·";

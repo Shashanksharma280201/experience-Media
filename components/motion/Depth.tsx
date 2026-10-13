@@ -26,7 +26,10 @@ export default function Depth() {
           {
             clipPath: "inset(0 0 0% 0)",
             ease: "none",
-            scrollTrigger: { trigger: ground.parentElement, start: "top 95%", end: "top 30%", scrub: 0.6 },
+            // The edge must lead the type: by the time a scene's headline
+            // reveals (top 85%) half the scene is drawn, which clears a
+            // two-line poster under the scene's top padding, with little lag.
+            scrollTrigger: { trigger: ground.parentElement, start: "top 100%", end: "top 70%", scrub: 0.25 },
           }
         );
       });

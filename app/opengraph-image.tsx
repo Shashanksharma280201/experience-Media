@@ -12,8 +12,8 @@ export default function OpengraphImage() {
         style={{
           width: "100%",
           height: "100%",
-          background: "#F4F0EA",
-          color: "#0A0A0B",
+          background: "#F5F6F7",
+          color: "#15171A",
           display: "flex",
           flexDirection: "column",
           justifyContent: "space-between",
@@ -22,7 +22,7 @@ export default function OpengraphImage() {
           position: "relative",
         }}
       >
-        <svg viewBox={EMBLEM_VIEWBOX} width={132} fill="#0A0A0B" fillRule="evenodd">
+        <svg viewBox={EMBLEM_VIEWBOX} width={132} fill="#15171A" fillRule="evenodd">
           {EMBLEM_PATHS.map((p) => (
             <path key={p.id} d={p.d} />
           ))}
@@ -38,8 +38,8 @@ export default function OpengraphImage() {
         </div>
 
         <div style={{ display: "flex", alignItems: "center", gap: 20 }}>
-          <div style={{ width: 56, height: 2, background: "#FF2D20" }} />
-          <div style={{ fontSize: 26, color: "rgba(10,10,11,0.72)" }}>
+          <div style={{ width: 56, height: 2, background: "#1F3DFF" }} />
+          <div style={{ fontSize: 26, color: "rgba(21,23,26,0.72)" }}>
             Experience Media — 360° Media & Marketing Agency
           </div>
         </div>
