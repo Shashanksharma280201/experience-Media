@@ -138,7 +138,7 @@ shadows, and no elevated surfaces anywhere in this system.
 
 | Page | Sections |
 |---|---|
-| Home | 01 hero (the frame, with the strip) · 02 the reel (mirror wall) · 03 what we believe · 04 the founder story · 05 the numbers (dark) · 06 who we work with (audiences, then the roster) · 07 the offer · 08 services (three legs) · 09 capabilities (the band) · 10 process (dark) · 11 the work (poster grid) · 12 what people say (the deck, dark) · 13 Founder's Corner · 14 training · 15 the conversation (band) · footer (band) |
+| Home | 01 hero (the frame, with the strip) · 02 the reel (mirror wall) · 03 what we believe (with media) · 04 the founder story (with media) · 05 the numbers (dark) (with media) · 06 who we work with (audiences, then the roster) (with media) · 07 the offer (with media) · 08 services (three legs) · 09 capabilities (the band) (with media) · 10 process (dark) (with media) · 11 the work (poster grid) · 12 what people say (the deck, dark) · 13 Founder's Corner (with media) · 14 training (with media) · 15 the conversation (band) · footer (band) |
 | Work | 01 the work · 02 the disciplines · 03 the complete portfolio |
 | Discipline | 01 discipline (tagline, reach, platforms, period) · 02 the line · 03 the pieces · 04 more |
 | About | 01 the headline · 02 the story · 03 the question (dark) · 04 the principle · 05 the brand statement (band) |
@@ -221,6 +221,7 @@ ScrollTrigger on the page. All are gated behind reduced motion.
 | 18 | Mirror wall | Enter viewport; scroll | Sixteen frames in colour on a 5×5 grid in perspective, receding and fading toward the edges around the reel loop at the centre (3×3). The wall turns from -6° to 6° with the scroll. |
 | 19 | Reel player | "Watch the reel" | Full-viewport takeover on ink, sound on, native controls. Settles over `--dur-base`, frame from 0.96. Escape closes; scroll is held; focus returns to the opener. |
 | 20 | The deck | Enter viewport; every 6s; click | Seven paper cards in a skewed 3D stack (React Bits CardSwap) deal themselves: the front card drops, the rest step forward, it returns to the back, elastic. Hover pauses; a click deals. The front card's words are set large beside the deck and rise out of masks as it turns. |
+| 23 | Loops and frames | In view | Every loop beside copy is silent, plays only while on screen, and is a still under reduced motion. The founder frame is a labelled slot until the photo exists. |
 
 ---
 

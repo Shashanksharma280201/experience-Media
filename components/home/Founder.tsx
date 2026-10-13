@@ -3,6 +3,7 @@ import Scene from "@/components/layout/Scene";
 import Group from "@/components/motion/Group";
 import Poster from "@/components/motion/Poster";
 import Magnet from "@/components/bits/Magnet";
+import FounderFrame from "@/components/home/FounderFrame";
 import { founder, site, socials } from "@/lib/content";
 
 /** 13 — Founder's Corner. Parth, in his own words; the whole story is on /about. */
@@ -18,6 +19,9 @@ export default function Founder() {
       </Group>
       <Group className="mt-12 grid gap-10 md:mt-16 md:grid-cols-12">
         <div className="md:col-span-3">
+          <div className="mb-6" data-reveal="fade">
+            <FounderFrame />
+          </div>
           <p className="font-display text-ink [font-variation-settings:'wdth'_104,'wght'_600]" data-reveal="fade">
             {site.founder}
           </p>

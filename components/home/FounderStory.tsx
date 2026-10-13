@@ -3,6 +3,7 @@ import Scene from "@/components/layout/Scene";
 import Group from "@/components/motion/Group";
 import Poster from "@/components/motion/Poster";
 import Magnet from "@/components/bits/Magnet";
+import FounderFrame from "@/components/home/FounderFrame";
 import { founder } from "@/lib/content";
 
 /** 04 — the founder story, in short. The whole of it is on /about. */
@@ -20,12 +21,17 @@ export default function FounderStory() {
             </p>
           ))}
         </div>
-        <div className="md:col-span-4 md:col-start-9 md:self-end" data-reveal="fade">
-          <Magnet padding={40} magnetStrength={3}>
-            <Link href="/about" className="button">
-              Meet Parth →
-            </Link>
-          </Magnet>
+        <div className="md:col-span-4 md:col-start-9">
+          <div data-reveal="fade">
+            <FounderFrame />
+          </div>
+          <p className="mt-8" data-reveal="fade">
+            <Magnet padding={40} magnetStrength={3}>
+              <Link href="/about" className="button">
+                Meet Parth →
+              </Link>
+            </Magnet>
+          </p>
         </div>
       </Group>
     </Scene>

@@ -1664,3 +1664,70 @@ html.mark-flying .nav-mark {
   background: var(--color-paper-deep);
   margin-bottom: 1.25rem;
 }
+
+/* The founder. A 4:5 frame; the slot is the same shape in paper-deep with
+   a hairline, so the layout holds until the photo arrives. */
+.founder-frame {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  background: var(--color-paper-deep);
+}
+.founder-frame--slot {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 0.25rem;
+  padding: var(--gutter);
+  border: 1px solid var(--color-hairline);
+}
+.stack-frame {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  background: var(--color-paper-deep);
+}
+.ticker-frame {
+  position: relative;
+  display: inline-block;
+  vertical-align: middle;
+  width: 1.6em;
+  height: 1em;
+  margin-inline: 0.35em;
+  overflow: hidden;
+  background: var(--color-paper-deep);
+}
+/* The playbook cover: a 3:4 sheet in ink with paper type, the way the
+   band is set. Tilted a hair, like the sticker it replaces. */
+.cover {
+  position: relative;
+  aspect-ratio: 3 / 4;
+  max-width: 360px;
+  padding: clamp(1.25rem, 3vw, 2rem);
+  background: var(--color-ink);
+  color: var(--color-paper);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transform: rotate(-2deg);
+  outline: 8px solid var(--color-paper);
+  outline-offset: -8px;
+}
+.cover-days {
+  font-size: clamp(5rem, 12vw, 9rem);
+  line-height: 0.8;
+  color: var(--color-signal-band);
+}
+.cover-title {
+  font-size: clamp(1.6rem, 3.2vw, 2.4rem);
+  max-width: 10ch;
+}
+.cover-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: var(--color-paper-faint);
+}
+.cover .micro {
+  color: var(--color-paper-faint);
+}

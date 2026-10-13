@@ -3,6 +3,7 @@ import Scene from "@/components/layout/Scene";
 import Group from "@/components/motion/Group";
 import Poster from "@/components/motion/Poster";
 import PlaybookForm from "@/components/training/PlaybookForm";
+import PlaybookCover from "@/components/training/PlaybookCover";
 import { training } from "@/lib/content";
 
 export const metadata: Metadata = {
@@ -36,6 +37,9 @@ export default function TrainingPage() {
                 </li>
               ))}
             </ul>
+            <div className="mt-10 max-w-[300px]" data-reveal="fade">
+              <PlaybookCover />
+            </div>
           </div>
           <div className="md:col-span-6 md:col-start-7" data-reveal="fade">
             <PlaybookForm />

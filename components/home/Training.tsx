@@ -3,6 +3,7 @@ import Scene from "@/components/layout/Scene";
 import Group from "@/components/motion/Group";
 import Poster from "@/components/motion/Poster";
 import Magnet from "@/components/bits/Magnet";
+import PlaybookCover from "@/components/training/PlaybookCover";
 import { training } from "@/lib/content";
 
 /** 14 — training. The free playbook, with the page behind it. */
@@ -25,8 +26,9 @@ export default function Training() {
             </Magnet>
           </p>
         </div>
-        <div className="md:col-span-4 md:col-start-9 md:self-end" data-reveal="fade">
-          <p className="small text-ink-dim">Coming next</p>
+        <div className="md:col-span-4 md:col-start-9" data-reveal="fade">
+          <PlaybookCover />
+          <p className="small mt-8 text-ink-dim">Coming next</p>
           <p className="small mt-2 text-ink-dim">{training.future.join(" · ")}</p>
         </div>
       </Group>
