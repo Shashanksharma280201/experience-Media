@@ -25,3 +25,4 @@ export {
   type Featured,
   type RestPiece,
 } from "./work";
+export { clips, audienceFrames, processFrames, capabilityFrames, numbersWall, type Clip } from "./media";

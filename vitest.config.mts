@@ -8,6 +8,10 @@ export default defineConfig({
     setupFiles: ["test/setup.ts"],
   },
   resolve: {
-    alias: { "@": path.resolve(import.meta.dirname, ".") },
+    alias: {
+      "@": path.resolve(import.meta.dirname, "."),
+      // The marker package throws outside Next's server graph; vitest is node.
+      "server-only": path.resolve(import.meta.dirname, "test/server-only.ts"),
+    },
   },
 });
