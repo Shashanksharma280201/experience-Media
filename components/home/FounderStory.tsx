@@ -25,13 +25,13 @@ export default function FounderStory() {
           <div data-reveal="fade">
             <FounderFrame />
           </div>
-          <p className="mt-8" data-reveal="fade">
+          <div className="mt-8" data-reveal="fade">
             <Magnet padding={40} magnetStrength={3}>
               <Link href="/about" className="button">
                 Meet Parth →
               </Link>
             </Magnet>
-          </p>
+          </div>
         </div>
       </Group>
     </Scene>

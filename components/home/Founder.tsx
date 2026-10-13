@@ -44,13 +44,13 @@ export default function Founder() {
               {p}
             </p>
           ))}
-          <p className="mt-10" data-reveal="fade">
+          <div className="mt-10" data-reveal="fade">
             <Magnet padding={40} magnetStrength={3}>
               <Link href="/about" className="link-underline small text-ink">
                 Read Parth&rsquo;s Story →
               </Link>
             </Magnet>
-          </p>
+          </div>
         </div>
       </Group>
     </Scene>

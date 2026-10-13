@@ -56,13 +56,13 @@ export default function ProductionPage() {
           <p className="lede max-w-[40ch] text-ink-dim" data-reveal="fade">
             Tell us where the story is. We&rsquo;ll bring the right crew, kit and room to it.
           </p>
-          <p data-reveal="fade">
+          <div data-reveal="fade">
             <Magnet padding={40} magnetStrength={3}>
               <Link href="/contact" className="button">
                 Plan a Shoot →
               </Link>
             </Magnet>
-          </p>
+          </div>
         </Group>
       </Scene>
     </>

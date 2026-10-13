@@ -51,13 +51,13 @@ export default function TopEleven() {
           </a>
         ))}
       </Group>
-      <p className="mt-12 text-right">
+      <div className="mt-12 text-right">
         <Magnet padding={40} magnetStrength={3}>
           <Link href="/work" className="button">
             Explore the complete portfolio →
           </Link>
         </Magnet>
-      </p>
+      </div>
     </Scene>
   );
 }

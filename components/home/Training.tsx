@@ -18,13 +18,13 @@ export default function Training() {
           <p className="micro" data-reveal="fade">free resource</p>
           <h3 className="poster poster--m mt-4" data-reveal="fade">{training.product}</h3>
           <p className="lede mt-5 max-w-[46ch] text-ink-dim" data-reveal="fade">{training.body}</p>
-          <p className="mt-10" data-reveal="fade">
+          <div className="mt-10" data-reveal="fade">
             <Magnet padding={40} magnetStrength={3}>
               <Link href="/training" className="button">
                 {training.cta} →
               </Link>
             </Magnet>
-          </p>
+          </div>
         </div>
         <div className="md:col-span-4 md:col-start-9" data-reveal="fade">
           <PlaybookCover />

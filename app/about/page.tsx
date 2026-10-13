@@ -79,13 +79,13 @@ export default function AboutPage() {
               </p>
             ))}
           </div>
-          <p className="mt-12" data-reveal="fade">
+          <div className="mt-12" data-reveal="fade">
             <Magnet padding={40} magnetStrength={3}>
               <Link href="/contact" className="button">
                 Start a Project →
               </Link>
             </Magnet>
-          </p>
+          </div>
         </Group>
       </Scene>
     </>

@@ -1,4 +1,3 @@
-import Link from "next/link";
 import Scene from "@/components/layout/Scene";
 import Group from "@/components/motion/Group";
 import Line from "@/components/motion/Line";
@@ -36,10 +35,9 @@ export default function Services() {
               <div className="row-body">
                 <p className="lede max-w-[46ch] text-ink-dim" data-reveal="fade">{l.positioning}</p>
                 <p className="small mt-4 text-ink-faint" data-reveal="fade">{l.audience}</p>
+                {/* The whole row is the link to /contact; this is its label, not a second anchor. */}
                 <p className="mt-6" data-reveal="fade">
-                  <Link href="/contact" className="link-underline small text-ink">
-                    {l.cta} →
-                  </Link>
+                  <span className="link-underline small text-ink">{l.cta} →</span>
                 </p>
               </div>
             </div>
