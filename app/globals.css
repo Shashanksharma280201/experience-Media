@@ -1614,3 +1614,53 @@ html.mark-flying .nav-mark {
     }
   }
 }
+
+/* A silent loop beside copy. Clipped to the layout's ratio, paper edge. */
+.loop {
+  position: relative;
+  margin: 0;
+  overflow: hidden;
+  background: var(--color-paper-deep);
+  aspect-ratio: 4 / 3;
+}
+.loop video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.loop--wide {
+  aspect-ratio: 16 / 9;
+}
+/* The faint wall behind the numbers: six by three, never interactive. */
+.numbers-wall {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  gap: 4px;
+  opacity: 0.14;
+  pointer-events: none;
+  filter: saturate(0.4);
+}
+.numbers-wall > span {
+  position: relative;
+  overflow: hidden;
+}
+@media (max-width: 767px) {
+  .numbers-wall {
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(6, 1fr);
+  }
+}
+/* One frame per audience card. */
+.audience-frame {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  background: var(--color-paper-deep);
+  margin-bottom: 1.25rem;
+}

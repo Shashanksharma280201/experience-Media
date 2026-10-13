@@ -4,7 +4,8 @@ import Group from "@/components/motion/Group";
 import Line from "@/components/motion/Line";
 import Poster from "@/components/motion/Poster";
 import Magnet from "@/components/bits/Magnet";
-import { offer } from "@/lib/content";
+import Loop from "@/components/media/Loop";
+import { clips, offer } from "@/lib/content";
 
 /**
  * 07 — the offer. Two days from you, everything else from us: the two days
@@ -25,15 +26,20 @@ export default function Offer() {
       </Group>
 
       <Group className="mt-12 md:mt-16" stagger={0.06}>
-        {offer.days.map((d) => (
+        {offer.days.map((d, i) => (
           <div key={d.n} className="row">
             <span className="row-rule" data-reveal="rule" />
             <Line as="h3" className="row-title poster">
               <span className="num mr-4">{d.n}</span>
               {d.title}
             </Line>
-            <div className="row-body">
-              <p className="lede max-w-[46ch] text-ink-dim" data-reveal="fade">{d.body}</p>
+            <div className="row-body md:grid md:grid-cols-12 md:gap-8">
+              <p className="lede max-w-[46ch] text-ink-dim md:col-span-7" data-reveal="fade">{d.body}</p>
+              {i === 0 && (
+                <div className="mt-6 md:col-span-4 md:col-start-9 md:mt-0" data-reveal="frame">
+                  <Loop clip={clips.bts} className="loop--wide" label="A shoot day with Experience Media" />
+                </div>
+              )}
             </div>
           </div>
         ))}

@@ -5,11 +5,17 @@ import Image from "next/image";
 import Scene from "@/components/layout/Scene";
 import Group from "@/components/motion/Group";
 import Poster from "@/components/motion/Poster";
-import { audiences, brands, creatorPortraits } from "@/lib/content";
+import {
+  audienceFrames,
+  audiences,
+  brands,
+  creatorPortraits,
+} from "@/lib/content";
 import { gsap, prefersReducedMotion, ScrollTrigger } from "@/lib/gsap";
 
 // §4.06 of the brief: no fixed creator count in the line.
-const CREATORS_LINE = "And the creators we work with, on their own channels, week after week.";
+const CREATORS_LINE =
+  "And the creators we work with, on their own channels, week after week.";
 
 /**
  * 06 — who we work with. Three audiences first, then the roster: the
@@ -78,7 +84,12 @@ export default function Clients() {
         end: "bottom 55%",
         onUpdate: (self) => {
           if (held) return;
-          show(Math.min(names.length - 1, Math.floor(self.progress * names.length)));
+          show(
+            Math.min(
+              names.length - 1,
+              Math.floor(self.progress * names.length),
+            ),
+          );
         },
       });
 
@@ -98,16 +109,43 @@ export default function Clients() {
   return (
     <Scene id="clients">
       <Group>
-        <Poster lines={["Built for people", "building something", "bigger."]} script="like you" scriptLine={2} />
+        <Poster
+          lines={["Built for people", "building something", "bigger."]}
+          script="like you"
+          scriptLine={2}
+        />
       </Group>
 
-      <Group className="mt-12 grid gap-10 md:mt-16 md:grid-cols-3" stagger={0.08}>
-        {audiences.map((a) => (
-          <div key={a.title} className="border-t border-hairline pt-6" data-reveal="fade">
-            <h3 className="poster poster--m">{a.title}</h3>
-            <p className="lede mt-4 max-w-[34ch] text-ink-dim">{a.body}</p>
-          </div>
-        ))}
+      <Group
+        className="mt-12 grid gap-10 md:mt-16 md:grid-cols-3"
+        stagger={0.08}
+      >
+        {audiences.map((a) => {
+          const key = a.title
+            .toLowerCase()
+            .replace(/\s+/g, "-") as keyof typeof audienceFrames;
+          return (
+            <div
+              key={a.title}
+              className="border-t border-hairline pt-6"
+              data-reveal="fade"
+            >
+              <div className="audience-frame">
+                <Image
+                  src={audienceFrames[key]}
+                  alt=""
+                  fill
+                  sizes="(min-width: 768px) 30vw, 100vw"
+                  loading="lazy"
+                  className="object-cover"
+                  data-reveal="frame"
+                />
+              </div>
+              <h3 className="poster poster--m">{a.title}</h3>
+              <p className="lede mt-4 max-w-[34ch] text-ink-dim">{a.body}</p>
+            </div>
+          );
+        })}
       </Group>
 
       <div ref={roster} className="roster mt-16 md:mt-24">
@@ -154,7 +192,7 @@ export default function Clients() {
                 loading="lazy"
                 sizes="(min-width: 768px) 28vw, 40vw"
               />
-            )
+            ),
           )}
         </div>
       </div>
@@ -166,7 +204,14 @@ export default function Clients() {
         <ul className="faces mt-6">
           {creatorPortraits.map((src) => (
             <li key={src} className="face" data-reveal="fade">
-              <Image src={src} alt="" width={520} height={520} loading="lazy" sizes="104px" />
+              <Image
+                src={src}
+                alt=""
+                width={520}
+                height={520}
+                loading="lazy"
+                sizes="104px"
+              />
             </li>
           ))}
         </ul>

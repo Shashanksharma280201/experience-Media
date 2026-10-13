@@ -11,7 +11,7 @@ export type Clip = { src: string; poster: string };
 export const clips = {
   hero: { src: "/assets/webgl/hero-loop.mp4", poster: "/assets/webgl/hero-poster.jpg" },
   heroSmall: { src: "/assets/webgl/hero-loop-720.mp4", poster: "/assets/webgl/hero-poster.jpg" },
-  /** The reel's behind-the-scenes passage, 9–14 s. */
+  /** On set: the reel's podcast shoot, 1.5–6.5 s. */
   bts: { src: "/assets/clips/bts.mp4", poster: "/assets/clips/bts-poster.jpg" },
 } satisfies Record<string, Clip>;
 

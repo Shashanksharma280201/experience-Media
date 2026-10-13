@@ -4,6 +4,8 @@ import { useEffect, useRef } from "react";
 import Scene from "@/components/layout/Scene";
 import Group from "@/components/motion/Group";
 import Poster from "@/components/motion/Poster";
+import Loop from "@/components/media/Loop";
+import { clips } from "@/lib/content";
 import { EASE, gsap, prefersReducedMotion, ScrollTrigger } from "@/lib/gsap";
 
 // §4.03 of the brief.
@@ -92,7 +94,10 @@ export default function Positioning() {
         <p className="poster poster--l">
           <Words text={STATEMENT} script="honestly" />
         </p>
-        <Group className="mt-12 grid gap-8 md:mt-16 md:grid-cols-12">
+        <Group className="mt-12 grid gap-10 md:mt-16 md:grid-cols-12">
+          <div className="md:col-span-4" data-reveal="frame">
+            <Loop clip={clips.bts} label="Behind the scenes on an Experience Media shoot" />
+          </div>
           <div className="md:col-span-7 md:col-start-6">
             {COPY.map((p, i) => (
               <p key={i} className={`lede max-w-[46ch] text-ink-dim ${i > 0 ? "mt-6" : ""}`} data-reveal="fade">

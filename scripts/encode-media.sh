@@ -29,8 +29,8 @@ ffmpeg -v error -y -i "$SRC" -filter_complex "$FILTER;[graded]scale=1280:720[v72
   -c:v libx264 -preset slow -crf 23 -pix_fmt yuv420p -movflags +faststart "$OUT/hero-loop-720.mp4"
 ffmpeg -v error -y -i "$OUT/hero-loop.mp4" -frames:v 1 -q:v 3 "$OUT/hero-poster.jpg"
 
-# Behind the scenes: the reel's 9–14s passage, silent, 720p, for the belief and the offer.
-ffmpeg -v error -y -ss 9 -t 5 -i "$SRC" -an -vf "scale=1280:720,fps=30" \
+# On set: the reel's podcast shoot at 1.5–6.5s (the 9–14s passage is a title card), silent, 720p, for the belief and the offer.
+ffmpeg -v error -y -ss 1.5 -t 5 -i "$SRC" -an -vf "scale=1280:720,fps=30" \
   -c:v libx264 -preset slow -crf 24 -pix_fmt yuv420p -movflags +faststart "$CLIPS/bts.mp4"
 ffmpeg -v error -y -i "$CLIPS/bts.mp4" -frames:v 1 -q:v 4 "$CLIPS/bts-poster.jpg"
 
