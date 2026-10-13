@@ -1,25 +1,28 @@
 @import "tailwindcss";
 
 /* ===========================================================================
-   Tokens — see DESIGN.md. Warm paper, near-black ink, one red signal.
+   Tokens — see DESIGN.md. Cool near-white, charcoal ink, one blue.
    ======================================================================== */
 
 @theme {
-  --color-paper: #f4f0ea;
-  --color-ink: #0a0a0b;
+  --color-paper: #f5f6f7;
+  --color-ink: #15171a;
   /* Alpha ramp is set by contrast, not by eye: against --paper these give
-     roughly 7.8:1 and 5.0:1, so both clear AA for normal-size text. */
-  --color-ink-dim: rgba(10, 10, 11, 0.72);
-  --color-ink-faint: rgba(10, 10, 11, 0.6);
-  --color-hairline: rgba(10, 10, 11, 0.14);
+     6.9:1 and 5.4:1, so both clear AA for normal-size text. */
+  --color-ink-dim: rgba(21, 23, 26, 0.72);
+  --color-ink-faint: rgba(21, 23, 26, 0.65);
+  --color-hairline: rgba(21, 23, 26, 0.14);
   /* Media placeholder — the one tone allowed to sit under a thumbnail. */
-  --color-paper-deep: #e9e4dd;
-  --color-signal: #ff2d20;
-  /* Pop tints. Flat, one per scene, ink on top of all of them. */
-  --color-sun: #f5c542;
-  --color-mint: #8fd3b1;
-  --color-sky: #9cc0f0;
-  --color-rose: #f4a493;
+  --color-paper-deep: #e8eaed;
+  /* The accent. 6.1:1 on paper. */
+  --color-signal: #1f3dff;
+  /* The same blue two steps lighter, for the band: 4.6:1 on ink, where
+     the accent itself is 2.7:1 and fails. */
+  --color-signal-band: #5c74ff;
+  /* The band's type: paper, inverted through the same ramp (9.0:1, 6.6:1). */
+  --color-paper-dim: rgba(245, 246, 247, 0.72);
+  --color-paper-faint: rgba(245, 246, 247, 0.6);
+  --color-hairline-dark: rgba(245, 246, 247, 0.16);
 
   --font-display: var(--font-archivo), "Arial Black", sans-serif;
   --font-sans: var(--font-inter-tight), system-ui, sans-serif;
@@ -233,35 +236,51 @@ html.lenis body {
   min-height: 0;
   padding-block: var(--section-y);
 }
-.scene--signal {
-  background: var(--color-signal);
-  color: var(--color-ink);
-}
-/* A tint is a layer under the scene rather than the scene's own ground,
-   so the page can draw it in as the scene arrives (motion #12). Without
-   JS, or under reduced motion, the layer is simply full. */
-.scene--sun,
-.scene--mint,
-.scene--sky,
-.scene--rose {
-  background: transparent;
-}
 .scene-ground {
   position: absolute;
   inset: 0;
   z-index: -1;
 }
-.scene--sun .scene-ground {
-  background: var(--color-sun);
+/* The dark band is a layer under the scene, like the tints were, so the
+   page can draw it in as the scene arrives (motion #12). Type inverts
+   through the paper ramp; the accent steps up to its band value. */
+.scene--dark {
+  background: transparent;
+  color: var(--color-paper);
 }
-.scene--mint .scene-ground {
-  background: var(--color-mint);
+.scene--dark .scene-ground {
+  background: var(--color-ink);
 }
-.scene--sky .scene-ground {
-  background: var(--color-sky);
+.scene--dark .poster-script,
+.band .poster-script {
+  color: var(--color-signal-band);
 }
-.scene--rose .scene-ground {
-  background: var(--color-rose);
+.scene--dark .text-ink-dim,
+.scene--dark .lede,
+.band .text-ink-dim,
+.band .lede {
+  color: var(--color-paper-dim);
+}
+.scene--dark .text-ink-faint,
+.scene--dark .num,
+.scene--dark .micro,
+.scene--dark .small,
+.band .text-ink-faint,
+.band .num,
+.band .micro {
+  color: var(--color-paper-faint);
+}
+.scene--dark .border-hairline,
+.band .border-hairline {
+  border-color: var(--color-hairline-dark);
+}
+.scene--dark .bg-hairline,
+.band .bg-hairline {
+  background-color: var(--color-hairline-dark);
+}
+.scene--dark .text-ink,
+.band .text-ink {
+  color: var(--color-paper);
 }
 .scene--signal .micro,
 .scene--signal .num,
@@ -347,52 +366,6 @@ html.lenis body {
   margin: 0;
   font-size: clamp(2rem, 4vw, 3.5rem);
   transform: rotate(-6deg);
-}
-.scene--signal .poster-script {
-  color: var(--color-paper);
-}
-/* On the strong tints no red clears 3:1, so the script goes ink: the same
-   hand, a different pen. Faint text steps up to dim for the same reason. */
-.scene--sun .poster-script,
-.scene--mint .poster-script,
-.scene--sky .poster-script,
-.scene--rose .poster-script {
-  color: var(--color-ink);
-}
-/* On a tint the script is ink, so it sits after the line instead of over it,
-   or it would vanish into the caps. Tinted headlines are short, so it fits. */
-.scene--sun .poster-script,
-.scene--mint .poster-script,
-.scene--sky .poster-script,
-.scene--rose .poster-script {
-  left: 100%;
-  right: auto;
-  margin-left: -0.3em;
-  transform-origin: left center;
-}
-/* On a phone the line usually fills the width, so "after the line" is off
-   the screen. Set it under the line instead, still in the same hand. */
-@media (max-width: 767px) {
-  .scene--sun .poster-script,
-  .scene--mint .poster-script,
-  .scene--sky .poster-script,
-  .scene--rose .poster-script {
-    position: static;
-    display: block;
-    width: fit-content;
-    margin: 0.1em 0 0 0.1em;
-    transform: rotate(-6deg);
-  }
-}
-.scene--sun .text-ink-faint,
-.scene--mint .text-ink-faint,
-.scene--sky .text-ink-faint,
-.scene--rose .text-ink-faint,
-.scene--sun .num,
-.scene--mint .num,
-.scene--sky .num,
-.scene--rose .num {
-  color: var(--color-ink-dim);
 }
 
 /* Section headline in a scene: the poster at "l". Row titles: caps at "m". */
@@ -1074,36 +1047,40 @@ html.lenis body {
 /* ---------------------------------------------------------------------------
    The red blocks: the contact band and the footer.
    ------------------------------------------------------------------------ */
-.redblock {
-  background: var(--color-signal);
+/* The band. Charcoal, paper type, the accent only in its script and the
+   selection. The contact scene, the footer and About's statement. */
+.band {
+  background: var(--color-ink);
+  color: var(--color-paper);
+}
+.band .field {
+  color: var(--color-paper);
+  border-bottom-color: var(--color-paper-faint);
+}
+.band .field:focus {
+  border-bottom-color: var(--color-paper);
+}
+.band .button {
+  border-color: var(--color-paper);
+  color: var(--color-paper);
+}
+.band .button:hover,
+.band .button:focus-visible {
+  background: var(--color-paper);
   color: var(--color-ink);
 }
-.redblock .micro,
-.redblock .num,
-.redblock .text-ink-dim,
-.redblock .text-ink-faint {
+.band .link-underline::after {
+  background: currentColor;
+}
+.band ::selection {
+  background: var(--color-signal-band);
   color: var(--color-ink);
 }
-.redblock .field {
-  border-bottom-color: rgba(10, 10, 11, 0.45);
+.band :focus-visible {
+  outline-color: var(--color-signal-band);
 }
-.redblock .field:focus {
-  border-bottom-color: var(--color-ink);
-}
-.redblock .button {
-  border-color: var(--color-ink);
-}
-.redblock .button:hover,
-.redblock .button:focus-visible {
-  background: var(--color-ink);
-  color: var(--color-signal);
-}
-.redblock ::selection {
-  background: var(--color-ink);
-  color: var(--color-signal);
-}
-.redblock :focus-visible {
-  outline-color: var(--color-ink);
+.band select option {
+  color: var(--color-ink);
 }
 .wordmark-script {
   position: absolute;
@@ -1367,6 +1344,7 @@ html.lenis body {
 /* ScrollStack — the process cards. */
 .stack-card {
   background: var(--color-paper);
+  color: var(--color-ink);
   border: 1px solid var(--color-hairline);
   padding: clamp(1.5rem, 3vw, 2.75rem);
   min-height: 38vh;

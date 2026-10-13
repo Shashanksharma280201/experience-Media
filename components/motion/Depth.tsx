@@ -6,7 +6,7 @@ import { gsap, prefersReducedMotion } from "@/lib/gsap";
 /**
  * The page's own scroll choreography, declared once for every scene.
  *
- * Two moves. A tinted scene's ground draws down over the paper as the scene
+ * Two moves. A dark scene's ground draws down over the paper as the scene
  * arrives, the way a rule draws (motion #12), so the colour is something
  * the visitor pulls in rather than a block they land on. And every scene
  * headline drifts a few percent slower than the page around it, which is
