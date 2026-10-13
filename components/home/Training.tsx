@@ -8,7 +8,7 @@ import { training } from "@/lib/content";
 /** 14 — training. The free playbook, with the page behind it. */
 export default function Training() {
   return (
-    <Scene id="training" tone="sun" tight>
+    <Scene id="training" tight>
       <Group>
         <Poster lines={training.headline} script="free" scriptLine={0} />
       </Group>

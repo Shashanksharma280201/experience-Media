@@ -30,7 +30,7 @@ export default function Testimonials() {
   }, [front]);
 
   return (
-    <Scene tone="rose">
+    <Scene tone="dark">
       <Group>
         <Poster lines={["Don't take our", "word for it."]} script="really" scriptLine={1} />
       </Group>

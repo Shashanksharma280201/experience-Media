@@ -23,7 +23,7 @@ export default function TrainingPage() {
         </Group>
       </Scene>
 
-      <Scene tone="sun" tight>
+      <Scene tight>
         <Group className="grid gap-12 md:grid-cols-12">
           <div className="md:col-span-5">
             <p className="micro" data-reveal="fade">free resource</p>

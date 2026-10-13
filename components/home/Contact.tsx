@@ -127,7 +127,7 @@ export default function Contact({ page = false }: { page?: boolean }) {
           </Group>
         </Scene>
       )}
-      <Scene id="contact" tone="signal" className="redblock" tight={page}>
+      <Scene id="contact" tone="dark" className="band" tight={page}>
         {!page && (
           <Group>
             <Poster

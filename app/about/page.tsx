@@ -39,7 +39,7 @@ export default function AboutPage() {
         </Group>
       </Scene>
 
-      <Scene tone="sky" tight>
+      <Scene tone="dark" tight>
         <Group>
           <Poster as="p" size="l" lines={["What if we could", "create such a good", "experience for our", "clients that they", "never wanted to work", "with anyone else?"]} script="the question" scriptLine={0} />
         </Group>
@@ -69,7 +69,7 @@ export default function AboutPage() {
         </Group>
       </Scene>
 
-      <Scene tone="signal" className="redblock" tight>
+      <Scene tone="dark" className="band" tight>
         <Group stagger={0.1}>
           <p className="micro" data-reveal="fade">{site.name} · {site.tagline}</p>
           <div className="mt-8">

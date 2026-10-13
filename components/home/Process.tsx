@@ -10,7 +10,7 @@ import { process, processClose } from "@/lib/content";
  */
 export default function Process() {
   return (
-    <Scene tone="sky" tight>
+    <Scene tone="dark" tight>
       <Group>
         <Poster lines={["From idea to impact.", "Without the usual", "agency chaos."]} script="calmly" scriptLine={2} />
       </Group>

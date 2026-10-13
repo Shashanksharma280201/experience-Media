@@ -13,43 +13,52 @@ knows how attention works and can prove it.
 
 ## 1. Colour
 
-Warm paper, near-black ink, one red. Seven values.
+Cool near-white, charcoal ink, one blue. Eight tokens, one of them the blue's band step.
 
 | Token | Value | Role |
 |---|---|---|
-| `--paper` | `#F4F0EA` | Ground. The only background colour on the site. |
-| `--ink` | `#0A0A0B` | Type. |
-| `--ink-dim` | `rgba(10,10,11,0.72)` | Body prose, secondary type. ~7.8:1 on paper. |
-| `--ink-faint` | `rgba(10,10,11,0.6)` | Labels, numerals, metadata. ~5.0:1 — the floor for normal text. |
-| `--hairline` | `rgba(10,10,11,0.14)` | 1px rules. The only border colour. |
-| `--paper-deep` | `#E9E4DD` | Media placeholder, under thumbnails only. |
-| `--signal` | `#FF2D20` | **The accent.** |
-| `--sun` · `--mint` · `--sky` · `--rose` | `#F5C542` · `#8FD3B1` · `#9CC0F0` · `#F4A493` | Pop tints, saturated. Flat, one per scene: sun behind the belief, mint behind the record, sky behind the process, rose behind the voices. Ink on all of them; body prose clears 5.6:1 or better. No red clears 3:1 on them, so the script is ink there. |
+| `--paper` | `#F5F6F7` | Ground. The only light background on the site. A hair of blue, never pure white. |
+| `--ink` | `#15171A` | Type, and the ground of the band. |
+| `--ink-dim` | `rgba(21,23,26,0.72)` | Body prose. 6.9:1 on paper. |
+| `--ink-faint` | `rgba(21,23,26,0.65)` | Labels, numerals. 5.4:1, the floor for normal text. |
+| `--hairline` | `rgba(21,23,26,0.14)` | 1px rules. The only border colour on paper. |
+| `--paper-deep` | `#E8EAED` | Media placeholder, under thumbnails only. |
+| `--signal` | `#1F3DFF` | **The accent.** 6.1:1 on paper. |
+| `--signal-band` | `#5C74FF` | The accent on the band, two steps lighter: 4.6:1 on ink, where `--signal` is 2.7:1. The way a dark mode lifts its accent, not a second colour. |
 
-The alpha ramp is set by measured contrast, not by eye; `npm run audit` checks
-it on every route.
+On the band the type ramp inverts: paper, `--paper-dim` (0.72, 9.0:1), `--paper-faint` (0.60, 6.6:1), `--hairline-dark` (0.16).
+
+The alpha ramp is set by measured contrast, not by eye; `npm run audit` checks it on every route and `app/globals.test.ts` pins the values.
 
 ### Where the accent is allowed to appear
 
-1. **The script** — one word in Pinyon Script laid across a poster headline. Never a whole sentence.
-2. **The red blocks** — the contact band and the footer, full-bleed, with ink type.
+1. **The script** — one word in Pinyon Script laid across a poster headline. Never a whole sentence. On the band it is `--signal-band`.
+2. **The band's selection and focus** — the button on the band fills paper, not blue; the accent on the band is the script, the selection and the focus ring only.
 3. **The loading screen's script** — the wordmark's "Media".
 4. **Focus ring**, **scroll cue**, **current-page marker**, **selection**.
 
-Forbidden: red words inside running copy, red buttons, red rules, glows,
-gradients. The v2 signal line is retired: the red has a bigger job now.
+Forbidden: blue words inside running copy, blue buttons, blue rules, glows,
+gradients, and any second hue. The tints of v3 are retired: colour comes from the
+work now.
+
+### The band
+
+The charcoal scenes: the numbers, the process, the voices, About's question, the
+contact band, About's statement, the footer. A dark scene is a `.scene-ground`
+layer under the scene so it draws in on scroll like the tints did; the contact
+band and the footer are solid (`.band`) because that is where the site stops
+performing.
 
 ### The mark
 
-The emblem (`components/brand/Emblem.tsx`, traced from the original artwork)
-appears in three places: beside the wordmark in the nav, above the wordmark in
-the loader, and in the footer's red block. It inherits the text colour, so it
-is ink on paper and on the tints, ink on the red.
+The emblem (`components/brand/Emblem.tsx`) appears beside the wordmark in the nav,
+above the wordmark in the loader, and in the footer's band. It inherits the text
+colour: ink on paper, paper on the band.
 
 ### Deliberately not doing
 
-No secondary accent. No greys beyond the three alpha steps of ink. Client
-logos render flat black at 60%, full on hover.
+No secondary accent. No greys beyond the three alpha steps of ink. Client logos
+render flat ink at 60%, full on hover.
 
 ---
 
@@ -78,8 +87,7 @@ the width axis is the site's one live typographic effect (the reel headline).
 | `display-m` | clamp(1.75rem, 3.6vw, 3rem), `wdth` 105 | Pull quotes. |
 | `lede` · `small` · `micro` · `num` | as v2 | Prose; metadata; the parenthetical label; numerals. |
 
-**The script.** Pinyon Script, red (paper on the red blocks, ink on the
-tints), one word, rotated -6°, laid over the end of its line with its right
+**The script.** Pinyon Script, blue (`--signal-band` on the dark scenes), one word, rotated -6°, laid over the end of its line with its right
 edge just past the last letter, so it never runs off a full-width line and
 lands the same way at every width. Never below 24px, so it always clears 3:1
 as large text. Decorative and hidden from assistive tech.
@@ -95,7 +103,7 @@ headlines. `micro` survives only for captions inside media (the reel's
 One act per section. A scene is at least a viewport tall, opens with the
 numeral and the parenthetical label, and centres one thing: a poster headline
 and what it introduces. `tight` scenes (lists) drop the viewport minimum.
-`tone="signal"` makes the scene a red block.
+A scene is paper or dark; `tone="dark"` gives it a charcoal ground that draws in on scroll (motion #12).
 
 ---
 
@@ -104,7 +112,7 @@ and what it introduces. `tight` scenes (lists) drop the viewport minimum.
 ### The grammar
 
 ```
-POSTER HEADLINE            ← one word in red script laid across a line
+POSTER HEADLINE            ← one word in blue script laid across a line
 the one thing
 ```
 
@@ -130,12 +138,12 @@ shadows, and no elevated surfaces anywhere in this system.
 
 | Page | Sections |
 |---|---|
-| Home | 01 hero · credibility strip · 02 the reel (mirror wall) · 03 what we believe · 04 the founder story · 05 the numbers · 06 who we work with (audiences, then the roster) · 07 the offer · 08 services (three legs) · 09 capabilities (the band) · 10 process · 11 the work (poster grid) · 12 what people say (the deck) · 13 Founder's Corner · 14 training · 15 the conversation (red band) · footer (red block) |
+| Home | 01 hero · credibility strip · 02 the reel (mirror wall) · 03 what we believe · 04 the founder story · 05 the numbers (dark) · 06 who we work with (audiences, then the roster) · 07 the offer · 08 services (three legs) · 09 capabilities (the band) · 10 process (dark) · 11 the work (poster grid) · 12 what people say (the deck, dark) · 13 Founder's Corner · 14 training · 15 the conversation (band) · footer (band) |
 | Work | 01 the work · 02 the disciplines · 03 the complete portfolio |
 | Discipline | 01 discipline (tagline, reach, platforms, period) · 02 the line · 03 the pieces · 04 more |
-| About | 01 the headline · 02 the story · 03 the question (sky) · 04 the principle · 05 the brand statement (red) |
+| About | 01 the headline · 02 the story · 03 the question (dark) · 04 the principle · 05 the brand statement (band) |
 | Production | 01 wherever the story needs to happen · 02 what we shoot |
-| Training | 01 learn the system · 02 the playbook and its form (sun) · 03 coming next |
+| Training | 01 learn the system · 02 the playbook and its form · 03 coming next |
 | Contact | the conversation, as a page |
 | 404 | 01 no such page |
 
@@ -193,7 +201,7 @@ ScrollTrigger on the page. All are gated behind reduced motion.
 
 | # | Moment | Trigger | Behaviour |
 |---|---|---|---|
-| 1 | Load sequence | Every load and refresh | The emblem draws itself stroke-first, core to wingtips (0.05–1.15s), and fills (0.85–1.3s), while "EXPERIENCE" sets itself letter by letter (0.1–1.1s) and "Media" writes itself in red script (1.0–1.9s). Holds until 2.25s. Letters and script lift out; the panel wipes up (2.5–3.4s) while the mark flies to its place in the nav on `expo.inOut`, so the logo you watched draw is the logo in the corner; the hero letters rise through the opening from 2.8s. Escape skips on the same choreography. |
+| 1 | Load sequence | Every load and refresh | The emblem draws itself stroke-first, core to wingtips (0.05–1.15s), and fills (0.85–1.3s), while "EXPERIENCE" sets itself letter by letter (0.1–1.1s) and "Media" writes itself in blue script (1.0–1.9s). Holds until 2.25s. Letters and script lift out; the panel wipes up (2.5–3.4s) while the mark flies to its place in the nav on `expo.inOut`, so the logo you watched draw is the logo in the corner; the hero letters rise through the opening from 2.8s. Escape skips on the same choreography. |
 | 2 | Nav condense | `scrollY > 64` | Height and type-size reduce; hairline appears. |
 | 3 | Poster headlines | After loader (hero) or enter viewport | Every poster line rises letter by letter out of per-character masks, 28ms apart (React Bits SplitText on GSAP SplitText); the script writes in after. |
 | 4 | The script | Enter viewport | Writes itself in left to right over the headline, a beat after the lines have risen. |
@@ -204,7 +212,7 @@ ScrollTrigger on the page. All are gated behind reduced motion.
 | 9 | Rows | Enter viewport | Rule draws, title rises, body settles; 50ms stagger down the list. Services, process, work index, voices. |
 | 10 | The top eleven | Enter viewport | The client's eleven best, ranked, on a six-column poster grid: landscape pieces two columns wide, portraits one wide and two tall. Frames settle from 1.08, captions follow, 60ms apart. The same grid carries the other pieces on the work page. |
 | 11 | The roster | Enter viewport; scroll; hover | Every client set as a billing block of condensed caps, each name rising out of its own mask 30ms after the last. From 768px the block becomes an index: the scroll walks a beat down the names, the frame beside them cross-fades to that client's logo over `--dur-base`, and the name being read takes the ink back while the rest sit at `--ink-faint`, with the link underline (#14) wiping in beneath it. Pointing at a name holds the read there until the pointer leaves. Narrower, or under reduced motion, the frame is simply the whole logo wall and no name is ever dimmed. |
-| 12 | Scene ground | Scroll | A tinted scene's colour is a layer under it, and it draws down over the paper as the scene arrives (95% to 30% of the viewport, scrubbed), the way a rule draws. Every scene headline also drifts 6% slower than the page around it. Full and still under reduced motion. |
+| 12 | Scene ground | Scroll | A dark scene's charcoal is a layer under it, and it draws down over the paper as the scene arrives (95% to 30% of the viewport, scrubbed), the way a rule draws. Every scene headline also drifts 6% slower than the page around it. Full and still under reduced motion. |
 | 13 | Footer | Enter viewport | The wordmark rises out of its mask at 19vw; "Media" writes itself across it in paper. |
 | 14 | Link hover | Hover | Ink underline wipes left to right in `--dur-quick`. |
 | 15 | Page transition | Route change | The paper veil dissolves off the incoming page over 450ms; scroll resets; triggers re-measure. |
@@ -218,7 +226,7 @@ ScrollTrigger on the page. All are gated behind reduced motion.
 
 ## 6. Copy
 
-Every line of copy, every figure and the section order come from the October 2026 redevelopment brief (`Experience_Media_Website_Redevelopment_Brief.docx`, §3–§9). The content layer is `lib/content/`: `proof.ts` holds the approved metrics, the process, the offer, the audiences and training; `capabilities.ts` the three legs, the fifteen capabilities and production; `founder.ts` the story; `work.ts` the discipline copy and reach figures. No count of pieces appears anywhere on the site, and no figure is derived from an array length. The only accent decision the brief leaves open, one electric-blue accent in place of red and the tints, is not applied here.
+Every line of copy, every figure and the section order come from the October 2026 redevelopment brief (`Experience_Media_Website_Redevelopment_Brief.docx`, §3–§9). The content layer is `lib/content/`: `proof.ts` holds the approved metrics, the process, the offer, the audiences and training; `capabilities.ts` the three legs, the fifteen capabilities and production; `founder.ts` the story; `work.ts` the discipline copy and reach figures. No count of pieces appears anywhere on the site, and no figure is derived from an array length. The accent is the brief's electric blue; see §1.
 
 
 First person plural, plain sentences, no agency throat-clearing. Strategy
@@ -232,11 +240,11 @@ review.
 ## 7. Why it looks like this
 
 The reference is a poster wall, not a magazine. Condensed caps at the size of
-a billboard say "we understand attention" before a word is read; the one red
+a billboard say "we understand attention" before a word is read; the one blue
 script word across them is the human hand on the poster. Every section is a
 scene because the client makes scenes for a living, and each scene has one
 thing in it because attention is the product. The mirror wall and the fold
 gallery are the two set pieces — the work shown as spectacle, not as a grid
-— and the two red blocks are where the site stops performing and asks. It is
+— and the two bands are where the site stops performing and asks. It is
 all on paper rather than black because the client asked for light, and
-because on paper the red reads as a signature instead of a warning.
+because on paper the blue reads as a signature instead of a link.

@@ -46,7 +46,7 @@ export default function Record() {
   }, []);
 
   return (
-    <Scene tone="mint">
+    <Scene tone="dark">
       <div ref={root}>
         <Group>
           <Poster lines={["The numbers", "behind the work."]} script="verified" scriptLine={1} />

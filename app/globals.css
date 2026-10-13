@@ -282,6 +282,17 @@ html.lenis body {
 .band .text-ink {
   color: var(--color-paper);
 }
+/* Paper cards on a dark scene keep the ink ramp: the card is its own ground. */
+.scene--dark .stack-card .text-ink-dim,
+.scene--dark .stack-card .lede,
+.scene--dark .deck-card .text-ink-dim {
+  color: var(--color-ink-dim);
+}
+.scene--dark .stack-card .num,
+.scene--dark .stack-card .text-ink-faint,
+.scene--dark .stack-card .micro {
+  color: var(--color-ink-faint);
+}
 .scene--signal .micro,
 .scene--signal .num,
 .scene--signal .text-ink-dim,

@@ -87,7 +87,7 @@ export default function Positioning() {
   }, []);
 
   return (
-    <Scene id="studio" tone="sun">
+    <Scene id="studio">
       <div ref={root}>
         <p className="poster poster--l">
           <Words text={STATEMENT} script="honestly" />
