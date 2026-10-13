@@ -1,11 +1,11 @@
 @import "tailwindcss";
 
 /* ===========================================================================
-   Tokens — see DESIGN.md. Cool near-white, charcoal ink, one blue.
+   Tokens — see DESIGN.md. Warm paper, charcoal ink, one red.
    ======================================================================== */
 
 @theme {
-  --color-paper: #f5f6f7;
+  --color-paper: #f4f0ea;
   --color-ink: #15171a;
   /* Alpha ramp is set by contrast, not by eye: against --paper these give
      6.9:1 and 5.4:1, so both clear AA for normal-size text. */
@@ -13,16 +13,15 @@
   --color-ink-faint: rgba(21, 23, 26, 0.65);
   --color-hairline: rgba(21, 23, 26, 0.14);
   /* Media placeholder — the one tone allowed to sit under a thumbnail. */
-  --color-paper-deep: #e8eaed;
-  /* The accent. 6.1:1 on paper. */
-  --color-signal: #1f3dff;
-  /* The same blue two steps lighter, for the band: 4.6:1 on ink, where
-     the accent itself is 2.7:1 and fails. */
-  --color-signal-band: #5c74ff;
+  --color-paper-deep: #e9e4dd;
+  /* The accent. 3.5:1 on paper, so it is only ever set large (the script
+     is never under 24px); 4.9:1 on ink, so the band keeps the same red. */
+  --color-signal: #ff2d20;
+  --color-signal-band: #ff2d20;
   /* The band's type: paper, inverted through the same ramp (9.0:1, 6.6:1). */
-  --color-paper-dim: rgba(245, 246, 247, 0.72);
-  --color-paper-faint: rgba(245, 246, 247, 0.6);
-  --color-hairline-dark: rgba(245, 246, 247, 0.16);
+  --color-paper-dim: rgba(244, 240, 234, 0.72);
+  --color-paper-faint: rgba(244, 240, 234, 0.6);
+  --color-hairline-dark: rgba(244, 240, 234, 0.16);
 
   --font-display: var(--font-archivo), "Arial Black", sans-serif;
   --font-sans: var(--font-inter-tight), system-ui, sans-serif;
@@ -514,6 +513,9 @@ html.lenis body {
   line-height: 0.9;
   text-align: center;
   color: var(--color-ink);
+  /* Type, not a silhouette: at 15px on paper the wall's 0.6 is 4.0:1 with
+     charcoal ink, so this one sits at 0.72 (6.5:1). */
+  opacity: 0.72;
 }
 
 @media (min-width: 768px) {
@@ -805,21 +807,6 @@ html.lenis body {
   opacity: 0.6;
   pointer-events: none;
 }
-.hero-trail {
-  z-index: 2;
-  pointer-events: none;
-}
-.trail-img {
-  position: absolute;
-  top: 0;
-  left: 0;
-  aspect-ratio: 16 / 9;
-  background-size: cover;
-  background-position: center;
-  opacity: 0;
-  outline: 6px solid var(--color-paper);
-  will-change: transform, opacity;
-}
 .hero-copy {
   z-index: 3;
   color: var(--color-paper);
@@ -1107,6 +1094,46 @@ html.lenis body {
 }
 .band select option {
   color: var(--color-ink);
+}
+/* The red block: the footer, where the site stops performing and signs
+   off. Ink type on the accent; the script goes paper, as it did in v3. */
+.band--signal {
+  background: var(--color-signal);
+  color: var(--color-ink);
+}
+.band--signal .poster-script {
+  color: var(--color-paper);
+}
+.band--signal .text-ink-dim,
+.band--signal .lede,
+.band--signal .text-ink-faint,
+.band--signal .num,
+.band--signal .micro,
+.band--signal .text-ink {
+  color: var(--color-ink);
+}
+.band--signal .field {
+  color: var(--color-ink);
+  border-bottom-color: rgba(21, 23, 26, 0.45);
+}
+.band--signal .field:focus {
+  border-bottom-color: var(--color-ink);
+}
+.band--signal .button {
+  border-color: var(--color-ink);
+  color: var(--color-ink);
+}
+.band--signal .button:hover,
+.band--signal .button:focus-visible {
+  background: var(--color-ink);
+  color: var(--color-signal);
+}
+.band--signal ::selection {
+  background: var(--color-ink);
+  color: var(--color-signal);
+}
+.band--signal :focus-visible {
+  outline-color: var(--color-ink);
 }
 .wordmark-script {
   position: absolute;

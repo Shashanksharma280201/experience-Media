@@ -11,7 +11,7 @@ const year = new Date().getFullYear();
 /** The red block. The wordmark at full width, the script over it. */
 export default function Footer() {
   return (
-    <footer className="band relative overflow-hidden pt-[var(--section-y)]">
+    <footer className="band band--signal relative overflow-hidden pt-[var(--section-y)]">
       <Emblem className="footer-mark" />
       {/* React Bits CurvedLoop: the line, curved and draggable. */}
       <div className="curve -mt-6 mb-10 md:-mt-10">
@@ -53,7 +53,7 @@ export default function Footer() {
           </div>
         </Group>
 
-        <div className="mt-8 flex flex-col gap-2 border-t py-6 md:flex-row md:items-center md:justify-between" style={{ borderColor: "var(--color-hairline-dark)" }}>
+        <div className="mt-8 flex flex-col gap-2 border-t py-6 md:flex-row md:items-center md:justify-between" style={{ borderColor: "rgba(21,23,26,0.35)" }}>
           <p className="small">© {year} {site.name}</p>
           <p className="small">{site.tagline}</p>
           <p className="small flex gap-6">

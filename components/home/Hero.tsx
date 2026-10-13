@@ -6,16 +6,12 @@ import Shell from "@/components/layout/Shell";
 import Group from "@/components/motion/Group";
 import Poster from "@/components/motion/Poster";
 import Magnet from "@/components/bits/Magnet";
-import ImageTrail from "@/components/bits/ImageTrail";
-import { clips, credibility, disciplines, site } from "@/lib/content";
+import { clips, credibility, site } from "@/lib/content";
 import { DUR, EASE, gsap, prefersReducedMotion, whenIntroDone } from "@/lib/gsap";
 import { openReel } from "@/lib/reel";
 
 // §4.01 of the brief.
 const HEADLINE = ["We build content", "systems that make", "brands impossible", "to ignore."];
-
-/** Twelve frames for the trail, two per discipline, mixed. */
-const TRAIL = Array.from({ length: 3 }, (_, k) => disciplines.map((d) => d.items[(k * 2) % d.items.length].thumb)).flat().slice(0, 12);
 
 /**
  * 01 — the hero: the frame (motion #17).
@@ -23,7 +19,7 @@ const TRAIL = Array.from({ length: 3 }, (_, k) => disciplines.map((d) => d.items
  * The footage fills the viewport from the first paint, under a flat ink
  * scrim; the headline sits bottom-left over it in paper and condenses into
  * place as its letters rise; the credibility strip and one round Watch
- * button follow. The pointer leaves a trail of work over the footage.
+ * button follow.
  *
  * Scroll: over the first viewport the footage shrinks to a framed card at
  * the right, the scrim lifts, the copy leaves, and the paper page rises
@@ -65,7 +61,6 @@ export default function Hero() {
           defaults: { ease: "none" },
         })
         .to(".hero-copy", { y: -60, autoAlpha: 0, duration: 0.2, ease: "power2.in" }, 0)
-        .to(".hero-trail", { autoAlpha: 0, duration: 0.12 }, 0)
         // Explicit start values: the arrival also tweens this, and a lazily
         // recorded start would otherwise be whatever the arrival had set.
         .fromTo(".hero-watch", { autoAlpha: 1, scale: 1 }, { autoAlpha: 0, scale: 0.8, duration: 0.15 }, 0)
@@ -106,9 +101,6 @@ export default function Hero() {
         </div>
         {/* Flat ink under the type, so paper on a moving picture stays legible. */}
         <div className="hero-scrim" aria-hidden />
-
-        {/* React Bits ImageTrail: the pointer leaves the work behind it. */}
-        <ImageTrail items={TRAIL} threshold={110} size={190} className="hero-trail" />
 
         <Shell className="hero-copy relative flex flex-1 flex-col justify-end pb-[calc(var(--gutter)+0.5rem)] pt-28 md:pt-20">
           <Group onLoad stagger={0.07}>
