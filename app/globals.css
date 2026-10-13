@@ -728,10 +728,11 @@ html.lenis body {
 }
 
 /* ---------------------------------------------------------------------------
-   The hero: three acts on one scroll. The hero is sticky inside a taller
-   track; the section after the track starts a viewport early and rides up
-   over it. That is the curtain, and it needs no pin and no script. JS adds
-   only the scrub that opens the reel over the first viewport of scroll.
+   The hero: the frame. Footage fills the viewport under a flat scrim; the
+   headline sits over it bottom-left in paper. The hero is sticky inside a
+   taller track; the section after the track starts a viewport early and
+   rides up over it. That is the curtain, and it needs no pin and no script.
+   JS adds only the scrub that frames the footage over the first viewport.
    ------------------------------------------------------------------------ */
 .hero-track {
   position: relative;
@@ -745,9 +746,11 @@ html.lenis body {
   flex-direction: column;
   min-height: 100svh;
   overflow: hidden;
+  background: var(--color-ink);
+  color: var(--color-paper);
 }
 /* Everything after the hero rides over it: the first thing starts a
-   viewport early, and all of it paints above the sticky reel. The reel
+   viewport early, and all of it paints above the sticky film. The reel
    player is fixed and stays out of this. */
 .hero-track + :not(.reel-player) {
   margin-top: calc(-1 * var(--hero-curtain));
@@ -755,9 +758,6 @@ html.lenis body {
 .hero-track ~ :not(.reel-player) {
   position: relative;
   z-index: 1;
-}
-.ticker {
-  background: var(--color-paper);
 }
 @media (prefers-reduced-motion: reduce) {
   .hero-track {
@@ -769,113 +769,40 @@ html.lenis body {
   .hero-track + :not(.reel-player) {
     margin-top: 0;
   }
-  .hero-over {
+  .hero-film video {
     display: none;
+  }
+  .hero-film {
+    background: url("/assets/webgl/hero-poster.jpg") center / cover no-repeat;
   }
 }
 
-/* The reel. A full-viewport loop clipped to a window; the scrub opens it.
-   The window is a crop, not a scaled frame, so its ratio can follow the
-   layout. Insets are the resting state — what no-JS and reduced-motion
-   visitors see. */
-.hero-reel {
+/* The footage. Full-bleed at rest; the scrub clips it to a card. */
+.hero-film {
   position: absolute;
   inset: 0;
-  z-index: 1;
-  clip-path: inset(64% 5% 6% 5%);
-  /* A sticker: tilted, with a paper edge. */
-  transform: rotate(-3deg);
-  transform-origin: 78% 82%;
-}
-@media (min-width: 768px) {
-  .hero-reel {
-    clip-path: inset(60% 2.8% 6% 58%);
-  }
-}
-.hero-reel-inner {
-  position: absolute;
-  inset: 0;
+  z-index: 0;
+  clip-path: inset(0 0 0 0);
   background: var(--color-ink);
-  outline: 8px solid var(--color-paper);
-  outline-offset: -8px;
 }
-.hero-reel video {
+.hero-film video {
   position: absolute;
   inset: 0;
-  height: 100%;
   width: 100%;
+  height: 100%;
   object-fit: cover;
-  transform: scale(1.12);
-  transform-origin: 62% 70%;
+  transform-origin: 60% 50%;
 }
-/* Flat ink, no gradient: paper type on a moving picture needs a floor. */
+/* Flat ink, no gradient: paper type on a moving picture needs a floor.
+   0.5 here plus the darker encode clears 4.5:1 on the brightest frame. */
 .hero-scrim {
   position: absolute;
   inset: 0;
+  z-index: 1;
   background: var(--color-ink);
-  opacity: 0;
+  opacity: 0.5;
   pointer-events: none;
 }
-.hero-over {
-  position: absolute;
-  inset: 0;
-  z-index: 2;
-  display: grid;
-  place-items: center;
-  color: var(--color-paper);
-}
-.hero-over .micro {
-  position: absolute;
-  left: var(--gutter);
-  bottom: var(--gutter);
-  margin: 0;
-  color: var(--color-paper);
-  text-shadow: 0 0 24px rgba(10, 10, 11, 0.6);
-}
-.hero-over :focus-visible {
-  outline-color: var(--color-paper);
-}
-.button--paper {
-  border-color: var(--color-paper);
-  color: var(--color-paper);
-  padding: 1.25rem 2.5rem;
-  font-size: 1.1rem;
-}
-.button--paper:hover,
-.button--paper:focus-visible {
-  background: var(--color-paper);
-  color: var(--color-ink);
-}
-.hero-copy {
-  z-index: 3;
-}
-
-/* The headline condenses into place: Hero.tsx tweens --wdth 118 → 62. */
-.hero-poster {
-  font-variation-settings: "wdth" var(--wdth, 62), "wght" 800;
-  /* Four stepped lines, the lede and the reel must share one viewport, so
-     the size is capped by height as well as width. */
-  font-size: clamp(2.5rem, min(10.5vw, 11svh), 10rem);
-}
-.hero-poster .split-parent,
-.hero-poster .split-parent > div {
-  line-height: 0.86;
-}
-/* Stepped, like a poster: each line starts a little further in. */
-@media (min-width: 768px) {
-  .hero-poster .poster-row:nth-child(2) {
-    padding-left: 6vw;
-  }
-  .hero-poster .poster-row:nth-child(3) {
-    padding-left: 2vw;
-  }
-  .hero-poster .poster-row:nth-child(4) {
-    padding-left: 9vw;
-  }
-}
-
-/* ImageTrail — frames that pop in under the pointer. Above the reel, below
-   the copy, so the words stay readable. */
 .hero-trail {
   z-index: 2;
   pointer-events: none;
@@ -891,26 +818,110 @@ html.lenis body {
   outline: 6px solid var(--color-paper);
   will-change: transform, opacity;
 }
-
-/* The script tag on the sticker. */
-.hero-tag {
+.hero-copy {
+  z-index: 3;
+  color: var(--color-paper);
+}
+.hero-copy .text-paper {
+  color: var(--color-paper);
+}
+.hero-copy .link-underline::after {
+  background: currentColor;
+}
+/* The headline condenses into place: Hero.tsx tweens --wdth 118 → 62. Four
+   stepped lines, the links and the strip share the lower half of the
+   viewport, so the size is capped by height as well as width. */
+.hero-poster {
+  font-variation-settings: "wdth" var(--wdth, 62), "wght" 800;
+  font-size: clamp(2.5rem, min(9.5vw, 9.5svh), 9rem);
+  color: var(--color-paper);
+}
+.hero-poster .poster-script {
+  color: var(--color-signal-band);
+}
+.hero-poster .split-parent,
+.hero-poster .split-parent > div {
+  line-height: 0.86;
+}
+@media (min-width: 768px) {
+  .hero-poster .poster-row:nth-child(2) {
+    padding-left: 4vw;
+  }
+  .hero-poster .poster-row:nth-child(3) {
+    padding-left: 1.5vw;
+  }
+  .hero-poster .poster-row:nth-child(4) {
+    padding-left: 6vw;
+  }
+}
+/* The credibility strip: a static line, four items, dots between. */
+.hero-strip {
+  margin-top: 1.75rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 0;
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  letter-spacing: 0.02em;
+  color: var(--color-paper-dim);
+}
+.hero-strip > span + span::before {
+  content: "·";
+  margin-inline: 0.75rem;
+  color: var(--color-paper-faint);
+}
+/* One round Watch button, bottom-right. The only control over the footage. */
+.hero-watch {
   position: absolute;
+  right: var(--gutter);
+  bottom: calc(var(--gutter) + 0.5rem);
   z-index: 4;
-  right: 8%;
-  bottom: 32%;
-  left: auto;
-  top: auto;
-  margin: 0;
-  transform: rotate(-8deg);
-  font-size: clamp(1.6rem, 3vw, 2.6rem);
-  pointer-events: none;
+  width: 5rem;
+  height: 5rem;
+  border-radius: 50%;
+  border: 1px solid var(--color-paper);
+  background: transparent;
+  color: var(--color-paper);
+  display: grid;
+  place-content: center;
+  line-height: 1;
+  font-family: var(--font-display);
+  font-variation-settings: "wdth" 90, "wght" 600;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: background var(--dur-quick) var(--ease-out), color var(--dur-quick) var(--ease-out);
+}
+.hero-watch:hover,
+.hero-watch:focus-visible {
+  background: var(--color-paper);
+  color: var(--color-ink);
+}
+.hero-watch:focus-visible {
+  outline-color: var(--color-signal-band);
+}
+.button--paper {
+  border-color: var(--color-paper);
+  color: var(--color-paper);
+}
+.button--paper:hover,
+.button--paper:focus-visible {
+  background: var(--color-paper);
+  color: var(--color-ink);
 }
 @media (max-width: 767px) {
-  .hero-tag {
-    right: 10%;
-    bottom: 33%;
-    font-size: 1.5rem;
+  .hero-copy {
+    padding-bottom: 7rem;
   }
+  .hero-watch {
+    bottom: var(--gutter);
+    width: 4.25rem;
+    height: 4.25rem;
+  }
+}
+.ticker {
+  background: var(--color-paper);
 }
 
 /* ---------------------------------------------------------------------------
